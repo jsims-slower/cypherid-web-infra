@@ -19,7 +19,7 @@ locals {
       size = 1
       architecture = {
         ami_type       = "AL2_ARM_64"
-        instance_types = ["t4g.xlarge"]
+        instance_types = ["t4g.small"]
       }
     },
     // please push teams to use ARM, this is just a backup in case you need it
@@ -27,7 +27,7 @@ locals {
       size = 1
       architecture = {
         ami_type       = "AL2_x86_64"
-        instance_types = ["t3.xlarge"]
+        instance_types = ["t3.small"]
       }
     }
   }

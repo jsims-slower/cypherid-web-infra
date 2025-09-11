@@ -39,23 +39,33 @@ locals {
             ]
           },
           {
-            "key"      = "karpenter.k8s.aws/instance-size"
-            "operator" = "NotIn"
+            "key"      = "karpenter.k8s.aws/instance-family"
+            "operator" = "In"
             "values" = [
-              "nano",
-              "micro",
-              "small",
+              "t3",
+              "t4g",
+              "c6i",
+              "c8g",
+            ]
+          },
+          {
+            "key"      = "karpenter.k8s.aws/instance-size"
+            "operator" = "In"
+            "values" = [
+              "medium",
+              "large",
+              "xlarge",
             ]
           },
           # Required to make sure that our instances have enough ENIs on them
           # to work with the ebs-csi-node daemonset.
-          {
-            "key"      = "karpenter.k8s.aws/instance-cpu"
-            "operator" = "Gt"
-            "values" = [
-              "8",
-            ]
-          },
+          # {
+          #   "key"      = "karpenter.k8s.aws/instance-cpu"
+          #   "operator" = "Gt"
+          #   "values" = [
+          #     "8",
+          #   ]
+          # },
           # Required to work with the ebs-csi-node daemonset, as it has a scheduling
           # restrictins against a1 instances. 
           {

@@ -25,7 +25,7 @@ resource "aws_rds_cluster_instance" "db" {
   count                   = 1
   identifier              = "${var.project}-${var.env}-${count.index}"
   cluster_identifier      = aws_rds_cluster.db.id
-  instance_class          = "db.r5.xlarge"
+  instance_class          = "db.t3.medium"
   db_subnet_group_name    = aws_db_subnet_group.db.name
   db_parameter_group_name = aws_db_parameter_group.db.name
   monitoring_interval     = 0
