@@ -1,6 +1,5 @@
 locals {
-  //domain = "czid.org"
-  domain = "ucsf.czid.org" //TODO - change to UCSF domain once determined
+  domain = "czid.org"
 }
 
 // New zones for CZ ID

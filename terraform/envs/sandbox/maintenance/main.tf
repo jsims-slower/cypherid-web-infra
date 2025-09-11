@@ -1,6 +1,6 @@
 locals {
   subdomain   = "maintenance"
-  domain      = "${var.env}.ucsf.czid.org"
+  domain      = "${var.env}.seqtoid.org"
   full_domain = "${local.subdomain}.${local.domain}"
   zone_id     = data.terraform_remote_state.idseq-dev.outputs.sandbox_czid_org_zone_id
 
