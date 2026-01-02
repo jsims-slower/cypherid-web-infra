@@ -13,6 +13,7 @@ module "aws-env-v4.0.0" {
   public_subnet_cidrs   = local.public_subnet_cidrs
   region                = local.region
   service               = local.service
+  single_nat_gateway    = local.single_nat_gateway
   vpc_cidr              = local.vpc_cidr
 
 

@@ -5,12 +5,12 @@ include scripts/common.mk
 
 ENVS=dev prod public sandbox staging
 MODULES=config individual-attr machine-images
-ACCOUNTS=idseq-dev idseq-prod
+ACCOUNTS=idseq-dev idseq-newdev idseq-prod
 
 all: check
 
 setup: ## set up working directory by installing dependencies
-	curl -s https://raw.githubusercontent.com/chanzuckerberg/fogg/v0.92.23/download.sh | bash -s -- -b .fogg/bin v0.92.23
+	curl -s https://raw.githubusercontent.com/chanzuckerberg/fogg/v0.92.34/download.sh | bash -s -- -b .fogg/bin v0.92.34
 	.fogg/bin/fogg setup
 .PHONY: setup
 

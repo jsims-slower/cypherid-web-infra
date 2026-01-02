@@ -17,13 +17,23 @@ accounts:
     providers:
       aws:
         account_id: "745463180746"
+  idseq-newdev:
+    backend:
+      kind: s3
+      account_id: "491013321714"
+      bucket: tfstate-491013321714-test
+      region: us-west-2
+      profile: idseq-newdev
+    providers:
+      aws:
+        account_id: "491013321714"
 defaults:
   backend:
     kind: s3
-    account_id: "941377154785"
-    bucket: tfstate-941377154785-test
+    account_id: "491013321714"
+    bucket: tfstate-491013321714-test
     region: us-west-2
-    profile: default
+    profile: idseq-newdev
   depends_on:
     accounts: []
   extra_vars:
@@ -36,14 +46,14 @@ defaults:
     s3_bucket_workflows: idseq-workflows
   owner: biohub-tech@chanzuckerberg.com
   project: idseq
-  terraform_version: 1.11.3
+  terraform_version: "1.14.3"
   providers:
     aws:
-      account_id: "941377154785"
+      account_id: "491013321714"
       additional_regions:
         - us-east-1
         - us-west-2
-      profile: default
+      profile: idseq-newdev
       region: us-west-2
       version: 5.94.0
   tools:
@@ -112,13 +122,11 @@ envs:
             version: 1.14.0
           helm:
             version: 2.11.0
-        extra_vars:
-          eks_cluster_name: czid-dev-eks
       k8s-core:
         project: czid
         depends_on:
           accounts:
-            - idseq-dev
+            - idseq-newdev
           components:
             - eks
             - route53
@@ -146,12 +154,12 @@ envs:
         project: czid
         depends_on:
           accounts:
-            - idseq-dev
+            - idseq-newdev
           components:
             - cloud-env
             - k8s-core
             - eks
-        module_source: git@github.com:chanzuckerberg/happy//terraform/modules/happy-env-eks?ref=happy-env-eks-v4.12.2
+        module_source: terraform/modules/happy-env-eks-v4.12.2
         variables:
           - ecr_repos
           - s3_buckets
@@ -159,25 +167,25 @@ envs:
           - additional_secrets
           - okta_teams
         module_name: happy
-        provider_aliases:
-          "aws.czi-si": aws.czi-si
+#        provider_aliases:
+#          "aws.czi-si": aws.czi-si
         providers:
           aws:
             version: ~> 5.14.0
-            additional_providers:
-              czi-si:
-                account_id: "626314663667"
-                region: us-west-2
-          datadog:
-            custom_provider: true
-            version: 3.20.0
-          opsgenie:
-            version: 0.6.14
-          okta:
-            custom_provider: true
-            version: 3.41.0
-            registry_namespace: okta
-            org_name: czi-prod
+#            additional_providers:
+#              czi-si:
+#                account_id: "626314663667"
+#                region: us-west-2
+#          datadog:
+#            custom_provider: true
+#            version: 3.20.0
+#          opsgenie:
+#            version: 0.6.14
+#          okta:
+#            custom_provider: true
+#            version: 3.41.0
+#            registry_namespace: okta
+#            org_name: czi-prod
       auth0:
         depends_on:
           accounts: []
@@ -185,31 +193,85 @@ envs:
         providers:
           auth0:
             version: 0.26.0
-            domain: czi-idseq-dev.auth0.com
+            domain: dev-ep4y3efh1vxvw06z.us.auth0.com
       cloud-env:
         module_source: terraform/modules/aws-env-v4.0.0
         providers:
           aws:
             version: "~> 5.31.0"
         variables:
+          - single_nat_gateway
           - k8s_cluster_names
         depends_on:
           accounts:
-            - idseq-dev
+            - idseq-newdev
           components: []
-        extra_vars:
-          eks_cluster_name: czid-dev-eks
       downloads:
+        depends_on:
+          accounts: []
+          components: []
+      maintenance:
+        depends_on:
+          accounts:
+            - idseq-newdev
+          components: []
+
+      db:
+        depends_on:
+          accounts: []
+          components:
+            - cloud-env
+      ecs:
+        depends_on:
+          accounts: []
+          components:
+            - cloud-env
+      elb-access-logs:
+        module_source: terraform/modules/aws-elb-access-logs-bucket-v0.420.0
+        module_name: aws-elb-access-logs-bucket
+        depends_on:
+          accounts: []
+          components: []
+      heatmap-optimization:
+        depends_on:
+          accounts: []
+          components:
+            - cloud-env
+      redis:
+        depends_on:
+          accounts: []
+          components:
+            - cloud-env
+            - ecs
+      resque:
+        depends_on:
+          accounts: []
+          components:
+            - ecs
+            - web
+      web:
+        depends_on:
+          accounts:
+            - idseq-newdev
+          components:
+            - cloud-env
+            - ecs
+            - elb-access-logs
+            - db
+            - redis
+            # - heatmap-optimization
+      web-waf:
         depends_on:
           accounts: []
           components: []
     depends_on:
       accounts:
-        - idseq-dev
+        - idseq-newdev
     extra_vars:
-      s3_bucket_aegea_ecs_execute: aegea-ecs-execute-dev
-      s3_bucket_samples: idseq-samples-development
-      s3_bucket_samples_v1: czi-infectious-disease-development-samples
+      s3_bucket_aegea_ecs_execute: aegea-ecs-execute-dev-491013321714
+      s3_bucket_samples: idseq-samples-dev-491013321714
+      s3_bucket_samples_v1: czi-infectious-disease-dev-samples-491013321714
+      eks_cluster_name: czid-dev-eks
   sandbox:
     components:
       cloud-env:
@@ -449,7 +511,7 @@ envs:
             - cloud-env
             - k8s-core
             - eks
-        module_source: git@github.com:chanzuckerberg/happy//terraform/modules/happy-env-eks?ref=happy-env-eks-v4.12.2
+        module_source: terraform/modules/happy-env-eks-v4.12.2
         variables:
           - ecr_repos
           - s3_buckets
@@ -684,7 +746,7 @@ envs:
             - cloud-env
             - k8s-core
             - eks
-        module_source: git@github.com:chanzuckerberg/happy//terraform/modules/happy-env-eks?ref=happy-env-eks-v4.12.2
+        module_source: terraform/modules/happy-env-eks-v4.12.2
         variables:
           - ecr_repos
           - s3_buckets
