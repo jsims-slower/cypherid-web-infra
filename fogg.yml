@@ -24,6 +24,9 @@ accounts:
       bucket: tfstate-491013321714-test
       region: us-west-2
       profile: idseq-newdev
+#    depends_on:
+#      accounts:
+#        - "idseq-newdev"
     providers:
       aws:
         account_id: "491013321714"
