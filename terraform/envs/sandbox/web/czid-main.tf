@@ -1,16 +1,29 @@
 locals {
-  czid_zone_id = data.terraform_remote_state.idseq-dev.outputs.sandbox_czid_org_zone_id
+  # czid_zone_id = data.terraform_remote_state.idseq-newdev.outputs.sandbox_czid_org_zone_id
+  czid_domain        = "${var.env}.seqtoid.org"
+  czid_www_fqdn   = "www.${local.czid_domain}"
+  # czid_full_domain   = "${local.czid_subdomain}.${local.czid_domain}"
+  # czid_origin_domain = local.czid_domain
+
+  # czid_aliases = {
+  #   "www.${local.czid_full_domain}" = local.czid_zone_id
+  # }
+}
+
+data "aws_route53_zone" "czid_zone" {
+  name         = local.czid_domain
+  private_zone = false
 }
 
 module "czid-sandbox-cert" {
   source = "github.com/chanzuckerberg/cztack//aws-acm-certificate?ref=v0.41.0"
 
-  cert_domain_name    = local.czid_origin_domain
-  aws_route53_zone_id = local.czid_zone_id
+  cert_domain_name    = local.czid_domain
+  aws_route53_zone_id = data.aws_route53_zone.czid_zone.id
   tags                = var.tags
 
   cert_subject_alternative_names = {
-    "www.${local.czid_origin_domain}" = local.czid_zone_id
+    (local.czid_www_fqdn) = data.aws_route53_zone.czid_zone.id
   }
 }
 
@@ -28,7 +41,7 @@ module "czid-web-service" {
   task_role_arn       = aws_iam_role.idseq-web.arn
   desired_count       = 2
   lb_subnets          = data.terraform_remote_state.cloud-env.outputs.public_subnets
-  route53_zone_id     = local.czid_zone_id
+  route53_zone_id     = data.aws_route53_zone.czid_zone.id
   subdomain           = ""
   health_check_path   = "/health_check"
   acm_certificate_arn = module.czid-sandbox-cert.arn
@@ -42,8 +55,8 @@ module "czid-web-service" {
 }
 
 resource "aws_route53_record" "czid-www" {
-  zone_id = local.czid_zone_id
-  name    = "www.${local.czid_origin_domain}"
+  zone_id = data.aws_route53_zone.czid_zone.id
+  name    = local.czid_www_fqdn
   type    = "A"
 
   alias {

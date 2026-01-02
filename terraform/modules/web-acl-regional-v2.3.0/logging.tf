@@ -22,13 +22,13 @@ resource "aws_wafv2_web_acl_logging_configuration" "regional" {
   }
 }
 
-data "aws_iam_account_alias" "current" {}
+#data "aws_iam_account_alias" "current" {}
 data "aws_caller_identity" "current" {}
 
 locals {
-  bucket_name   = substr("aws-waf-logs-${local.web_acl_name}-941377154785", 0, 63) //TODO - Add accountID as param later
+  bucket_name   = substr("aws-waf-logs-${local.web_acl_name}-491013321714", 0, 63) //TODO - Add accountID as param later
   account_id    = data.aws_caller_identity.current.account_id
-  account_alias = data.aws_iam_account_alias.current.account_alias
+  #account_alias = data.aws_iam_account_alias.current.account_alias
 }
 
 data "aws_iam_policy_document" "waf_logs" {

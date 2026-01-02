@@ -1,7 +1,7 @@
 locals {
   eks_cluster = data.terraform_remote_state.eks.outputs
   tags        = var.tags
-  //TODO - Does UCSF use DataDog for monitoring?
+  #TODO - Does UCSF use DataDog for monitoring?
   additional_addons = {
     # datadog = {
     #   mute                 = true

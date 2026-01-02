@@ -1,6 +1,6 @@
 dependencies {
   paths = [
     "../eks",
-    "../../../accounts/idseq-dev",
+    "../../../accounts/idseq-newdev",
   ]
 }

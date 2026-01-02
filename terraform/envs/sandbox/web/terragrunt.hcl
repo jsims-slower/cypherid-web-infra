@@ -5,6 +5,6 @@ dependencies {
     "../ecs",
     "../elb-access-logs",
     "../redis",
-    "../../../accounts/idseq-dev",
+    "../../../accounts/idseq-newdev",
   ]
 }

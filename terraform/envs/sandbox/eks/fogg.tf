@@ -283,7 +283,7 @@ variable "project_v1" {
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_aegea_ecs_execute" {
   type    = string
-  default = "aegea-ecs-execute-sandbox-941377154785"
+  default = "aegea-ecs-execute-sandbox-491013321714"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_idseq_bench" {
@@ -298,12 +298,12 @@ variable "s3_bucket_public_references" {
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_samples" {
   type    = string
-  default = "idseq-samples-sandbox-941377154785"
+  default = "idseq-samples-sandbox-491013321714"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_samples_v1" {
   type    = string
-  default = "czi-infectious-disease-sandbox-samples-941377154785"
+  default = "czi-infectious-disease-sandbox-samples-491013321714"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_secrets" {

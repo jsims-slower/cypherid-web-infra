@@ -18,26 +18,25 @@ resource "helm_release" "nginx_ingress" {
   version          = var.nginx_version
   namespace        = var.namespace
   create_namespace = true
-  set {
-    name  = "controller.service.type"
-    value = "NodePort"
-  }
-
-  set {
-    name  = "controller.podAnnotations.linkerd\\.io/inject"
-    value = "enabled"
-    type  = "string"
-  }
-
-  set {
-    name  = "controller.config.proxy-buffer-size"
-    value = "16k"
-    type  = "string"
-  }
-
-  set {
-    name  = "controller.config.client-body-buffer-size"
-    value = "32k"
-    type  = "string"
-  }
+  set = [
+    {
+      name  = "controller.service.type"
+      value = "NodePort"
+    },
+    {
+      name  = "controller.podAnnotations.linkerd\\.io/inject"
+      value = "enabled"
+      type  = "string"
+    },
+    {
+      name  = "controller.config.proxy-buffer-size"
+      value = "16k"
+      type  = "string"
+    },
+    {
+      name  = "controller.config.client-body-buffer-size"
+      value = "32k"
+      type  = "string"
+    }
+  ]
 }

@@ -45,7 +45,12 @@ check-auth: check-auth-aws check-auth-heroku ## check that authentication is pro
 
 check-auth-aws:
 	@for p in $(AWS_BACKEND_PROFILE) $(AWS_PROVIDER_PROFILE); do \
-		aws --profile $$p sts get-caller-identity > /dev/null || (echo "AWS AUTH error. This component is configured to use a profile named '$$p'. Please add one to your ~/.aws/config" && exit -1); \
+		if [ -z "$$p" ]; then continue; fi; \
+		sso_url=$$(aws configure get sso_start_url --profile $$p 2>/dev/null); \
+		aws --profile $$p sts get-caller-identity > /dev/null || \
+			( [ ! -z "$$sso_url" ] && \
+			  (echo "AWS SSO AUTH error for profile '$$p'. Your session may have expired. Please run: aws sso login --profile $$p" && exit 1) || \
+			  (echo "AWS AUTH error for profile '$$p'. Please check your credentials or run 'aws configure sso --profile $$p'" && exit 1) ); \
 	done
 	@for r in $(AWS_BACKEND_ROLE_ARN) $(AWS_PROVIDER_ROLE_ARN); do \
 		aws sts assume-role --role-arn $$r --role-session-name fogg-auth-test > /dev/null || (echo "AWS AUTH error. This component is configured to use a role named '$$r'." && exit -1); \

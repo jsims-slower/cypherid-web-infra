@@ -107,8 +107,8 @@ resource "kubernetes_secret" "certificate_secret" {
   }
 
   data = {
-    "tls.key" : "${data.aws_ssm_parameter.ca_key.value}",
-    "tls.crt" : "${data.aws_ssm_parameter.ca_cert.value}"
+    "tls.key" = data.aws_ssm_parameter.ca_key.value
+    "tls.crt" = data.aws_ssm_parameter.ca_cert.value
   }
 }
 
@@ -186,16 +186,18 @@ resource "helm_release" "linkerd" {
   namespace        = var.linkerd_namespace
   create_namespace = false
   version          = var.linkerd_control_plane_chart_version
-  set {
-    name  = "identityTrustAnchorsPEM"
-    value = data.aws_ssm_parameter.ca_cert.value
-  }
-  set {
-    name  = "identity.issuer.scheme"
-    value = "kubernetes.io/tls"
-  }
+  set = [
+    {
+      name  = "identityTrustAnchorsPEM"
+      value = data.aws_ssm_parameter.ca_cert.value
+    },
+    {
+      name  = "identity.issuer.scheme"
+      value = "kubernetes.io/tls"
+    }
+  ]
   values = [
-    "${file("${path.module}/ha.yml")}"
+    file("${path.module}/ha.yml")
   ]
   depends_on = [helm_release.linkerd_crd]
 }
