@@ -1,7 +1,7 @@
 locals {
   # czid_zone_id = data.terraform_remote_state.idseq-newdev.outputs.sandbox_czid_org_zone_id
-  czid_domain        = "${var.env}.seqtoid.org"
-  czid_www_fqdn   = "www.${local.czid_domain}"
+  czid_domain   = "${var.env}.seqtoid.org"
+  czid_www_fqdn = "www.${local.czid_domain}"
 
   # czid_aliases = {
   #   "www.${local.czid_full_domain}" = local.czid_zone_id
@@ -37,7 +37,7 @@ module "czid-web-service" {
   vpc_id              = data.terraform_remote_state.cloud-env.outputs.vpc_id
   cluster_id          = data.terraform_remote_state.ecs.outputs.cluster_id
   task_role_arn       = aws_iam_role.idseq-web.arn
-  desired_count       = 2
+  desired_count       = 1
   lb_subnets          = data.terraform_remote_state.cloud-env.outputs.public_subnets
   route53_zone_id     = data.aws_route53_zone.czid_zone.id
   subdomain           = ""

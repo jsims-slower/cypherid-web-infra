@@ -33,7 +33,7 @@ jobs:
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::941377154785:role/gha-seqtoid #TODO - Parameterize AWS account ID based on deploy environment
+          role-to-assume: arn:aws:iam::491013321714:role/gha-seqtoid #TODO - Parameterize AWS account ID based on deploy environment
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ env.AWS_REGION }}
       - name: Setup Profile

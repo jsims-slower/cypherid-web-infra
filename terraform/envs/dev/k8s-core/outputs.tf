@@ -6,10 +6,10 @@ output "additional_addons" {
   sensitive = true
 }
 
-output "datadog_agent_hostname" {
-  value     = module.k8s-core.datadog_agent_hostname
-  sensitive = false
-}
+# output "datadog_agent_hostname" {
+#   value     = module.k8s-core.datadog_agent_hostname
+#   sensitive = false
+# }
 
 output "default_namespace" {
   value     = module.k8s-core.default_namespace

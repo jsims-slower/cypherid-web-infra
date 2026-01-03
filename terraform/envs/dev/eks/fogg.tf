@@ -123,7 +123,7 @@ provider "aws" {
 
 provider "assert" {}
 terraform {
-  required_version = "=1.14.3"
+  required_version = ">=1.14.0"
 
   backend "s3" {
 

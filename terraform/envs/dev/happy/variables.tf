@@ -1,5 +1,5 @@
 locals {
-  #base_zone_id = data.terraform_remote_state.idseq-dev.outputs.dev_happy_czid_org_zone_id
+  #base_zone_id = data.terraform_remote_state.idseq-newdev.outputs.dev_happy_czid_org_zone_id
   cloud-env    = data.terraform_remote_state.cloud-env.outputs
   eks-cluster  = data.terraform_remote_state.eks.outputs
   k8s-core     = data.terraform_remote_state.k8s-core.outputs
@@ -8,7 +8,7 @@ locals {
   okta_teams = [
     # By default all CZI has access, change this value to limit which
     # Okta groups can interact with your internal stacks.
-    //"Everyone"
+    "Everyone"
   ]
 
   ecr_repos  = local.machine_readable.ecr_repos
