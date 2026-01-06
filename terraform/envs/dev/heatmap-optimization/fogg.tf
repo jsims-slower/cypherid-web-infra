@@ -98,7 +98,7 @@ provider "aws" {
 
 provider "assert" {}
 terraform {
-  required_version = ">=1.14.0"
+  required_version = "=1.14.3"
 
   backend "s3" {
 
@@ -311,6 +311,3 @@ variable "aws_accounts" {
 
   }
 }
-
-data "aws_caller_identity" "current_account" {}
-

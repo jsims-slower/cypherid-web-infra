@@ -134,6 +134,7 @@ envs:
             - eks
             - route53
         module_source: terraform/modules/k8s-core-v5.5.1
+        module_name: k8s-core
         extra_vars:
           ie_ops_genie_team: Core Infra Eng
         variables:
@@ -199,6 +200,7 @@ envs:
             domain: dev-ep4y3efh1vxvw06z.us.auth0.com
       cloud-env:
         module_source: terraform/modules/aws-env-v4.0.0
+        module_name: aws-env
         providers:
           aws:
             version: "~> 5.31.0"
