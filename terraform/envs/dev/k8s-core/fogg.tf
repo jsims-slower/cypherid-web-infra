@@ -67,7 +67,7 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["626314663667"]
+  allowed_account_ids = ["941377154785"]
 }
 
 
@@ -92,7 +92,7 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["626314663667"]
+  allowed_account_ids = ["941377154785"]
 }
 
 
@@ -117,7 +117,7 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["626314663667"]
+  allowed_account_ids = ["941377154785"]
 }
 
 
@@ -205,21 +205,7 @@ terraform {
     aws = {
       source = "hashicorp/aws"
 
-      version = "~> 5.31.0"
-
-    }
-
-    datadog = {
-      source = "datadog/datadog"
-
-      version = "3.20.0"
-
-    }
-
-    kubernetes = {
-      source = "hashicorp/kubernetes"
-
-      version = "2.23.0"
+      version = "5.94.0"
 
     }
 
@@ -241,13 +227,6 @@ terraform {
       source = "okta/okta"
 
       version = "> 3.30"
-
-    }
-
-    opsgenie = {
-      source = "opsgenie/opsgenie"
-
-      version = "0.6.14"
 
     }
 
@@ -369,21 +348,6 @@ variable "s3_bucket_secrets" {
 variable "s3_bucket_workflows" {
   type    = string
   default = "idseq-workflows"
-}
-# tflint-ignore: terraform_unused_declarations
-data "terraform_remote_state" "global" {
-  backend = "s3"
-  config = {
-
-
-    bucket = "tfstate-491013321714-test"
-
-    key     = "terraform/idseq/global.tfstate"
-    region  = "us-west-2"
-    profile = "idseq-newdev"
-
-
-  }
 }
 data "terraform_remote_state" "eks" {
   backend = "s3"

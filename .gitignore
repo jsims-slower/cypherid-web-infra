@@ -10,11 +10,9 @@
 
 # Module directory
 .terraform/
-#.terraform.d/
 
 # Pycharm folder
 .idea
-*.iml
 
 # Editor Swap Files
 *.swp

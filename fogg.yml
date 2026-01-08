@@ -1,15 +1,54 @@
-global: {}
+# TODO: Re-enable when we are ready to turn on SSH Users in ECS
+#global: {}
 accounts:
-  idseq-dev:
+  idseq-newdev:
+    backend:
+      kind: s3
+      account_id: 491013321714
+      bucket: tfstate-491013321714-test
+      region: us-west-2
+      profile: idseq-newdev
     providers:
       aws:
-        account_id: "941377154785"
+        account_id: 491013321714
+        profile: idseq-newdev
+        additional_regions:
+          - us-east-1
+        additional_providers:
+          czi-si:
+            account_id: 941377154785
+            region: us-west-2
+            profile: idseq-dev
+  idseq-dev:
+    backend:
+      kind: s3
+      account_id: 941377154785
+      bucket: tfstate-941377154785-test
+      region: us-west-2
+      profile: default
+    providers:
+      aws:
+        account_id: 941377154785
+        profile: default
+#  idseq-staging:
+#    backend:
+#      kind: s3
+#      account_id: 030998640247
+#      bucket: tfstate-030998640247
+#      region: us-west-2
+#      profile: default
+#    providers:
+#      aws:
+#        account_id: 030998640247
+#        profile: default
   idseq-prod:
     backend:
       kind: s3
       account_id: "745463180746"
+      #account_id: 283694049553
       bucket: idseq-prod-s3-tf-state-prod-prod-idseq-infra-prod-state
       dynamodb_table: idseq-prod-s3-tf-state-prod-prod-idseq-infra-prod-state-lock
+      #bucket: tfstate-283694049553
       region: us-west-2
       profile: idseq-prod
     depends_on:
@@ -17,28 +56,12 @@ accounts:
     providers:
       aws:
         account_id: "745463180746"
-  idseq-newdev:
-    backend:
-      kind: s3
-      account_id: "491013321714"
-      bucket: tfstate-491013321714-test
-      region: us-west-2
-      profile: idseq-newdev
-#    depends_on:
-#      accounts:
-#        - "idseq-newdev"
-    providers:
-      aws:
-        account_id: "491013321714"
+        #account_id: 283694049553
+        profile: idseq-prod
 defaults:
-  backend:
-    kind: s3
-    account_id: "491013321714"
-    bucket: tfstate-491013321714-test
-    region: us-west-2
-    profile: idseq-newdev
   depends_on:
     accounts: []
+    components: []
   extra_vars:
     alignment_index_date: "2021-01-22"
     build_index_date: "2021-01-22"
@@ -49,16 +72,18 @@ defaults:
     s3_bucket_workflows: idseq-workflows
   owner: biohub-tech@chanzuckerberg.com
   project: idseq
-  terraform_version: "1.14.3"
   providers:
     aws:
-      account_id: "491013321714"
+      account_id: invalid-account-id
       additional_regions:
         - us-east-1
         - us-west-2
-      profile: idseq-newdev
+      profile: invalid-profile
       region: us-west-2
       version: 5.94.0
+    auth0:
+      version: 0.26.2
+  terraform_version: "1.14.3"
   tools:
     github_actions_ci:
       aws_iam_role_name: infraci
@@ -72,6 +97,20 @@ defaults:
       test_buckets: 20
 envs:
   dev:
+    backend:
+      kind: s3
+      account_id: 491013321714
+      bucket: tfstate-491013321714-test
+      region: us-west-2
+      profile: idseq-newdev
+    providers:
+      aws:
+        account_id: 491013321714
+        profile: idseq-newdev
+        additional_providers:
+          czi-si:
+            account_id: 941377154785
+            region: us-west-2
     components:
       # used to code generate our configuration for the s3 storing state files outisde of TFE buckets
       # s3-tf-state:
@@ -125,6 +164,10 @@ envs:
             version: 1.14.0
           helm:
             version: 2.11.0
+#      route53:
+#        project: czid
+#        module_source: terraform/modules/happy-route53
+#        module_name: happy-route53
       k8s-core:
         project: czid
         depends_on:
@@ -139,21 +182,21 @@ envs:
           ie_ops_genie_team: Core Infra Eng
         variables:
           - additional_addons
-        providers:
-          aws:
-            version: ~> 5.31.0
-            additional_providers:
-              czi-si:
-                account_id: "626314663667"
-                region: us-west-2
-          datadog:
-            custom_provider: true
-            version: 3.20.0
-          kubernetes:
-            enabled: true
-            version: 2.23.0
-          opsgenie:
-            version: 0.6.14
+#        providers:
+#          aws:
+#            version: ~> 5.31.0
+#            additional_providers:
+#              czi-si:
+#                account_id: "626314663667"
+#                region: us-west-2
+#          datadog:
+#            custom_provider: true
+#            version: 3.20.0
+#          kubernetes:
+#            enabled: true
+#            version: 2.23.0
+#          opsgenie:
+#            version: 0.6.14
       happy:
         project: czid
         depends_on:
@@ -173,9 +216,8 @@ envs:
         module_name: happy
 #        provider_aliases:
 #          "aws.czi-si": aws.czi-si
-        providers:
-          aws:
-            version: ~> 5.14.0
+#        providers:
+#          aws:
 #            additional_providers:
 #              czi-si:
 #                account_id: "626314663667"
@@ -191,30 +233,21 @@ envs:
 #            registry_namespace: okta
 #            org_name: czi-prod
       auth0:
-        depends_on:
-          accounts: []
-          components: []
         providers:
           auth0:
-            version: 0.26.0
-            domain: dev-ep4y3efh1vxvw06z.us.auth0.com
+            domain: "${var.auth0_m2m_domain}"
+        extra_vars:
+          auth0_m2m_domain: "dev-ep4y3efh1vxvw06z.us.auth0.com"
       cloud-env:
         module_source: terraform/modules/aws-env-v4.0.0
         module_name: aws-env
-        providers:
-          aws:
-            version: "~> 5.31.0"
         variables:
           - single_nat_gateway
           - k8s_cluster_names
         depends_on:
           accounts:
             - idseq-newdev
-          components: []
       downloads:
-        depends_on:
-          accounts: []
-          components: []
       maintenance:
         depends_on:
           accounts:
@@ -223,34 +256,26 @@ envs:
 
       db:
         depends_on:
-          accounts: []
           components:
             - cloud-env
       ecs:
         depends_on:
-          accounts: []
           components:
             - cloud-env
       elb-access-logs:
         module_source: terraform/modules/aws-elb-access-logs-bucket-v0.420.0
         module_name: aws-elb-access-logs-bucket
-        depends_on:
-          accounts: []
-          components: []
       heatmap-optimization:
         depends_on:
-          accounts: []
           components:
             - cloud-env
       redis:
         depends_on:
-          accounts: []
           components:
             - cloud-env
             - ecs
       resque:
         depends_on:
-          accounts: []
           components:
             - ecs
             - web
@@ -264,11 +289,8 @@ envs:
             - elb-access-logs
             - db
             - redis
-            # - heatmap-optimization
+            - heatmap-optimization
       web-waf:
-        depends_on:
-          accounts: []
-          components: []
     depends_on:
       accounts:
         - idseq-newdev
@@ -278,6 +300,16 @@ envs:
       s3_bucket_samples_v1: czi-infectious-disease-dev-samples-491013321714
       eks_cluster_name: czid-dev-eks
   sandbox:
+    backend:
+      kind: s3
+      account_id: 941377154785
+      bucket: tfstate-941377154785-test
+      region: us-west-2
+      profile: default
+    providers:
+      aws:
+        account_id: 941377154785
+        profile: default
     components:
       cloud-env:
         module_source: terraform/modules/aws-env-v4.0.0
@@ -286,11 +318,9 @@ envs:
           - single_nat_gateway
           - k8s_cluster_names
         depends_on:
-          accounts: []
+          accounts:
+            - idseq-dev
           components: []
-        providers:
-          aws:
-            version: "~> 5.31.0"
       eks:
         project: czid
         depends_on:
@@ -328,7 +358,7 @@ envs:
         project: czid
         depends_on:
           accounts:
-            - idseq-newdev
+            - idseq-dev
           components:
             - eks
             - route53
@@ -357,7 +387,7 @@ envs:
         project: czid
         depends_on:
           accounts:
-            - idseq-newdev
+            - idseq-dev
           components:
             - cloud-env
             - k8s-core
@@ -370,9 +400,25 @@ envs:
           - additional_secrets
           - okta_teams
         module_name: happy
+        provider_aliases:
+          "aws.czi-si": aws.czi-si
         providers:
           aws:
             version: ~> 5.14.0
+            additional_providers:
+              czi-si:
+                account_id: "626314663667"
+                region: us-west-2
+          datadog:
+            custom_provider: true
+            version: 3.20.0
+          opsgenie:
+            version: 0.6.14
+          okta:
+            custom_provider: true
+            version: 3.41.0
+            registry_namespace: okta
+            org_name: czi-prod
       db:
         depends_on:
           accounts: []
@@ -392,7 +438,7 @@ envs:
       maintenance:
         depends_on:
           accounts:
-            - idseq-newdev
+            - idseq-dev
           components: []
       heatmap-optimization:
         depends_on:
@@ -414,27 +460,34 @@ envs:
       web:
         depends_on:
           accounts:
-            - idseq-newdev
+            - idseq-dev
           components:
             - cloud-env
             - ecs
             - elb-access-logs
             - db
             - redis
-            # - heatmap-optimization
+            - heatmap-optimization
       web-waf:
-        depends_on:
-          accounts: []
-          components: []
     depends_on:
       accounts:
-        - idseq-newdev
+        - idseq-dev
     extra_vars:
       s3_bucket_aegea_ecs_execute: aegea-ecs-execute-sandbox-941377154785
       s3_bucket_samples: idseq-samples-sandbox-941377154785
       s3_bucket_samples_v1: czi-infectious-disease-sandbox-samples-941377154785
       eks_cluster_name: czid-sandbox-eks
   staging:
+    backend:
+      kind: s3
+      account_id: 030998640247
+      bucket: tfstate-030998640247-test
+      region: us-west-2
+      profile: idseq-staging
+    providers:
+      aws:
+        account_id: 030998640247
+        profile: idseq-staging
     components:
       eks:
         project: czid
@@ -470,8 +523,6 @@ envs:
             version: 1.14.0
           helm:
             version: 2.11.0
-        extra_vars:
-          eks_cluster_name: czid-staging-eks
       fivetran-ssh-nextgen:
         depends_on:
           accounts: []
@@ -483,11 +534,12 @@ envs:
         project: czid
         depends_on:
           accounts:
-            - idseq-newdev
+            - idseq-dev
           components:
             - eks
             - route53
         module_source: terraform/modules/k8s-core-v5.5.1
+        module_name: k8s-core
         extra_vars:
           ie_ops_genie_team: Core Infra Eng
         variables:
@@ -511,7 +563,7 @@ envs:
         project: czid
         depends_on:
           accounts:
-            - idseq-newdev
+            - idseq-dev
           components:
             - cloud-env
             - k8s-core
@@ -550,7 +602,9 @@ envs:
       auth0:
         providers:
           auth0:
-            version: 0.26.0
+            domain: "${var.auth0_m2m_domain}"
+        extra_vars:
+          auth0_m2m_domain: <TBD>
         depends_on:
           accounts: []
           components: []
@@ -569,10 +623,8 @@ envs:
           - k8s_cluster_names
         depends_on:
           accounts:
-            - idseq-newdev
+            - idseq-dev
           components: []
-        extra_vars:
-          eks_cluster_name: czid-staging-eks
       db:
         depends_on:
           accounts: []
@@ -618,7 +670,7 @@ envs:
             version: 4.61.0
         depends_on:
           accounts:
-            - idseq-newdev
+            - idseq-dev
           components:
             - cloud-env
             - db
@@ -632,24 +684,27 @@ envs:
             version: 4.44.0
     depends_on:
       accounts:
-        - idseq-newdev
+        - idseq-dev
     extra_vars:
       s3_bucket_aegea_ecs_execute: aegea-ecs-execute-staging
       s3_bucket_samples: idseq-samples-staging
       s3_bucket_samples_v1: czi-infectious-disease-staging-samples
-  public:
-    components:
-      web:
-        depends_on:
-          accounts:
-            - idseq-newdev
-          components: []
+      eks_cluster_name: czid-staging-eks
+# TODO: Where do we want to house the Public data, like help-center(?) and other public files
+#  public:
+#    components:
+#      web:
+#        depends_on:
+#          accounts:
+#            - idseq-dev
+#          components: []
   prod:
     backend:
       kind: s3
-      account_id: "745463180746"
-      bucket: idseq-prod-s3-tf-state-prod-prod-idseq-infra-prod-state
-      dynamodb_table: idseq-prod-s3-tf-state-prod-prod-idseq-infra-prod-state-lock
+      account_id: 283694049553
+      bucket: tfstate-283694049553
+      #bucket: idseq-prod-s3-tf-state-prod-prod-idseq-infra-prod-state
+      #dynamodb_table: idseq-prod-s3-tf-state-prod-prod-idseq-infra-prod-state-lock
       region: us-west-2
       profile: idseq-prod
     depends_on:
@@ -657,7 +712,7 @@ envs:
         - idseq-prod
     providers:
       aws:
-        account_id: "745463180746"
+        account_id: 283694049553
         profile: idseq-prod
     components:
       # used to code generate our configuration for the s3 storing state files outisde of TFE buckets
@@ -712,8 +767,6 @@ envs:
             version: 1.14.0
           helm:
             version: 2.11.0
-        extra_vars:
-          eks_cluster_name: czid-prod-eks
       k8s-core:
         project: czid
         depends_on:
@@ -723,6 +776,7 @@ envs:
             - eks
             - route53
         module_source: terraform/modules/k8s-core-v5.5.1
+        module_name: k8s-core
         extra_vars:
           ie_ops_genie_team: Core Infra Eng
         variables:
@@ -788,7 +842,9 @@ envs:
           components: []
         providers:
           auth0:
-            version: 0.26.0
+            domain: "${var.auth0_m2m_domain}"
+        extra_vars:
+          auth0_m2m_domain: <TBD>
       batch:
         depends_on:
           accounts: []
@@ -806,8 +862,6 @@ envs:
           accounts:
             - idseq-prod
           components: []
-        extra_vars:
-          eks_cluster_name: czid-prod-eks
       db:
         depends_on:
           accounts: []
@@ -903,6 +957,7 @@ envs:
       s3_bucket_aegea_ecs_execute: idseq-prod-aegea-ecs-execute-us-west-2
       s3_bucket_idseq_bench: idseq-bench
       s3_bucket_pipeline_public_assets: idseq-prod-pipeline-public-assets-us-west-2
+      eks_cluster_name: czid-prod-eks
 modules:
   config: {}
   machine-images: {}

@@ -47,6 +47,81 @@ provider "aws" {
 
 
 provider "aws" {
+  alias   = "czi-si-us-west-2"
+  region  = "us-west-2"
+  profile = "idseq-newdev"
+
+  # this is the new way of injecting AWS tags to all AWS resources
+  # var.tags should be considered deprecated
+  default_tags {
+    tags = {
+      TFC_WORKSPACE_NAME                   = coalesce(var.TFC_WORKSPACE_NAME, "unknown")
+      TFC_WORKSPACE_SLUG                   = coalesce(var.TFC_WORKSPACE_SLUG, "unknown")
+      TFC_CONFIGURATION_VERSION_GIT_BRANCH = coalesce(var.TFC_CONFIGURATION_VERSION_GIT_BRANCH, "unknown")
+      TFC_CONFIGURATION_VERSION_GIT_TAG    = coalesce(var.TFC_CONFIGURATION_VERSION_GIT_TAG, "unknown")
+      TFC_PROJECT_NAME                     = coalesce(var.TFC_PROJECT_NAME, "unknown")
+      project                              = coalesce(var.tags.project, "unknown")
+      env                                  = coalesce(var.tags.env, "unknown")
+      service                              = coalesce(var.tags.service, "unknown")
+      owner                                = coalesce(var.tags.owner, "unknown")
+      managedBy                            = "terraform"
+    }
+  }
+  allowed_account_ids = ["941377154785"]
+}
+
+
+provider "aws" {
+  alias   = "czi-si-us-east-1"
+  region  = "us-east-1"
+  profile = "idseq-newdev"
+
+  # this is the new way of injecting AWS tags to all AWS resources
+  # var.tags should be considered deprecated
+  default_tags {
+    tags = {
+      TFC_WORKSPACE_NAME                   = coalesce(var.TFC_WORKSPACE_NAME, "unknown")
+      TFC_WORKSPACE_SLUG                   = coalesce(var.TFC_WORKSPACE_SLUG, "unknown")
+      TFC_CONFIGURATION_VERSION_GIT_BRANCH = coalesce(var.TFC_CONFIGURATION_VERSION_GIT_BRANCH, "unknown")
+      TFC_CONFIGURATION_VERSION_GIT_TAG    = coalesce(var.TFC_CONFIGURATION_VERSION_GIT_TAG, "unknown")
+      TFC_PROJECT_NAME                     = coalesce(var.TFC_PROJECT_NAME, "unknown")
+      project                              = coalesce(var.tags.project, "unknown")
+      env                                  = coalesce(var.tags.env, "unknown")
+      service                              = coalesce(var.tags.service, "unknown")
+      owner                                = coalesce(var.tags.owner, "unknown")
+      managedBy                            = "terraform"
+    }
+  }
+  allowed_account_ids = ["941377154785"]
+}
+
+
+provider "aws" {
+  alias   = "czi-si"
+  region  = "us-west-2"
+  profile = "idseq-newdev"
+
+  # this is the new way of injecting AWS tags to all AWS resources
+  # var.tags should be considered deprecated
+  default_tags {
+    tags = {
+      TFC_WORKSPACE_NAME                   = coalesce(var.TFC_WORKSPACE_NAME, "unknown")
+      TFC_WORKSPACE_SLUG                   = coalesce(var.TFC_WORKSPACE_SLUG, "unknown")
+      TFC_CONFIGURATION_VERSION_GIT_BRANCH = coalesce(var.TFC_CONFIGURATION_VERSION_GIT_BRANCH, "unknown")
+      TFC_CONFIGURATION_VERSION_GIT_TAG    = coalesce(var.TFC_CONFIGURATION_VERSION_GIT_TAG, "unknown")
+      TFC_PROJECT_NAME                     = coalesce(var.TFC_PROJECT_NAME, "unknown")
+      project                              = coalesce(var.tags.project, "unknown")
+      env                                  = coalesce(var.tags.env, "unknown")
+      service                              = coalesce(var.tags.service, "unknown")
+      owner                                = coalesce(var.tags.owner, "unknown")
+      managedBy                            = "terraform"
+    }
+  }
+  allowed_account_ids = ["941377154785"]
+}
+
+
+provider "aws" {
   alias   = "us-west-2"
   region  = "us-west-2"
   profile = "idseq-newdev"
@@ -95,33 +170,14 @@ provider "aws" {
   allowed_account_ids = ["491013321714"]
 }
 
+
 provider "assert" {}
 
-variable "auth0_m2m_domain" {
-  type    = string
-  default = "dev-ep4y3efh1vxvw06z.us.auth0.com"
-}
-
-variable "auth0_m2m_client_id" {
-  type    = string
-  default = "91wpPpxTpbcMQ5kcoeYJcw443pdizI4l"
-}
-
-variable "auth0_m2m_client_secret" {
-  type    = string
-  sensitive = true # Mark as sensitive if it contains credentials
-  default = "_oL9PNazw_8iG6woY2vReZeEghZPCVwIZAyiylLcXVhJj1Axcw4FH1G5yWne1YUl"
-}
-
 provider "auth0" {
-  domain        = var.auth0_m2m_domain
-  client_id     = var.auth0_m2m_client_id
-  client_secret = var.auth0_m2m_client_secret
-  debug         = "1"
+  domain = "${var.auth0_m2m_domain}"
 }
-
 terraform {
-  required_version = ">=1.14.0"
+  required_version = "=1.14.3"
 
   backend "s3" {
 
@@ -160,7 +216,7 @@ terraform {
     aws = {
       source = "hashicorp/aws"
 
-      version = "~> 5.31.0"
+      version = "5.94.0"
 
     }
 
@@ -232,7 +288,7 @@ variable "owner" {
   default = "biohub-tech@chanzuckerberg.com"
 }
 # tflint-ignore: terraform_unused_declarations
-# DEPRECATED: this field is deprecated in favor or
+# DEPRECATED: this field is deprecated in favor or 
 # AWS provider default tags.
 variable "tags" {
   type = object({ project : string, env : string, service : string, owner : string, managedBy : string })
@@ -250,9 +306,19 @@ variable "alignment_index_date" {
   default = "2021-01-22"
 }
 # tflint-ignore: terraform_unused_declarations
+variable "auth0_m2m_domain" {
+  type    = string
+  default = "dev-ep4y3efh1vxvw06z.us.auth0.com"
+}
+# tflint-ignore: terraform_unused_declarations
 variable "build_index_date" {
   type    = string
   default = "2021-01-22"
+}
+# tflint-ignore: terraform_unused_declarations
+variable "eks_cluster_name" {
+  type    = string
+  default = "czid-dev-eks"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "project_v1" {
@@ -294,15 +360,14 @@ variable "s3_bucket_workflows" {
   type    = string
   default = "idseq-workflows"
 }
-# tflint-ignore: terraform_unused_declarations
-data "terraform_remote_state" "global" {
+data "terraform_remote_state" "idseq-newdev" {
   backend = "s3"
   config = {
 
 
     bucket = "tfstate-491013321714-test"
 
-    key     = "terraform/idseq/global.tfstate"
+    key     = "terraform/idseq/accounts/idseq-newdev.tfstate"
     region  = "us-west-2"
     profile = "idseq-newdev"
 

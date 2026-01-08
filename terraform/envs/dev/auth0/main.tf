@@ -1,3 +1,7 @@
+# NOTE: The following ENV Variables MUST be set, and must point to the machine-to-machine (m2m) Auth0 Application
+#     AUTH0_CLIENT_ID
+#     AUTH0_CLIENT_SECRET
+
 # resource "auth0_client" "global" {
 #   name                 = "All Applications"
 #   custom_login_page    = file("${path.module}/pages/login.html")
@@ -13,11 +17,16 @@
 #   }
 # }
 
+resource "auth0_role" "admin" {
+  name        = "Admin"
+  description = "Administrator"
+}
+
 resource "auth0_client" "idseq_web" {
-  name = "idseq-web"
+  name        = "idseq-web"
   description = "Seqtoid DEV Web Application"
   allowed_clients = [
-    var.auth0_m2m_client_id,
+    # var.auth0_m2m_client_id,
     "https://dev.seqtoid.org",
   ]
   allowed_logout_urls = [
@@ -78,7 +87,7 @@ resource "auth0_client" "idseq_web_management" {
 
 resource "auth0_client_grant" "idseq_web_management_grant" {
   client_id = auth0_client.idseq_web_management.id
-  audience  = "https://${var.auth0_m2m_domain}/api/v2/"
+  audience  = "https://${var.auth0_m2m_domain}/api/v2/" # "https://dev.seqtoid.org" ## TODO: Should be this?!!!
   scope = [
     "read:users",
     "update:users",
@@ -157,7 +166,7 @@ resource "auth0_connection" "username_password_authentication" {
   strategy = "auth0"
   enabled_clients = [
     auth0_client.idseq_web.id,
-    var.auth0_m2m_client_id,
+    # var.auth0_m2m_client_id,
     # auth0_client.idseq_web_management.id,
     # auth0_client.idseq_cli_v2.id,
   ]
@@ -226,6 +235,5 @@ module "auth0-ssm-params" {
     AUTH0_MANAGEMENT_CLIENT_ID     = auth0_client.idseq_web_management.client_id
     AUTH0_MANAGEMENT_CLIENT_SECRET = auth0_client.idseq_web_management.client_secret
     AUTH0_MANAGEMENT_DOMAIN        = var.auth0_m2m_domain
-    S3_WORKFLOWS_BUCKET=
   }
 }

@@ -315,21 +315,6 @@ variable "s3_bucket_workflows" {
   type    = string
   default = "idseq-workflows"
 }
-# tflint-ignore: terraform_unused_declarations
-data "terraform_remote_state" "global" {
-  backend = "s3"
-  config = {
-
-
-    bucket = "tfstate-491013321714-test"
-
-    key     = "terraform/idseq/global.tfstate"
-    region  = "us-west-2"
-    profile = "idseq-newdev"
-
-
-  }
-}
 data "terraform_remote_state" "cloud-env" {
   backend = "s3"
   config = {
