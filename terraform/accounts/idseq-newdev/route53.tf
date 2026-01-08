@@ -28,7 +28,7 @@ resource "aws_route53_zone" "dev-seqtoid-org" {
 data "aws_route53_zone" "root-seqtoid-org" {
   name         = local.base_domain
   private_zone = false
-  provider     = aws.czi-si
+  provider     = aws.czi-si-us-east-1
 }
 
 resource "aws_route53_record" "dev-seqtoid-org" {
@@ -37,5 +37,5 @@ resource "aws_route53_record" "dev-seqtoid-org" {
   type     = "NS"
   ttl      = 300
   records  = aws_route53_zone.dev-seqtoid-org.name_servers
-  provider = aws.czi-si
+  provider = aws.czi-si-us-east-1
 }

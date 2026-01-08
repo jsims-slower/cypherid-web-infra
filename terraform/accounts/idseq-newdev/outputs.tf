@@ -16,14 +16,13 @@ output "dev_seqtoid_org_name_servers" {
 #   value = aws_route53_zone.staging-czid-org.name_servers
 # }
 
-# TODO: These 2 are wrong, and should be renamed later to dev_seqtoid_org_zone_id
-output "sandbox_czid_org_zone_id" {
-  value = aws_route53_zone.dev-seqtoid-org.zone_id
-}
-
-output "sandbox_czid_org_name_servers" {
-  value = aws_route53_zone.dev-seqtoid-org.name_servers
-}
+# output "sandbox_czid_org_zone_id" {
+#   value = aws_route53_zone.dev-seqtoid-org.zone_id
+# }
+#
+# output "sandbox_czid_org_name_servers" {
+#   value = aws_route53_zone.dev-seqtoid-org.name_servers
+# }
 
 # output "public_czid_org_zone_id" {
 #   value = aws_route53_zone.public-czid-org.zone_id

@@ -19,6 +19,8 @@ accounts:
             account_id: 941377154785
             region: us-west-2
             profile: idseq-dev
+            additional_regions:
+              - us-east-1
   idseq-dev:
     backend:
       kind: s3
@@ -107,10 +109,13 @@ envs:
       aws:
         account_id: 491013321714
         profile: idseq-newdev
-        additional_providers:
-          czi-si:
-            account_id: 941377154785
-            region: us-west-2
+#        additional_providers:
+#          czi-si:
+#            account_id: 941377154785
+#            region: us-west-2
+#            profile: idseq-dev
+#            additional_regions:
+#              - us-east-1
     components:
       # used to code generate our configuration for the s3 storing state files outisde of TFE buckets
       # s3-tf-state:
@@ -149,14 +154,16 @@ envs:
         provider_aliases:
           aws.us-east-1: aws.us-east-1
         providers:
-          aws:
-            version: ~> 5.31.0
-            additional_regions:
-              - us-east-1
-            additional_providers:
-              czi-si:
-                account_id: "626314663667"
-                region: us-west-2
+#          aws:
+#            additional_regions:
+#              - us-east-1
+#            additional_providers:
+#              czi-si:
+#                account_id: 941377154785
+#                region: us-west-2
+#                profile: idseq-dev
+#                additional_regions:
+#                  - us-east-1
           kubernetes:
             enabled: true
             version: 2.23.0
@@ -244,16 +251,15 @@ envs:
         variables:
           - single_nat_gateway
           - k8s_cluster_names
-        depends_on:
-          accounts:
-            - idseq-newdev
+#        depends_on:
+#          accounts:
+#            - idseq-newdev
       downloads:
       maintenance:
         depends_on:
           accounts:
             - idseq-newdev
           components: []
-
       db:
         depends_on:
           components:
@@ -291,9 +297,9 @@ envs:
             - redis
             - heatmap-optimization
       web-waf:
-    depends_on:
-      accounts:
-        - idseq-newdev
+#    depends_on:
+#      accounts:
+#        - idseq-newdev
     extra_vars:
       s3_bucket_aegea_ecs_execute: aegea-ecs-execute-dev-491013321714
       s3_bucket_samples: idseq-samples-dev-491013321714

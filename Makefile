@@ -3,7 +3,7 @@
 
 include scripts/common.mk
 
-ENVS=dev prod public sandbox staging
+ENVS=dev prod sandbox staging
 MODULES=config individual-attr machine-images
 ACCOUNTS=idseq-dev idseq-newdev idseq-prod
 

@@ -1,7 +1,7 @@
 locals {
   # TODO: Do we really want offline hours, where the EC2 instance is taken down the the application ceases to function?
-  off_hour_utc = 3
-  on_hour_utc  = 13
+  off_hour_utc = 8
+  on_hour_utc  = 10
 }
 
 module "ecs-cluster" {

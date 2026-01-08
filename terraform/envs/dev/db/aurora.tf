@@ -6,6 +6,7 @@ data "aws_ssm_parameter" "db_secret" {
 }
 
 resource "aws_rds_cluster" "db" {
+  enable_http_endpoint                = true # This enables Query Editor in the AWS RDS UI
   cluster_identifier                  = "${var.project}-${var.env}"
   database_name                       = "${var.project}_${var.env}"
   master_username                     = var.db_username
@@ -25,7 +26,7 @@ resource "aws_rds_cluster_instance" "db" {
   count                   = 1
   identifier              = "${var.project}-${var.env}-${count.index}"
   cluster_identifier      = aws_rds_cluster.db.id
-  instance_class          = "db.t3.medium"
+  instance_class          = "db.r6i.large" # This was db.t3.medium, but needs to be larger to enable Query Editor in the AWS RDS UI
   db_subnet_group_name    = aws_db_subnet_group.db.name
   db_parameter_group_name = aws_db_parameter_group.db.name
   monitoring_interval     = 0

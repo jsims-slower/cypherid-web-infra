@@ -29,7 +29,7 @@ resource "aws_s3_bucket" "samples" {
 
     expiration {
       // Short period is safer for data privacy.
-      days = 3
+      days = 30 # TODO: was 3, but hard to debug when files disappear
     }
   }
 
@@ -43,7 +43,7 @@ resource "aws_s3_bucket" "samples" {
     }
 
     expiration {
-      days = 1
+      days = 30 # TODO: was 1, but hard to debug when files disappear
     }
   }
 
