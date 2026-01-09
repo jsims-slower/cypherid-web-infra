@@ -254,7 +254,7 @@ envs:
 #        depends_on:
 #          accounts:
 #            - idseq-newdev
-      downloads:
+#      downloads:
       maintenance:
         depends_on:
           accounts:

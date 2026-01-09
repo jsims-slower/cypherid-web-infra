@@ -3,7 +3,7 @@ locals {
   domain      = "${var.env}.seqtoid.org"
   full_domain = "${local.subdomain}.${local.domain}"
   # TODO: Use aws_route53_zone zone data block instead of using an unrelated statefile
-  zone_id     = data.terraform_remote_state.idseq-newdev.outputs.sandbox_czid_org_zone_id
+  zone_id     = data.terraform_remote_state.idseq-newdev.outputs.dev_seqtoid_org_zone_id
 
   aliases = {
     "www.${local.full_domain}" = local.zone_id
