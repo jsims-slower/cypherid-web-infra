@@ -79,7 +79,6 @@ defaults:
       account_id: invalid-account-id
       additional_regions:
         - us-east-1
-        - us-west-2
       profile: invalid-profile
       region: us-west-2
       version: 5.94.0
@@ -144,7 +143,7 @@ envs:
         module_source: terraform/modules/eks-cluster-v2-v7.3.0
         variables:
           - cluster_name
-          - iam_cluster_name_prefix
+          #- iam_cluster_name_prefix
           - cluster_version
           - owner_roles
           - node_groups
@@ -154,9 +153,9 @@ envs:
         provider_aliases:
           aws.us-east-1: aws.us-east-1
         providers:
-#          aws:
-#            additional_regions:
-#              - us-east-1
+          aws:
+            additional_regions:
+              - us-east-1
 #            additional_providers:
 #              czi-si:
 #                account_id: 941377154785
