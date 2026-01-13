@@ -13,6 +13,7 @@ data "aws_route53_zone" "czid_zone" {
   private_zone = false
 }
 
+# TODO: Rename to czid-www-cert
 module "czid-sandbox-cert" {
   source = "github.com/chanzuckerberg/cztack//aws-acm-certificate?ref=v0.41.0"
 
