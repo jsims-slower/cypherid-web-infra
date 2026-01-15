@@ -36,6 +36,10 @@ accounts:
       aws:
         account_id: 030998640247
         profile: idseq-staging
+    extra_vars:
+      dynamodb_enabled: false
+      #prevent_unencrypted_uploads: false
+      s3_bucket_name: tfstate-030998640247
   idseq-prod:
     backend:
       kind: s3
@@ -54,6 +58,7 @@ accounts:
         #account_id: 283694049553
         profile: idseq-prod
 defaults:
+  needs_aws_accounts_variable: false
   depends_on:
     accounts: []
     components: []
@@ -81,6 +86,7 @@ defaults:
           region: us-west-2
           profile: idseq-dev
           additional_regions:
+            - us-east-1
     auth0:
       version: 0.26.2
   terraform_version: "1.14.3"
@@ -527,6 +533,10 @@ envs:
             version: 1.14.0
           helm:
             version: 2.11.0
+#      route53:
+#        project: czid
+#        module_source: terraform/modules/happy-route53
+#        module_name: happy-route53
       fivetran-ssh-nextgen:
         depends_on:
           accounts: []
@@ -690,9 +700,9 @@ envs:
       accounts:
         - idseq-dev
     extra_vars:
-      s3_bucket_aegea_ecs_execute: "aegea-ecs-execute-${var.env}-${data.aws_caller_identity.current.account_id}"
-      s3_bucket_samples: "idseq-samples-${var.env}-${data.aws_caller_identity.current.account_id}"
-      s3_bucket_samples_v1: "czi-infectious-disease-${var.env}-samples-030998640247"
+      s3_bucket_aegea_ecs_execute: "aegea-ecs-execute-${var.env}-${var.aws_accounts.idseq-staging}"
+      s3_bucket_samples: "idseq-samples-${var.env}-${var.aws_accounts.idseq-staging}"
+      s3_bucket_samples_v1: "czi-infectious-disease-${var.env}-samples-${var.aws_accounts.idseq-staging}"
       eks_cluster_name: "czid-${var.env}-eks"
 # TODO: Where do we want to house the Public data, like help-center(?) and other public files
 #  public:

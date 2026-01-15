@@ -255,6 +255,11 @@ variable "build_index_date" {
   default = "2021-01-22"
 }
 # tflint-ignore: terraform_unused_declarations
+variable "dynamodb_enabled" {
+  type    = string
+  default = "false"
+}
+# tflint-ignore: terraform_unused_declarations
 variable "project_v1" {
   type    = string
   default = "czid"
@@ -263,6 +268,11 @@ variable "project_v1" {
 variable "s3_bucket_idseq_bench" {
   type    = string
   default = "idseq-bench"
+}
+# tflint-ignore: terraform_unused_declarations
+variable "s3_bucket_name" {
+  type    = string
+  default = "tfstate-030998640247"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_public_references" {
@@ -278,19 +288,4 @@ variable "s3_bucket_secrets" {
 variable "s3_bucket_workflows" {
   type    = string
   default = "idseq-workflows"
-}
-# tflint-ignore: terraform_unused_declarations
-variable "aws_accounts" {
-  type = map(string)
-  default = {
-
-    idseq-dev = "941377154785"
-
-    idseq-newdev = "491013321714"
-
-    idseq-prod = "745463180746"
-
-    idseq-staging = "030998640247"
-
-  }
 }
