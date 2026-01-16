@@ -13,7 +13,5 @@ module "happy" {
   tags                 = local.tags
 
 
-  providers = {
-    aws.czi-si = aws.czi-si
-  }
+
 }

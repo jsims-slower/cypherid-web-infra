@@ -47,6 +47,9 @@ Deploy Terraform components
 cd terraform/envs/<env>/route53
 make apply
 
+cd ../params-secrets
+make apply
+
 cd ../cloud-env
 make apply
 
@@ -57,6 +60,33 @@ cd ../maintenance
 make apply
 
 cd ../heatmap-optimization
+make apply
+
+cd ../db
+make apply
+
+cd ../ecs
+make apply
+
+cd ../redis
+make apply
+
+cd ../web
+make apply
+
+cd ../web-waf
+make apply
+
+cd ../resque
+make apply
+
+cd ../eks
+make apply
+
+cd ../k8s-core
+make apply
+
+cd ../happy
 make apply
 
 cd -

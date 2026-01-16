@@ -508,8 +508,8 @@ envs:
           - additional_secrets
           - okta_teams
         module_name: happy
-        provider_aliases:
-          "aws.czi-si": aws.czi-si
+#        provider_aliases:
+#          "aws.czi-si": aws.czi-si
 #        providers:
 #          datadog:
 #            custom_provider: true
