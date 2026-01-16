@@ -63,6 +63,7 @@ defaults:
     accounts: []
     components: []
   extra_vars:
+    base_domain: seqtoid.org
     alignment_index_date: "2021-01-22"
     build_index_date: "2021-01-22"
     project_v1: czid
@@ -84,7 +85,7 @@ defaults:
         czi-si:
           account_id: 941377154785
           region: us-west-2
-          profile: idseq-dev
+          profile: idseq-sandbox
           additional_regions:
             - us-east-1
     auth0:
@@ -113,13 +114,6 @@ envs:
       aws:
         account_id: 491013321714
         profile: idseq-newdev
-#        additional_providers:
-#          czi-si:
-#            account_id: 941377154785
-#            region: us-west-2
-#            profile: idseq-dev
-#            additional_regions:
-#              - us-east-1
     components:
       # used to code generate our configuration for the s3 storing state files outisde of TFE buckets
       # s3-tf-state:
@@ -500,7 +494,6 @@ envs:
         profile: idseq-staging
     components:
       eks:
-        project: czid
         depends_on:
           accounts: []
           components:
@@ -533,22 +526,15 @@ envs:
             version: 1.14.0
           helm:
             version: 2.11.0
-#      route53:
-#        project: czid
-#        module_source: terraform/modules/happy-route53
-#        module_name: happy-route53
+      route53:
       fivetran-ssh-nextgen:
         depends_on:
-          accounts: []
           components:
             - db
             - happy
             - k8s-core
       k8s-core:
-        project: czid
         depends_on:
-          accounts:
-            - idseq-dev
           components:
             - eks
             - route53
@@ -574,10 +560,7 @@ envs:
           opsgenie:
             version: 0.6.14
       happy:
-        project: czid
         depends_on:
-          accounts:
-            - idseq-dev
           components:
             - cloud-env
             - k8s-core
@@ -610,35 +593,23 @@ envs:
             registry_namespace: okta
             org_name: czi-prod
       access-management:
-        depends_on:
-          accounts: []
-          components: []
       auth0:
         providers:
           auth0:
             domain: "${var.auth0_m2m_domain}"
         extra_vars:
           auth0_m2m_domain: <TBD>
-        depends_on:
-          accounts: []
-          components: []
       batch:
         depends_on:
-          accounts: []
           components:
             - ecs
             - cloud-env
       cloud-env:
         module_source: terraform/modules/aws-env-v4.0.0
-        providers:
-          aws:
-            version: "~> 5.31.0"
+        module_name: aws-env
         variables:
+          - single_nat_gateway
           - k8s_cluster_names
-        depends_on:
-          accounts:
-            - idseq-dev
-          components: []
       db:
         depends_on:
           accounts: []
@@ -683,8 +654,6 @@ envs:
           aws:
             version: 4.61.0
         depends_on:
-          accounts:
-            - idseq-dev
           components:
             - cloud-env
             - db
@@ -696,14 +665,11 @@ envs:
         providers:
           aws:
             version: 4.44.0
-    depends_on:
-      accounts:
-        - idseq-dev
     extra_vars:
-      s3_bucket_aegea_ecs_execute: "aegea-ecs-execute-${var.env}-${var.aws_accounts.idseq-staging}"
-      s3_bucket_samples: "idseq-samples-${var.env}-${var.aws_accounts.idseq-staging}"
-      s3_bucket_samples_v1: "czi-infectious-disease-${var.env}-samples-${var.aws_accounts.idseq-staging}"
-      eks_cluster_name: "czid-${var.env}-eks"
+      s3_bucket_aegea_ecs_execute: "aegea-ecs-execute-staging-030998640247"
+      s3_bucket_samples: "idseq-samples-staging-030998640247"
+      s3_bucket_samples_v1: "czi-infectious-disease-staging-samples-030998640247"
+      eks_cluster_name: "czid-staging-eks"
 # TODO: Where do we want to house the Public data, like help-center(?) and other public files
 #  public:
 #    components:
@@ -748,7 +714,6 @@ envs:
       #     - tags
       #     - attributes
       eks:
-        project: czid
         depends_on:
           accounts: []
           components:
@@ -782,7 +747,6 @@ envs:
           helm:
             version: 2.11.0
       k8s-core:
-        project: czid
         depends_on:
           accounts:
             - idseq-prod
@@ -811,7 +775,6 @@ envs:
           opsgenie:
             version: 0.6.14
       happy:
-        project: czid
         depends_on:
           accounts:
             - idseq-prod
