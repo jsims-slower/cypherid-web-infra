@@ -1,8 +1,16 @@
+data "aws_ssm_parameter" "db_secret" {
+  name = "${local.ssm_param_name}_password"
+  depends_on = [
+    aws_ssm_parameter.db_master_password
+  ]
+}
+
 resource "aws_rds_cluster" "db" {
+  enable_http_endpoint                = true # This enables Query Editor in the AWS RDS UI
   cluster_identifier                  = "${var.project}-${var.env}"
   database_name                       = "${var.project}_${var.env}"
   master_username                     = var.db_username
-  master_password                     = module.db_password.value
+  master_password                     = data.aws_ssm_parameter.db_secret.value
   vpc_security_group_ids              = [aws_security_group.rds.id]
   db_subnet_group_name                = aws_db_subnet_group.db.name
   storage_encrypted                   = true
@@ -34,7 +42,7 @@ resource "aws_rds_cluster_instance" "db" {
 
 resource "aws_rds_cluster_parameter_group" "db" {
   name        = "${var.project}-${var.env}-rds-cluster-pg"
-  family      = "aurora-mysql5.7"
+  family      = "aurora-mysql8.0"
   description = "RDS default cluster parameter group"
 
   parameter {
@@ -62,7 +70,7 @@ resource "aws_rds_cluster_parameter_group" "db" {
 
 resource "aws_db_parameter_group" "db" {
   name   = "${var.project}-${var.env}-rds-pg"
-  family = "aurora-mysql5.7"
+  family = "aurora-mysql8.0"
 
   parameter {
     name  = "general_log"
@@ -82,6 +90,7 @@ resource "aws_db_parameter_group" "db" {
   parameter {
     name  = "log_output"
     value = "FILE"
+    #apply_method = "pending-reboot"
   }
 
   parameter {
