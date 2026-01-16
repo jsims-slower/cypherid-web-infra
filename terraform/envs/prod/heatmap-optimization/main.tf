@@ -1,8 +1,8 @@
 locals {
   service     = "es"
   name        = "${var.project}-${var.env}-${local.service}"
-  bucket_name = "idseq-${var.env}-heatmap-batch-jobs"
-  account_id  = var.aws_accounts["idseq-prod"]
+  bucket_name = "idseq-${var.env}-heatmap-batch-jobs-${local.account_id}"
+  account_id  = var.aws_accounts.idseq-prod
   tags = {
     managedBy = "terraform"
     Name      = local.name
@@ -160,27 +160,27 @@ resource "aws_glue_job" "batch-taxon-indexing" {
   }
 }
 
-module "gh_actions_executor" {
-  source = "git@github.com:chanzuckerberg/shared-infra//terraform/modules/aws-iam-role-github-action?ref=v0.125.0"
-
-  tags = local.tags
-  role = {
-    name = "gh_actions_executor"
-  }
-  authorized_github_repos = {
-    chanzuckerberg : ["czid-heatmap-spark-service"]
-  }
-}
-
-module "idseq-heatmap-iam-s3-writer" {
-  source = "git@github.com:chanzuckerberg/shared-infra//terraform/modules/aws-iam-policy-s3-writer?ref=v0.66.0"
-
-  bucket_name   = "idseq-prod-heatmap"
-  bucket_prefix = ""
-
-  env       = var.env
-  owner     = var.owner
-  project   = var.project
-  role_name = module.gh_actions_executor.role.name
-  service   = var.component
-}
+# module "gh_actions_executor" {
+#   source = "git@github.com:chanzuckerberg/shared-infra//terraform/modules/aws-iam-role-github-action?ref=v0.125.0"
+#
+#   tags = local.tags
+#   role = {
+#     name = "gh_actions_executor"
+#   }
+#   authorized_github_repos = {
+#     chanzuckerberg : ["czid-heatmap-spark-service"]
+#   }
+# }
+#
+# module "idseq-heatmap-iam-s3-writer" {
+#   source = "git@github.com:chanzuckerberg/shared-infra//terraform/modules/aws-iam-policy-s3-writer?ref=v0.66.0"
+#
+#   bucket_name   = "idseq-prod-heatmap"
+#   bucket_prefix = ""
+#
+#   env       = var.env
+#   owner     = var.owner
+#   project   = var.project
+#   role_name = module.gh_actions_executor.role.name
+#   service   = var.component
+# }

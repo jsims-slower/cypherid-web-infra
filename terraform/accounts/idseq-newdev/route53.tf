@@ -1,6 +1,6 @@
 locals {
   base_domain = "seqtoid.org"
-  sub_domain  = "dev.${local.base_domain}"
+  sub_domain  = "${var.env}.${local.base_domain}"
 }
 
 # TODO: Determine what method to use in the future; the old CZI way, or the newer way in this file
@@ -15,13 +15,13 @@ locals {
 #              IE: The Terraform for each sub_domain (idseq-dev, etc...) must be deployed first, and then after that, the base_domain could be deployed (idseq_prod)
 #
 
-resource "aws_route53_zone" "dev-seqtoid-org" {
+resource "aws_route53_zone" "env-seqtoid-org" {
   name = local.sub_domain
   tags = {
     owner   = var.owner
     project = var.project_v1
     service = "seqtoid"
-    env     = "dev"
+    env     = var.env
   }
 }
 
@@ -31,11 +31,11 @@ data "aws_route53_zone" "root-seqtoid-org" {
   provider     = aws.czi-si-us-east-1
 }
 
-resource "aws_route53_record" "dev-seqtoid-org" {
+resource "aws_route53_record" "env-seqtoid-org" {
   zone_id  = data.aws_route53_zone.root-seqtoid-org.zone_id
   name     = local.sub_domain
   type     = "NS"
   ttl      = 300
-  records  = aws_route53_zone.dev-seqtoid-org.name_servers
+  records  = aws_route53_zone.env-seqtoid-org.name_servers
   provider = aws.czi-si-us-east-1
 }

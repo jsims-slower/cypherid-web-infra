@@ -25,9 +25,14 @@ aws configure sso --profile idseq-<env>
 export AWS_DEFAULT_PROFILE=idseq-<env>
 ```
 
-# Initialize Fogg and Terraform executables (one-time setup):
+# Initialize Fogg and Terraform executables (one-time setup)
 ```bash
 make setup
+```
+
+# Run Fogg
+```bash
+./fogg/bin/fogg apply
 ```
 
 # Create remote Statefile (one-time setup, per environment):
@@ -41,10 +46,18 @@ Deploy Terraform components
 ```bash
 cd terraform/envs/<env>/route53
 make apply
-cd -
-cd terraform/envs/<env>/cloud-env
+
+cd ../cloud-env
 make apply
 
+cd ../elb-access-logs
+make apply
+
+cd ../maintenance
+make apply
+
+cd ../heatmap-optimization
+make apply
 
 cd -
 ```

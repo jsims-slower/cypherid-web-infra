@@ -76,7 +76,7 @@ resource "auth0_client" "idseq_web" {
 
 resource "auth0_client_grant" "idseq_web_grant" {
   client_id = auth0_client.idseq_web.id
-  audience  = "https://${var.auth0_m2m_domain}/api/v2/" # "https://dev.seqtoid.org" ## TODO: Should be this?!!!
+  audience  = "https://${var.auth0_domain}/api/v2/" # "https://dev.seqtoid.org" ## TODO: Should be this?!!!
   scope     = []
 }
 
@@ -87,7 +87,7 @@ resource "auth0_client" "idseq_web_management" {
 
 resource "auth0_client_grant" "idseq_web_management_grant" {
   client_id = auth0_client.idseq_web_management.id
-  audience  = "https://${var.auth0_m2m_domain}/api/v2/" # "https://dev.seqtoid.org" ## TODO: Should be this?!!!
+  audience  = "https://${var.auth0_domain}/api/v2/" # "https://dev.seqtoid.org" ## TODO: Should be this?!!!
   scope = [
     "read:users",
     "update:users",

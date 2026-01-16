@@ -58,7 +58,7 @@ accounts:
         #account_id: 283694049553
         profile: idseq-prod
 defaults:
-  needs_aws_accounts_variable: false
+  #needs_aws_accounts_variable: false
   depends_on:
     accounts: []
     components: []
@@ -71,7 +71,6 @@ defaults:
     s3_bucket_idseq_bench: idseq-bench
     s3_bucket_secrets: idseq-secrets
     s3_bucket_workflows: idseq-workflows
-    auth0_domain: dev-ep4y3efh1vxvw06z.us.auth0.com
   owner: biohub-tech@chanzuckerberg.com
   project: idseq
   providers:
@@ -137,7 +136,6 @@ envs:
       eks:
         project: czid
         depends_on:
-          accounts: []
           components:
             - cloud-env
         module_source: terraform/modules/eks-cluster-v2-v7.3.0
@@ -177,8 +175,6 @@ envs:
       k8s-core:
         project: czid
         depends_on:
-          accounts:
-            - idseq-newdev
           components:
             - eks
             - route53
@@ -189,12 +185,6 @@ envs:
         variables:
           - additional_addons
 #        providers:
-#          aws:
-#            version: ~> 5.31.0
-#            additional_providers:
-#              czi-si:
-#                account_id: "626314663667"
-#                region: us-west-2
 #          datadog:
 #            custom_provider: true
 #            version: 3.20.0
@@ -206,9 +196,8 @@ envs:
       happy:
         project: czid
         depends_on:
-          accounts:
-            - idseq-newdev
           components:
+            - route53
             - cloud-env
             - k8s-core
             - eks
@@ -223,11 +212,6 @@ envs:
 #        provider_aliases:
 #          "aws.czi-si": aws.czi-si
 #        providers:
-#          aws:
-#            additional_providers:
-#              czi-si:
-#                account_id: "626314663667"
-#                region: us-west-2
 #          datadog:
 #            custom_provider: true
 #            version: 3.20.0
@@ -248,15 +232,8 @@ envs:
         variables:
           - single_nat_gateway
           - k8s_cluster_names
-#        depends_on:
-#          accounts:
-#            - idseq-newdev
 #      downloads:
       maintenance:
-        depends_on:
-          accounts:
-            - idseq-newdev
-          components: []
       db:
         depends_on:
           components:
@@ -284,9 +261,8 @@ envs:
             - web
       web:
         depends_on:
-          accounts:
-            - idseq-newdev
           components:
+            - route53
             - cloud-env
             - ecs
             - elb-access-logs
@@ -294,14 +270,12 @@ envs:
             - redis
             - heatmap-optimization
       web-waf:
-#    depends_on:
-#      accounts:
-#        - idseq-newdev
     extra_vars:
       s3_bucket_aegea_ecs_execute: aegea-ecs-execute-dev-491013321714
       s3_bucket_samples: idseq-samples-dev-491013321714
       s3_bucket_samples_v1: czi-infectious-disease-dev-samples-491013321714
       eks_cluster_name: czid-dev-eks
+      auth0_domain: dev-ep4y3efh1vxvw06z.us.auth0.com
   sandbox:
     backend:
       kind: s3
@@ -320,14 +294,9 @@ envs:
         variables:
           - single_nat_gateway
           - k8s_cluster_names
-        depends_on:
-          accounts:
-            - idseq-dev
-          components: []
       eks:
         project: czid
         depends_on:
-          accounts: []
           components:
             - cloud-env
         module_source: terraform/modules/eks-cluster-v2-v7.3.0
@@ -360,9 +329,8 @@ envs:
       k8s-core:
         project: czid
         depends_on:
-          accounts:
-            - idseq-dev
           components:
+            - route53
             - eks
             - route53
         module_source: terraform/modules/k8s-core-v5.5.1
@@ -389,9 +357,8 @@ envs:
       happy:
         project: czid
         depends_on:
-          accounts:
-            - idseq-dev
           components:
+            - route53
             - cloud-env
             - k8s-core
             - eks
@@ -424,47 +391,34 @@ envs:
             org_name: czi-prod
       db:
         depends_on:
-          accounts: []
           components:
             - cloud-env
       ecs:
         depends_on:
-          accounts: []
           components:
             - cloud-env
       elb-access-logs:
         module_source: terraform/modules/aws-elb-access-logs-bucket-v0.420.0
         module_name: aws-elb-access-logs-bucket
-        depends_on:
-          accounts: []
-          components: []
       maintenance:
-        depends_on:
-          accounts:
-            - idseq-dev
-          components: []
       heatmap-optimization:
         depends_on:
-          accounts: []
           components:
             - cloud-env
       redis:
         depends_on:
-          accounts: []
           components:
             - cloud-env
             - ecs
       resque:
         depends_on:
-          accounts: []
           components:
             - ecs
             - web
       web:
         depends_on:
-          accounts:
-            - idseq-dev
           components:
+            - route53
             - cloud-env
             - ecs
             - elb-access-logs
@@ -472,9 +426,6 @@ envs:
             - redis
             - heatmap-optimization
       web-waf:
-    depends_on:
-      accounts:
-        - idseq-dev
     extra_vars:
       s3_bucket_aegea_ecs_execute: aegea-ecs-execute-sandbox-941377154785
       s3_bucket_samples: idseq-samples-sandbox-941377154785
@@ -580,6 +531,15 @@ envs:
           components:
             - ecs
             - cloud-env
+      params-secrets:
+        module_source: "github.com/chanzuckerberg/cztack//aws-params-secrets-setup?ref=v0.103.2"
+        module_name: aws-params-secrets-setup
+        variables:
+          - alias_name
+          - env
+          - owner
+          - project
+          - service
       cloud-env:
         module_source: terraform/modules/aws-env-v4.0.0
         module_name: aws-env
@@ -631,7 +591,8 @@ envs:
       s3_bucket_samples: "idseq-samples-staging-030998640247"
       s3_bucket_samples_v1: "czi-infectious-disease-staging-samples-030998640247"
       eks_cluster_name: "czid-staging-eks"
-# TODO: Where do we want to house the Public data, like help-center(?) and other public files
+      auth0_domain: dev-ep4y3efh1vxvw06z.us.auth0.com
+  # TODO: Where do we want to house the Public data, like help-center(?) and other public files
 #  public:
 #    components:
 #      web:
@@ -648,9 +609,6 @@ envs:
       #dynamodb_table: idseq-prod-s3-tf-state-prod-prod-idseq-infra-prod-state-lock
       region: us-west-2
       profile: idseq-prod
-    depends_on:
-      accounts:
-        - idseq-prod
     providers:
       aws:
         account_id: 283694049553
@@ -676,7 +634,6 @@ envs:
       #     - attributes
       eks:
         depends_on:
-          accounts: []
           components:
             - cloud-env
         module_source: terraform/modules/eks-cluster-v2-v7.3.0
@@ -709,9 +666,8 @@ envs:
             version: 2.11.0
       k8s-core:
         depends_on:
-          accounts:
-            - idseq-prod
           components:
+            - route53
             - eks
             - route53
         module_source: terraform/modules/k8s-core-v5.5.1
@@ -737,9 +693,8 @@ envs:
             version: 0.6.14
       happy:
         depends_on:
-          accounts:
-            - idseq-prod
           components:
+            - route53
             - cloud-env
             - k8s-core
             - eks
@@ -771,36 +726,23 @@ envs:
             registry_namespace: okta
             org_name: czi-prod
       access-management:
-        depends_on:
-          accounts: []
-          components: []
       auth0:
-        depends_on:
-          accounts: []
-          components: []
         providers:
           auth0:
             domain: "${var.auth0_domain}"
       batch:
         depends_on:
-          accounts: []
           components:
             - cloud-env
             - ecs
       cloud-env:
         module_source: terraform/modules/aws-env-v4.0.0
-        providers:
-          aws:
-            version: "~> 5.31.0"
+        module_name: aws-env
         variables:
+          - single_nat_gateway
           - k8s_cluster_names
-        depends_on:
-          accounts:
-            - idseq-prod
-          components: []
       db:
         depends_on:
-          accounts: []
           components:
             - cloud-env
       dashboards:
@@ -813,13 +755,8 @@ envs:
         module_source: terraform/modules/aws-elb-access-logs-bucket-v0.420.0
         module_name: aws-elb-access-logs-bucket
       email:
-        depends_on:
-          accounts:
-            - idseq-prod
-          components: []
       fivetran-ssh:
         depends_on:
-          accounts: []
           components:
             - ecs
             - db
@@ -827,31 +764,18 @@ envs:
             - k8s-core
       individual-attr:
         module_source: ./terraform/modules/individual-attr
-        depends_on:
-          accounts: []
-          components: []
       heatmap-optimization:
-        providers:
-          aws:
-            version: 4.34.0
         depends_on:
-          accounts: []
           components:
             - cloud-env
       maintenance:
-        depends_on:
-          accounts:
-            - idseq-prod
-          components: []
       redis:
         depends_on:
-          accounts: []
           components:
             - cloud-env
             - ecs
       resque:
         depends_on:
-          accounts: []
           components:
             - ecs
             - web
@@ -860,9 +784,8 @@ envs:
           aws:
             version: 4.61.0
         depends_on:
-          accounts:
-            - idseq-prod
           components:
+            - route53
             - cloud-env
             - ecs
             - elb-access-logs
@@ -875,9 +798,8 @@ envs:
             version: 4.44.0
       zendesk:
         depends_on:
-          accounts:
-            - idseq-prod
-          components: []
+          components:
+            - route53
     extra_vars:
       s3_bucket_samples: idseq-prod-samples-us-west-2
       s3_bucket_samples_v1: czi-infectious-disease-prod-samples
@@ -885,6 +807,7 @@ envs:
       s3_bucket_idseq_bench: idseq-bench
       s3_bucket_pipeline_public_assets: idseq-prod-pipeline-public-assets-us-west-2
       eks_cluster_name: czid-prod-eks
+      auth0_domain: dev-ep4y3efh1vxvw06z.us.auth0.com
 modules:
   config: {}
   machine-images: {}

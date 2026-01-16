@@ -10,7 +10,7 @@ export TF_BACKEND_KIND := s3
 export AWS_BACKEND_PROFILE := idseq-prod
 
 
-export AWS_PROVIDER_PROFILE := idseq-newdev
+export AWS_PROVIDER_PROFILE := idseq-prod
 
 
 
