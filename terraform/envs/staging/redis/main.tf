@@ -1,6 +1,6 @@
 module "elasticache_secure" {
   # TODO Point to the correct ref version tag once this new module is merged into cztack
-  source                        = "github.com/chanzuckerberg/cztack//aws-redis-replication-group?ref=v0.73.0"
+  source                        = "github.com/chanzuckerberg/cztack//aws-redis-replication-group?ref=v0.103.2"
   project                       = var.project
   env                           = var.env
   service                       = "resque-secure"

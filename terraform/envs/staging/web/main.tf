@@ -234,7 +234,7 @@ resource "aws_iam_role_policy" "idseq-upload" {
 }
 
 module "parameters-policy" {
-  source = "github.com/chanzuckerberg/cztack//aws-params-reader-policy?ref=v0.73.0"
+  source = "github.com/chanzuckerberg/cztack//aws-params-reader-policy?ref=v0.103.2"
 
   project   = var.project
   env       = var.env
@@ -244,7 +244,7 @@ module "parameters-policy" {
 }
 
 module "web-service-params" {
-  source  = "github.com/chanzuckerberg/cztack//aws-ssm-params-writer?ref=v0.73.0"
+  source  = "github.com/chanzuckerberg/cztack//aws-ssm-params-writer?ref=v0.103.2"
   project = var.project
   env     = var.env
   service = var.component
@@ -271,7 +271,7 @@ module "web-service-params" {
 # Our dev environment uses staging to run alignments
 #   The ALIGNMENT_CONFIG_DEFAULT_NAME must be in sync between them
 module "web-service-params-dev" {
-  source  = "github.com/chanzuckerberg/cztack//aws-ssm-params-writer?ref=v0.73.0"
+  source  = "github.com/chanzuckerberg/cztack//aws-ssm-params-writer?ref=v0.103.2"
   project = var.project
   env     = "dev"
   service = var.component
@@ -284,7 +284,7 @@ module "web-service-params-dev" {
 
 
 module "staging" {
-  source = "github.com/chanzuckerberg/cztack//aws-acm-certificate?ref=v0.73.0"
+  source = "github.com/chanzuckerberg/cztack//aws-acm-certificate?ref=v0.103.2"
 
   cert_domain_name    = "staging.idseq.net"
   aws_route53_zone_id = local.zone_id
@@ -297,7 +297,7 @@ module "staging" {
 }
 
 module "staging_east" {
-  source = "github.com/chanzuckerberg/cztack//aws-acm-certificate?ref=v0.73.0"
+  source = "github.com/chanzuckerberg/cztack//aws-acm-certificate?ref=v0.103.2"
 
   cert_domain_name    = "staging.idseq.net"
   aws_route53_zone_id = local.zone_id
