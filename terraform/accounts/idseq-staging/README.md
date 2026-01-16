@@ -1,4 +1,6 @@
-To destroy these resources, you need to either use the generated ilocal statefile, or reconstruct the local statefile using:
+To destroy these resources, you need to either use the generated local statefile, or reconstruct the local statefile using:
+
+***NOTE: If anything is added, like dynamodb, this list will change!***
 
 ```bash
 terraform import "module.terraform-aws-tfstate-backend.aws_s3_bucket.default[0]" "tfstate-030998640247"

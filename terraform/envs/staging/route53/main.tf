@@ -1,5 +1,5 @@
 locals {
-  sub_domain = "${var.env}.${var.base_domain}"
+  full_domain = "${var.env}.${var.base_domain}"
 }
 
 # TODO: Determine what method to use in the future; the old CZI way, or the newer way in this file
@@ -15,7 +15,7 @@ locals {
 #
 
 resource "aws_route53_zone" "env-seqtoid-org" {
-  name = local.sub_domain
+  name = local.full_domain
   tags = {
     owner   = var.owner
     project = var.project_v1
@@ -32,7 +32,7 @@ data "aws_route53_zone" "root-seqtoid-org" {
 
 resource "aws_route53_record" "env-seqtoid-org" {
   zone_id  = data.aws_route53_zone.root-seqtoid-org.zone_id
-  name     = local.sub_domain
+  name     = local.full_domain
   type     = "NS"
   ttl      = 300
   records  = aws_route53_zone.env-seqtoid-org.name_servers

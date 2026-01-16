@@ -71,6 +71,7 @@ defaults:
     s3_bucket_idseq_bench: idseq-bench
     s3_bucket_secrets: idseq-secrets
     s3_bucket_workflows: idseq-workflows
+    auth0_domain: dev-ep4y3efh1vxvw06z.us.auth0.com
   owner: biohub-tech@chanzuckerberg.com
   project: idseq
   providers:
@@ -240,9 +241,7 @@ envs:
       auth0:
         providers:
           auth0:
-            domain: "${var.auth0_m2m_domain}"
-        extra_vars:
-          auth0_m2m_domain: "dev-ep4y3efh1vxvw06z.us.auth0.com"
+            domain: "${var.auth0_domain}"
       cloud-env:
         module_source: terraform/modules/aws-env-v4.0.0
         module_name: aws-env
@@ -495,7 +494,6 @@ envs:
     components:
       eks:
         depends_on:
-          accounts: []
           components:
             - cloud-env
         module_source: terraform/modules/eks-cluster-v2-v7.3.0
@@ -511,14 +509,6 @@ envs:
         provider_aliases:
           aws.us-east-1: aws.us-east-1
         providers:
-          aws:
-            version: ~> 5.31.0
-            additional_regions:
-              - us-east-1
-            additional_providers:
-              czi-si:
-                account_id: "626314663667"
-                region: us-west-2
           kubernetes:
             enabled: true
             version: 2.23.0
@@ -540,25 +530,19 @@ envs:
             - route53
         module_source: terraform/modules/k8s-core-v5.5.1
         module_name: k8s-core
-        extra_vars:
-          ie_ops_genie_team: Core Infra Eng
+#        extra_vars:
+#          ie_ops_genie_team: Core Infra Eng
         variables:
           - additional_addons
-        providers:
-          aws:
-            version: ~> 5.31.0
-            additional_providers:
-              czi-si:
-                account_id: "626314663667"
-                region: us-west-2
-          datadog:
-            custom_provider: true
-            version: 3.20.0
-          kubernetes:
-            enabled: true
-            version: 2.23.0
-          opsgenie:
-            version: 0.6.14
+#        providers:
+#          datadog:
+#            custom_provider: true
+#            version: 3.20.0
+#          kubernetes:
+#            enabled: true
+#            version: 2.23.0
+#          opsgenie:
+#            version: 0.6.14
       happy:
         depends_on:
           components:
@@ -575,30 +559,22 @@ envs:
         module_name: happy
         provider_aliases:
           "aws.czi-si": aws.czi-si
-        providers:
-          aws:
-            version: ~> 5.14.0
-            additional_providers:
-              czi-si:
-                account_id: "626314663667"
-                region: us-west-2
-          datadog:
-            custom_provider: true
-            version: 3.20.0
-          opsgenie:
-            version: 0.6.14
-          okta:
-            custom_provider: true
-            version: 3.41.0
-            registry_namespace: okta
-            org_name: czi-prod
+#        providers:
+#          datadog:
+#            custom_provider: true
+#            version: 3.20.0
+#          opsgenie:
+#            version: 0.6.14
+#          okta:
+#            custom_provider: true
+#            version: 3.41.0
+#            registry_namespace: okta
+#            org_name: czi-prod
       access-management:
       auth0:
         providers:
           auth0:
-            domain: "${var.auth0_m2m_domain}"
-        extra_vars:
-          auth0_m2m_domain: <TBD>
+            domain: "${var.auth0_domain}"
       batch:
         depends_on:
           components:
@@ -612,47 +588,35 @@ envs:
           - k8s_cluster_names
       db:
         depends_on:
-          accounts: []
           components:
             - cloud-env
       downloads:
-        depends_on:
-          accounts: []
-          components: []
       ecs:
         depends_on:
-          accounts: []
           components:
             - cloud-env
       elb-access-logs:
         module_source: terraform/modules/aws-elb-access-logs-bucket-v0.420.0
-        depends_on:
-          accounts: []
-          components: []
+        module_name: aws-elb-access-logs-bucket
       heatmap-optimization:
-        providers:
-          aws:
-            version: 4.34.0
         depends_on:
-          accounts: []
           components:
             - cloud-env
+      maintenance:
+        depends_on:
+          components:
+            - route53
       resque:
         depends_on:
-          accounts: []
           components:
             - ecs
             - web
       redis:
         depends_on:
-          accounts: []
           components:
             - cloud-env
             - ecs
       web:
-        providers:
-          aws:
-            version: 4.61.0
         depends_on:
           components:
             - cloud-env
@@ -662,9 +626,6 @@ envs:
             - elb-access-logs
             - redis
       web-waf:
-        providers:
-          aws:
-            version: 4.44.0
     extra_vars:
       s3_bucket_aegea_ecs_execute: "aegea-ecs-execute-staging-030998640247"
       s3_bucket_samples: "idseq-samples-staging-030998640247"
@@ -819,9 +780,7 @@ envs:
           components: []
         providers:
           auth0:
-            domain: "${var.auth0_m2m_domain}"
-        extra_vars:
-          auth0_m2m_domain: <TBD>
+            domain: "${var.auth0_domain}"
       batch:
         depends_on:
           accounts: []
@@ -845,23 +804,14 @@ envs:
           components:
             - cloud-env
       dashboards:
-        depends_on:
-          accounts: []
-          components: []
       downloads:
-        depends_on:
-          accounts: []
-          components: []
       ecs:
         depends_on:
-          accounts: []
           components:
             - cloud-env
       elb-access-logs:
         module_source: terraform/modules/aws-elb-access-logs-bucket-v0.420.0
-        depends_on:
-          accounts: []
-          components: []
+        module_name: aws-elb-access-logs-bucket
       email:
         depends_on:
           accounts:
