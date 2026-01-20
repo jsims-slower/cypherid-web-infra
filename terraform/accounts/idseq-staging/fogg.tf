@@ -49,7 +49,7 @@ provider "aws" {
 provider "aws" {
   alias   = "czi-si-us-east-1"
   region  = "us-east-1"
-  profile = "idseq-dev"
+  profile = "idseq-sandbox"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -74,7 +74,7 @@ provider "aws" {
 provider "aws" {
   alias   = "czi-si"
   region  = "us-west-2"
-  profile = "idseq-dev"
+  profile = "idseq-sandbox"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -250,6 +250,11 @@ variable "alignment_index_date" {
   default = "2021-01-22"
 }
 # tflint-ignore: terraform_unused_declarations
+variable "base_domain" {
+  type    = string
+  default = "seqtoid.org"
+}
+# tflint-ignore: terraform_unused_declarations
 variable "build_index_date" {
   type    = string
   default = "2021-01-22"
@@ -288,4 +293,19 @@ variable "s3_bucket_secrets" {
 variable "s3_bucket_workflows" {
   type    = string
   default = "idseq-workflows"
+}
+# tflint-ignore: terraform_unused_declarations
+variable "aws_accounts" {
+  type = map(string)
+  default = {
+
+    idseq-dev = "941377154785"
+
+    idseq-newdev = "491013321714"
+
+    idseq-prod = "745463180746"
+
+    idseq-staging = "030998640247"
+
+  }
 }

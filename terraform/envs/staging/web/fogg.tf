@@ -47,9 +47,9 @@ provider "aws" {
 
 
 provider "aws" {
-  alias   = "us-west-2"
-  region  = "us-west-2"
-  profile = "idseq-newdev"
+  alias   = "czi-si-us-east-1"
+  region  = "us-east-1"
+  profile = "idseq-sandbox"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -67,7 +67,32 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["491013321714"]
+  allowed_account_ids = ["941377154785"]
+}
+
+
+provider "aws" {
+  alias   = "czi-si"
+  region  = "us-west-2"
+  profile = "idseq-sandbox"
+
+  # this is the new way of injecting AWS tags to all AWS resources
+  # var.tags should be considered deprecated
+  default_tags {
+    tags = {
+      TFC_WORKSPACE_NAME                   = coalesce(var.TFC_WORKSPACE_NAME, "unknown")
+      TFC_WORKSPACE_SLUG                   = coalesce(var.TFC_WORKSPACE_SLUG, "unknown")
+      TFC_CONFIGURATION_VERSION_GIT_BRANCH = coalesce(var.TFC_CONFIGURATION_VERSION_GIT_BRANCH, "unknown")
+      TFC_CONFIGURATION_VERSION_GIT_TAG    = coalesce(var.TFC_CONFIGURATION_VERSION_GIT_TAG, "unknown")
+      TFC_PROJECT_NAME                     = coalesce(var.TFC_PROJECT_NAME, "unknown")
+      project                              = coalesce(var.tags.project, "unknown")
+      env                                  = coalesce(var.tags.env, "unknown")
+      service                              = coalesce(var.tags.service, "unknown")
+      owner                                = coalesce(var.tags.owner, "unknown")
+      managedBy                            = "terraform"
+    }
+  }
+  allowed_account_ids = ["941377154785"]
 }
 
 
@@ -279,21 +304,6 @@ variable "s3_bucket_workflows" {
   type    = string
   default = "idseq-workflows"
 }
-# tflint-ignore: terraform_unused_declarations
-data "terraform_remote_state" "global" {
-  backend = "s3"
-  config = {
-
-
-    bucket = "tfstate-491013321714-test"
-
-    key     = "terraform/idseq/global.tfstate"
-    region  = "us-west-2"
-    profile = "idseq-newdev"
-
-
-  }
-}
 data "terraform_remote_state" "cloud-env" {
   backend = "s3"
   config = {
@@ -402,6 +412,8 @@ variable "aws_accounts" {
     idseq-newdev = "491013321714"
 
     idseq-prod = "745463180746"
+
+    idseq-staging = "030998640247"
 
   }
 }

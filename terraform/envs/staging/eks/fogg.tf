@@ -23,7 +23,7 @@ variable "TFC_PROJECT_NAME" {
 provider "aws" {
 
   region  = "us-west-2"
-  profile = "idseq-newdev"
+  profile = "idseq-staging"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -41,7 +41,7 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["491013321714"]
+  allowed_account_ids = ["030998640247"]
 }
 # Aliased Providers (for doing things in every region).
 
@@ -49,7 +49,7 @@ provider "aws" {
 provider "aws" {
   alias   = "czi-si-us-east-1"
   region  = "us-east-1"
-  profile = "idseq-newdev"
+  profile = "idseq-sandbox"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -67,14 +67,14 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["626314663667"]
+  allowed_account_ids = ["941377154785"]
 }
 
 
 provider "aws" {
   alias   = "czi-si"
   region  = "us-west-2"
-  profile = "idseq-newdev"
+  profile = "idseq-sandbox"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -92,14 +92,14 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["626314663667"]
+  allowed_account_ids = ["941377154785"]
 }
 
 
 provider "aws" {
   alias   = "us-east-1"
   region  = "us-east-1"
-  profile = "idseq-newdev"
+  profile = "idseq-staging"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -117,7 +117,7 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["491013321714"]
+  allowed_account_ids = ["030998640247"]
 }
 
 
@@ -127,12 +127,12 @@ terraform {
 
   backend "s3" {
 
-    bucket = "tfstate-491013321714-test"
+    bucket = "tfstate-030998640247"
 
-    key     = "terraform/czid/envs/staging/components/eks.tfstate"
+    key     = "terraform/idseq/envs/staging/components/eks.tfstate"
     encrypt = true
     region  = "us-west-2"
-    profile = "idseq-newdev"
+    profile = "idseq-staging"
 
 
   }
@@ -155,7 +155,7 @@ terraform {
     aws = {
       source = "hashicorp/aws"
 
-      version = "~> 5.31.0"
+      version = "5.94.0"
 
     }
 
@@ -225,7 +225,7 @@ variable "env" {
 # tflint-ignore: terraform_unused_declarations
 variable "project" {
   type    = string
-  default = "czid"
+  default = "idseq"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "region" {
@@ -240,7 +240,7 @@ variable "component" {
 # tflint-ignore: terraform_unused_declarations
 variable "aws_profile" {
   type    = string
-  default = "idseq-newdev"
+  default = "idseq-staging"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "owner" {
@@ -253,7 +253,7 @@ variable "owner" {
 variable "tags" {
   type = object({ project : string, env : string, service : string, owner : string, managedBy : string })
   default = {
-    project   = "czid"
+    project   = "idseq"
     env       = "staging"
     service   = "eks"
     owner     = "biohub-tech@chanzuckerberg.com"
@@ -264,6 +264,16 @@ variable "tags" {
 variable "alignment_index_date" {
   type    = string
   default = "2021-01-22"
+}
+# tflint-ignore: terraform_unused_declarations
+variable "auth0_domain" {
+  type    = string
+  default = "dev-ep4y3efh1vxvw06z.us.auth0.com"
+}
+# tflint-ignore: terraform_unused_declarations
+variable "base_domain" {
+  type    = string
+  default = "seqtoid.org"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "build_index_date" {
@@ -283,7 +293,7 @@ variable "project_v1" {
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_aegea_ecs_execute" {
   type    = string
-  default = "aegea-ecs-execute-staging"
+  default = "aegea-ecs-execute-staging-030998640247"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_idseq_bench" {
@@ -298,12 +308,12 @@ variable "s3_bucket_public_references" {
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_samples" {
   type    = string
-  default = "idseq-samples-staging"
+  default = "idseq-samples-staging-030998640247"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_samples_v1" {
   type    = string
-  default = "czi-infectious-disease-staging-samples"
+  default = "czi-infectious-disease-staging-samples-030998640247"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_secrets" {
@@ -315,31 +325,16 @@ variable "s3_bucket_workflows" {
   type    = string
   default = "idseq-workflows"
 }
-# tflint-ignore: terraform_unused_declarations
-data "terraform_remote_state" "global" {
-  backend = "s3"
-  config = {
-
-
-    bucket = "tfstate-491013321714-test"
-
-    key     = "terraform/idseq/global.tfstate"
-    region  = "us-west-2"
-    profile = "idseq-newdev"
-
-
-  }
-}
 data "terraform_remote_state" "cloud-env" {
   backend = "s3"
   config = {
 
 
-    bucket = "tfstate-491013321714-test"
+    bucket = "tfstate-030998640247"
 
     key     = "terraform/idseq/envs/staging/components/cloud-env.tfstate"
     region  = "us-west-2"
-    profile = "idseq-newdev"
+    profile = "idseq-staging"
 
 
   }
@@ -354,6 +349,8 @@ variable "aws_accounts" {
     idseq-newdev = "491013321714"
 
     idseq-prod = "745463180746"
+
+    idseq-staging = "030998640247"
 
   }
 }

@@ -129,7 +129,7 @@ terraform {
 
     bucket = "tfstate-030998640247"
 
-    key     = "terraform/czid/envs/staging/components/route53.tfstate"
+    key     = "terraform/idseq/envs/staging/components/route53.tfstate"
     encrypt = true
     region  = "us-west-2"
     profile = "idseq-staging"
@@ -204,7 +204,7 @@ variable "env" {
 # tflint-ignore: terraform_unused_declarations
 variable "project" {
   type    = string
-  default = "czid"
+  default = "idseq"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "region" {
@@ -232,7 +232,7 @@ variable "owner" {
 variable "tags" {
   type = object({ project : string, env : string, service : string, owner : string, managedBy : string })
   default = {
-    project   = "czid"
+    project   = "idseq"
     env       = "staging"
     service   = "route53"
     owner     = "biohub-tech@chanzuckerberg.com"
@@ -243,6 +243,11 @@ variable "tags" {
 variable "alignment_index_date" {
   type    = string
   default = "2021-01-22"
+}
+# tflint-ignore: terraform_unused_declarations
+variable "auth0_domain" {
+  type    = string
+  default = "dev-ep4y3efh1vxvw06z.us.auth0.com"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "base_domain" {
@@ -265,7 +270,52 @@ variable "project_v1" {
   default = "czid"
 }
 # tflint-ignore: terraform_unused_declarations
+variable "s3_bucket_aegea_ecs_execute" {
+  type    = string
+  default = "aegea-ecs-execute-staging-030998640247"
+}
+# tflint-ignore: terraform_unused_declarations
+variable "s3_bucket_idseq_bench" {
+  type    = string
+  default = "idseq-bench"
+}
+# tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_public_references" {
   type    = string
   default = "czid-public-references"
+}
+# tflint-ignore: terraform_unused_declarations
+variable "s3_bucket_samples" {
+  type    = string
+  default = "idseq-samples-staging-030998640247"
+}
+# tflint-ignore: terraform_unused_declarations
+variable "s3_bucket_samples_v1" {
+  type    = string
+  default = "czi-infectious-disease-staging-samples-030998640247"
+}
+# tflint-ignore: terraform_unused_declarations
+variable "s3_bucket_secrets" {
+  type    = string
+  default = "idseq-secrets"
+}
+# tflint-ignore: terraform_unused_declarations
+variable "s3_bucket_workflows" {
+  type    = string
+  default = "idseq-workflows"
+}
+# tflint-ignore: terraform_unused_declarations
+variable "aws_accounts" {
+  type = map(string)
+  default = {
+
+    idseq-dev = "941377154785"
+
+    idseq-newdev = "491013321714"
+
+    idseq-prod = "745463180746"
+
+    idseq-staging = "030998640247"
+
+  }
 }
