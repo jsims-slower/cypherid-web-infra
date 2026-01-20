@@ -157,9 +157,9 @@ terraform {
     }
 
     auth0 = {
-      source = "alexkappa/auth0"
+      source = "auth0/auth0"
 
-      version = "0.26.2"
+      version = "1.38.0"
 
     }
 
