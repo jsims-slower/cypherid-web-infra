@@ -23,7 +23,7 @@ variable "TFC_PROJECT_NAME" {
 provider "aws" {
 
   region  = "us-west-2"
-  profile = "idseq-newdev"
+  profile = "idseq-staging"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -41,7 +41,7 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["491013321714"]
+  allowed_account_ids = ["030998640247"]
 }
 # Aliased Providers (for doing things in every region).
 
@@ -74,7 +74,7 @@ provider "aws" {
 provider "aws" {
   alias   = "us-east-1"
   region  = "us-east-1"
-  profile = "idseq-newdev"
+  profile = "idseq-staging"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -92,7 +92,7 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["491013321714"]
+  allowed_account_ids = ["030998640247"]
 }
 
 
@@ -102,12 +102,12 @@ terraform {
 
   backend "s3" {
 
-    bucket = "tfstate-491013321714-test"
+    bucket = "tfstate-030998640247"
 
     key     = "terraform/idseq/envs/staging/components/web.tfstate"
     encrypt = true
     region  = "us-west-2"
-    profile = "idseq-newdev"
+    profile = "idseq-staging"
 
 
   }
@@ -130,7 +130,7 @@ terraform {
     aws = {
       source = "hashicorp/aws"
 
-      version = "4.61.0"
+      version = "5.94.0"
 
     }
 
@@ -194,7 +194,7 @@ variable "component" {
 # tflint-ignore: terraform_unused_declarations
 variable "aws_profile" {
   type    = string
-  default = "idseq-newdev"
+  default = "idseq-staging"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "owner" {
@@ -220,9 +220,24 @@ variable "alignment_index_date" {
   default = "2021-01-22"
 }
 # tflint-ignore: terraform_unused_declarations
+variable "auth0_domain" {
+  type    = string
+  default = "dev-ep4y3efh1vxvw06z.us.auth0.com"
+}
+# tflint-ignore: terraform_unused_declarations
+variable "base_domain" {
+  type    = string
+  default = "seqtoid.org"
+}
+# tflint-ignore: terraform_unused_declarations
 variable "build_index_date" {
   type    = string
   default = "2021-01-22"
+}
+# tflint-ignore: terraform_unused_declarations
+variable "eks_cluster_name" {
+  type    = string
+  default = "czid-staging-eks"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "project_v1" {
@@ -232,7 +247,7 @@ variable "project_v1" {
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_aegea_ecs_execute" {
   type    = string
-  default = "aegea-ecs-execute-staging"
+  default = "aegea-ecs-execute-staging-030998640247"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_idseq_bench" {
@@ -247,12 +262,12 @@ variable "s3_bucket_public_references" {
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_samples" {
   type    = string
-  default = "idseq-samples-staging"
+  default = "idseq-samples-staging-030998640247"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_samples_v1" {
   type    = string
-  default = "czi-infectious-disease-staging-samples"
+  default = "czi-infectious-disease-staging-samples-030998640247"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_secrets" {
@@ -284,11 +299,11 @@ data "terraform_remote_state" "cloud-env" {
   config = {
 
 
-    bucket = "tfstate-491013321714-test"
+    bucket = "tfstate-030998640247"
 
     key     = "terraform/idseq/envs/staging/components/cloud-env.tfstate"
     region  = "us-west-2"
-    profile = "idseq-newdev"
+    profile = "idseq-staging"
 
 
   }
@@ -298,11 +313,11 @@ data "terraform_remote_state" "db" {
   config = {
 
 
-    bucket = "tfstate-491013321714-test"
+    bucket = "tfstate-030998640247"
 
     key     = "terraform/idseq/envs/staging/components/db.tfstate"
     region  = "us-west-2"
-    profile = "idseq-newdev"
+    profile = "idseq-staging"
 
 
   }
@@ -312,11 +327,11 @@ data "terraform_remote_state" "ecs" {
   config = {
 
 
-    bucket = "tfstate-491013321714-test"
+    bucket = "tfstate-030998640247"
 
     key     = "terraform/idseq/envs/staging/components/ecs.tfstate"
     region  = "us-west-2"
-    profile = "idseq-newdev"
+    profile = "idseq-staging"
 
 
   }
@@ -326,11 +341,11 @@ data "terraform_remote_state" "elb-access-logs" {
   config = {
 
 
-    bucket = "tfstate-491013321714-test"
+    bucket = "tfstate-030998640247"
 
     key     = "terraform/idseq/envs/staging/components/elb-access-logs.tfstate"
     region  = "us-west-2"
-    profile = "idseq-newdev"
+    profile = "idseq-staging"
 
 
   }
@@ -340,11 +355,11 @@ data "terraform_remote_state" "heatmap-optimization" {
   config = {
 
 
-    bucket = "tfstate-491013321714-test"
+    bucket = "tfstate-030998640247"
 
     key     = "terraform/idseq/envs/staging/components/heatmap-optimization.tfstate"
     region  = "us-west-2"
-    profile = "idseq-newdev"
+    profile = "idseq-staging"
 
 
   }
@@ -354,25 +369,25 @@ data "terraform_remote_state" "redis" {
   config = {
 
 
-    bucket = "tfstate-491013321714-test"
+    bucket = "tfstate-030998640247"
 
     key     = "terraform/idseq/envs/staging/components/redis.tfstate"
     region  = "us-west-2"
-    profile = "idseq-newdev"
+    profile = "idseq-staging"
 
 
   }
 }
-data "terraform_remote_state" "idseq-dev" {
+data "terraform_remote_state" "route53" {
   backend = "s3"
   config = {
 
 
-    bucket = "tfstate-491013321714-test"
+    bucket = "tfstate-030998640247"
 
-    key     = "terraform/idseq/accounts/idseq-dev.tfstate"
+    key     = "terraform/idseq/envs/staging/components/route53.tfstate"
     region  = "us-west-2"
-    profile = "idseq-newdev"
+    profile = "idseq-staging"
 
 
   }

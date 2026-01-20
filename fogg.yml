@@ -90,7 +90,7 @@ defaults:
             - us-east-1
     auth0:
       version: 0.26.2
-  terraform_version: "1.14.3"
+  terraform_version: 1.14.3
   tools:
     github_actions_ci:
       aws_iam_role_name: infraci
@@ -151,16 +151,6 @@ envs:
         provider_aliases:
           aws.us-east-1: aws.us-east-1
         providers:
-          aws:
-            additional_regions:
-              - us-east-1
-#            additional_providers:
-#              czi-si:
-#                account_id: 941377154785
-#                region: us-west-2
-#                profile: idseq-dev
-#                additional_regions:
-#                  - us-east-1
           kubernetes:
             enabled: true
             version: 2.23.0
@@ -232,7 +222,7 @@ envs:
         variables:
           - single_nat_gateway
           - k8s_cluster_names
-#      downloads:
+      downloads:
       maintenance:
       db:
         depends_on:
@@ -311,14 +301,6 @@ envs:
         provider_aliases:
           aws.us-east-1: aws.us-east-1
         providers:
-          aws:
-            version: ~> 5.31.0
-            additional_regions:
-              - us-east-1
-            additional_providers:
-              czi-si:
-                account_id: "626314663667"
-                region: us-west-2
           kubernetes:
             enabled: true
             version: 2.23.0
@@ -340,12 +322,6 @@ envs:
         variables:
           - additional_addons
         providers:
-          aws:
-            version: ~> 5.31.0
-            additional_providers:
-              czi-si:
-                account_id: "626314663667"
-                region: us-west-2
           datadog:
             custom_provider: true
             version: 3.20.0
@@ -373,12 +349,6 @@ envs:
         provider_aliases:
           "aws.czi-si": aws.czi-si
         providers:
-          aws:
-            version: ~> 5.14.0
-            additional_providers:
-              czi-si:
-                account_id: "626314663667"
-                region: us-west-2
           datadog:
             custom_provider: true
             version: 3.20.0
@@ -579,6 +549,7 @@ envs:
       web:
         depends_on:
           components:
+            - route53
             - cloud-env
             - db
             - ecs
@@ -587,11 +558,11 @@ envs:
             - redis
       web-waf:
     extra_vars:
-      s3_bucket_aegea_ecs_execute: "aegea-ecs-execute-staging-030998640247"
-      s3_bucket_samples: "idseq-samples-staging-030998640247"
-      s3_bucket_samples_v1: "czi-infectious-disease-staging-samples-030998640247"
-      eks_cluster_name: "czid-staging-eks"
-      auth0_domain: dev-ep4y3efh1vxvw06z.us.auth0.com
+      s3_bucket_aegea_ecs_execute: aegea-ecs-execute-staging-030998640247
+      s3_bucket_samples: idseq-samples-staging-030998640247
+      s3_bucket_samples_v1: czi-infectious-disease-staging-samples-030998640247
+      eks_cluster_name: czid-staging-eks
+      auth0_domain: dev-ep4y3efh1vxvw06z.us.auth0.com # <- TODO: Separate organization, Tenant or Application?
   # TODO: Where do we want to house the Public data, like help-center(?) and other public files
 #  public:
 #    components:
@@ -649,14 +620,6 @@ envs:
         provider_aliases:
           aws.us-east-1: aws.us-east-1
         providers:
-          aws:
-            version: ~> 5.31.0
-            additional_regions:
-              - us-east-1
-            additional_providers:
-              czi-si:
-                account_id: "626314663667"
-                region: us-west-2
           kubernetes:
             enabled: true
             version: 2.23.0
@@ -677,12 +640,6 @@ envs:
         variables:
           - additional_addons
         providers:
-          aws:
-            version: ~> 5.31.0
-            additional_providers:
-              czi-si:
-                account_id: "626314663667"
-                region: us-west-2
           datadog:
             custom_provider: true
             version: 3.20.0
@@ -709,12 +666,6 @@ envs:
         provider_aliases:
           "aws.czi-si": aws.czi-si
         providers:
-          aws:
-            version: ~> 5.14.0
-            additional_providers:
-              czi-si:
-                account_id: "626314663667"
-                region: us-west-2
           datadog:
             custom_provider: true
             version: 3.20.0
@@ -807,7 +758,7 @@ envs:
       s3_bucket_idseq_bench: idseq-bench
       s3_bucket_pipeline_public_assets: idseq-prod-pipeline-public-assets-us-west-2
       eks_cluster_name: czid-prod-eks
-      auth0_domain: dev-ep4y3efh1vxvw06z.us.auth0.com
+      #auth0_domain: dev-ep4y3efh1vxvw06z.us.auth0.com <- TODO: Separate organization, Tenant or Application?
 modules:
   config: {}
   machine-images: {}

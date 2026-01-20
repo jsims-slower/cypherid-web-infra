@@ -1,20 +1,18 @@
 locals {
-  subdomain     = "assets.${var.env}"
-  domain        = "idseq.net"
-  full_domain   = "${local.subdomain}.${local.domain}"
-  origin_domain = "${var.env}.${local.domain}"
+  assets_fqdn = "assets.${local.env_fqdn}"
+  www_assets_fqdn    = "www.${local.assets_fqdn}"
 
-  aliases = {
-    "www.${local.full_domain}" = local.zone_id
+  assets_aliases = {
+    "${local.www_assets_fqdn}" = local.zone_id
   }
 }
 
 module "assets-cert" {
-  source = "github.com/chanzuckerberg/cztack//aws-acm-certificate?ref=v0.103.2"
+  source = "github.com/chanzuckerberg/cztack//aws-acm-certificate?ref=v0.41.0"
 
-  cert_domain_name               = local.full_domain
+  cert_domain_name               = local.assets_fqdn
   aws_route53_zone_id            = local.zone_id
-  cert_subject_alternative_names = local.aliases
+  cert_subject_alternative_names = local.assets_aliases
   tags                           = var.tags
 
   # cloudfront requires us-east-1 acm certs
@@ -28,12 +26,12 @@ resource "aws_cloudfront_distribution" "distribution" {
   enabled = true
   comment = "Caches Rails web server static assets in Amazon's edge servers"
 
-  aliases = [local.full_domain]
+  aliases = [local.assets_fqdn]
 
   # Rails web server
   origin {
-    domain_name = local.origin_domain
-    origin_id   = local.origin_domain
+    domain_name = local.env_fqdn
+    origin_id   = local.env_fqdn
 
     custom_origin_config {
       http_port              = "80"
@@ -48,7 +46,7 @@ resource "aws_cloudfront_distribution" "distribution" {
   default_cache_behavior {
     allowed_methods        = ["GET", "HEAD", "OPTIONS"]
     cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = local.origin_domain
+    target_origin_id       = local.env_fqdn
     viewer_protocol_policy = "redirect-to-https"
 
     default_ttl = 0
@@ -68,12 +66,13 @@ resource "aws_cloudfront_distribution" "distribution" {
     path_pattern           = "/assets/*"
     allowed_methods        = ["GET", "HEAD", "OPTIONS"]
     cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = local.origin_domain
+    target_origin_id       = local.env_fqdn
     viewer_protocol_policy = "redirect-to-https"
     # Time-to-live is set to 1 year. Rails puts a hash in the filename of
     # static assets, so changes to assets will result in new files, which
     # clients will then download from the origin.
     default_ttl = 31536000 # 1 year
+    max_ttl     = 31536000 # 1 year
 
     forwarded_values {
       # This is only necessary to set Vary: Origin header. See
@@ -112,7 +111,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 
 resource "aws_route53_record" "assets" {
   zone_id = local.zone_id
-  name    = local.full_domain
+  name    = local.assets_fqdn
   type    = "A"
 
   alias {
