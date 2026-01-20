@@ -4,7 +4,7 @@ locals {
   rds_high_port_workflows = "25433"
   rds_high_port_entities  = "25432"
   rds_port                = "5432"
-  image_arn               = "745463180746.dkr.ecr.us-west-2.amazonaws.com/czid-fivetran-ssh:latest"
+  image_arn               = "${var.aws_accounts.idseq-prod}.dkr.ecr.us-west-2.amazonaws.com/czid-fivetran-ssh:latest"
   mount_path              = "/var/secrets"
 }
 
