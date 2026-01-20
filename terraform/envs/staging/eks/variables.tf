@@ -38,6 +38,6 @@ locals {
     chanzuckerberg = ["czid-graphql-federation-server"]
   }
   addons = {
-    enable_guardduty = true
+    enable_guardduty = false
   }
 }

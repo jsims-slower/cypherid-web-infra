@@ -8,7 +8,7 @@ locals {
 }
 
 module "assets-cert" {
-  source = "github.com/chanzuckerberg/cztack//aws-acm-certificate?ref=v0.41.0"
+  source = "github.com/chanzuckerberg/cztack//aws-acm-certificate?ref=v0.103.2"
 
   cert_domain_name               = local.assets_fqdn
   aws_route53_zone_id            = local.zone_id

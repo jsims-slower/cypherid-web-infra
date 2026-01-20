@@ -420,7 +420,7 @@ envs:
         module_source: terraform/modules/eks-cluster-v2-v7.3.0
         variables:
           - cluster_name
-          - iam_cluster_name_prefix
+          #- iam_cluster_name_prefix
           - cluster_version
           - owner_roles
           - node_groups
@@ -610,7 +610,7 @@ envs:
         module_source: terraform/modules/eks-cluster-v2-v7.3.0
         variables:
           - cluster_name
-          - iam_cluster_name_prefix
+          #- iam_cluster_name_prefix
           - cluster_version
           - owner_roles
           - node_groups
