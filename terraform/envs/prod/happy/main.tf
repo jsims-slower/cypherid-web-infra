@@ -2,8 +2,9 @@
 # Make improvements in fogg, so that everyone can benefit.
 
 module "happy" {
-  source               = "../../../modules/happy-env-eks-v4.12.2"
+  source               = "../../../modules/happy-env-eks-v4.14.3"
   additional_secrets   = local.additional_secrets
+  base_zone_id         = local.base_zone_id
   cloud-env            = local.cloud-env
   ecr_repos            = local.ecr_repos
   eks-cluster          = local.eks-cluster

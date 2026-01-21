@@ -1,5 +1,6 @@
 locals {
-  full_domain = "${var.env}.${var.base_domain}"
+  env_fqdn       = "${var.env}.${var.base_domain}"
+  happy_env_fqdn = "happy.${var.env}.${var.base_domain}"
 }
 
 # TODO: Determine what method to use in the future; the old CZI way, or the newer way in this file
@@ -15,10 +16,10 @@ locals {
 #
 
 resource "aws_route53_zone" "env-seqtoid-org" {
-  name = local.full_domain
+  name = local.env_fqdn
   tags = {
     owner   = var.owner
-    project = var.project_v1
+    project = var.project
     service = "seqtoid"
     env     = var.env
   }
@@ -32,9 +33,30 @@ data "aws_route53_zone" "root-seqtoid-org" {
 
 resource "aws_route53_record" "env-seqtoid-org" {
   zone_id  = data.aws_route53_zone.root-seqtoid-org.zone_id
-  name     = local.full_domain
+  name     = local.env_fqdn
   type     = "NS"
   ttl      = 300
   records  = aws_route53_zone.env-seqtoid-org.name_servers
   provider = aws.czi-si-us-east-1
 }
+
+# Zones for happy dev/sandbox/staging envs
+
+resource "aws_route53_zone" "happy-env-seqtoid-org" {
+  name = local.happy_env_fqdn
+  tags = {
+    owner   = var.owner
+    project = var.project
+    service = "seqtoid"
+    env     = var.env
+  }
+}
+
+resource "aws_route53_record" "happy-env-seqtoid-org" {
+  zone_id = aws_route53_zone.env-seqtoid-org.id
+  name    = local.happy_env_fqdn
+  type    = "NS"
+  ttl     = 300
+  records = aws_route53_zone.happy-env-seqtoid-org.name_servers
+}
+

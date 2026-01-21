@@ -3,12 +3,12 @@ output "namespace" {
 }
 
 
-output "dashboard" {
-  value = {
-    id  = datadog_dashboard_json.environment_dashboard.id
-    url = datadog_dashboard_json.environment_dashboard.url
-  }
-}
+# output "dashboard" {
+#   value = {
+#     id  = datadog_dashboard_json.environment_dashboard.id
+#     url = datadog_dashboard_json.environment_dashboard.url
+#   }
+# }
 
 output "integration_secret" {
   value     = local.secret_string

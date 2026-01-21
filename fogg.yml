@@ -64,7 +64,7 @@ defaults:
     base_domain: seqtoid.org
     alignment_index_date: "2021-01-22"
     build_index_date: "2021-01-22"
-    project_v1: czid
+    #project_v1: czid
     s3_bucket_public_references: czid-public-references
     s3_bucket_idseq_bench: idseq-bench
     s3_bucket_secrets: idseq-secrets
@@ -189,7 +189,7 @@ envs:
             - cloud-env
             - k8s-core
             - eks
-        module_source: terraform/modules/happy-env-eks-v4.12.2
+        module_source: terraform/modules/happy-env-eks-v4.14.3
         variables:
           - ecr_repos
           - s3_buckets
@@ -336,7 +336,7 @@ envs:
             - cloud-env
             - k8s-core
             - eks
-        module_source: terraform/modules/happy-env-eks-v4.12.2
+        module_source: terraform/modules/happy-env-eks-v4.14.3
         variables:
           - ecr_repos
           - s3_buckets
@@ -465,16 +465,26 @@ envs:
       happy:
         depends_on:
           components:
+            - route53
             - cloud-env
             - k8s-core
             - eks
-        module_source: terraform/modules/happy-env-eks-v4.12.2
+        module_source: terraform/modules/happy-env-eks-v4.14.3
         variables:
-          - ecr_repos
-          - s3_buckets
-          - github_actions_roles
           - additional_secrets
+          - base_zone_id
+          - cloud-env
+          #- default_db_engine_version
+          - ecr_repos
+          - eks-cluster
+          - github_actions_roles
+          #- hapi_base_url
+          #- oidc_config
           - okta_teams
+          #- rds_dbs
+          - s3_buckets
+          - tags
+          #- waf_arn
         module_name: happy
         #provider_aliases:
         #  "aws.czi-si": aws.czi-si
@@ -653,7 +663,7 @@ envs:
             - cloud-env
             - k8s-core
             - eks
-        module_source: terraform/modules/happy-env-eks-v4.12.2
+        module_source: terraform/modules/happy-env-eks-v4.14.3
         variables:
           - ecr_repos
           - s3_buckets

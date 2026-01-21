@@ -1,5 +1,5 @@
 locals {
-  #base_zone_id = data.terraform_remote_state.idseq-staging.outputs.env_happy_czid_org_zone_id
+  base_zone_id = data.terraform_remote_state.route53.outputs.happy_env_seqtoid_org_zone_id
   cloud-env    = data.terraform_remote_state.cloud-env.outputs
   eks-cluster  = data.terraform_remote_state.eks.outputs
   k8s-core     = data.terraform_remote_state.k8s-core.outputs
@@ -21,6 +21,6 @@ locals {
     # }
   }
   github_actions_roles = [
-    //data.terraform_remote_state.eks.outputs.gh_action_role,
+    # data.terraform_remote_state.eks.outputs.gh_action_role,
   ]
 }

@@ -4,7 +4,7 @@ terraform {
       source  = "hashicorp/aws"
       version = ">= 5.14"
 
-      configuration_aliases = [aws.czi-si]
+      # configuration_aliases = [aws.czi-si]
     }
     random = {
       source  = "hashicorp/random"
@@ -14,10 +14,10 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = ">= 2.16"
     }
-    datadog = {
-      source  = "datadog/datadog"
-      version = ">= 3.20.0"
-    }
+    # datadog = {
+    #   source  = "datadog/datadog"
+    #   version = ">= 3.20.0"
+    # }
   }
   required_version = ">= 1.3"
 }
