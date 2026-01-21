@@ -264,7 +264,7 @@ data "template_file" "task" {
     "name": "${local.container_name}",
     "image": "library/busybox:1.29",
     "command": ["sh", "-c", "while true; do { echo -e 'HTTP/1.1 200 OK\r\n\nRunning stub server'; date; } | nc -l -p ${var.container_port}; done"],
-    "memoryReservation": 4,
+    "memoryReservation": 8,
     "portMappings": [
       {
         "containerPort": ${var.container_port},

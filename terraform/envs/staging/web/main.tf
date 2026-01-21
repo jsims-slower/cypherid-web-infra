@@ -242,6 +242,15 @@ module "parameters-policy" {
   role_name = aws_iam_role.idseq-web.name
 }
 
+resource "random_string" "secret_key_base" {
+  length  = 32
+  special = false
+  min_lower = 8
+  min_upper = 8
+  # min_digits = 8
+  # min_special = 8
+}
+
 module "web-service-params" {
   source  = "github.com/chanzuckerberg/cztack//aws-ssm-params-writer?ref=v0.103.2"
   project = var.project
@@ -261,6 +270,7 @@ module "web-service-params" {
     CLOUDFRONT_ENDPOINT           = local.assets_fqdn
     S3_DATABASE_BUCKET            = var.s3_bucket_public_references
     CLI_UPLOAD_ROLE_ARN           = aws_iam_role.idseq-upload.arn
+    SECRET_KEY_BASE               = random_string.secret_key_base.result
   }
 }
 

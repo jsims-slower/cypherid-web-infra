@@ -43,19 +43,17 @@ accounts:
   idseq-prod:
     backend:
       kind: s3
-      account_id: "745463180746"
-      #account_id: 283694049553
-      bucket: idseq-prod-s3-tf-state-prod-prod-idseq-infra-prod-state
-      dynamodb_table: idseq-prod-s3-tf-state-prod-prod-idseq-infra-prod-state-lock
-      #bucket: tfstate-283694049553
+      account_id: 283694049553
+      bucket: tfstate-283694049553
+      #bucket: idseq-prod-s3-tf-state-prod-prod-idseq-infra-prod-state
+      #dynamodb_table: idseq-prod-s3-tf-state-prod-prod-idseq-infra-prod-state-lock
       region: us-west-2
       profile: idseq-prod
     depends_on:
       accounts: ["idseq-dev"]
     providers:
       aws:
-        account_id: "745463180746"
-        #account_id: 283694049553
+        account_id: 283694049553
         profile: idseq-prod
 defaults:
   #needs_aws_accounts_variable: false
