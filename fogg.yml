@@ -12,8 +12,6 @@ accounts:
       aws:
         account_id: 491013321714
         profile: idseq-newdev
-        additional_regions:
-          - us-east-1
   idseq-dev:
     backend:
       kind: s3
@@ -220,7 +218,7 @@ envs:
         variables:
           - single_nat_gateway
           - k8s_cluster_names
-      downloads:
+      #downloads:
       maintenance:
       db:
         depends_on:
@@ -528,7 +526,7 @@ envs:
         depends_on:
           components:
             - cloud-env
-      downloads:
+      #downloads:
       ecs:
         depends_on:
           components:
@@ -705,7 +703,7 @@ envs:
           components:
             - cloud-env
       dashboards:
-      downloads:
+      #downloads:
       ecs:
         depends_on:
           components:

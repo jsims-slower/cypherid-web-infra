@@ -6,6 +6,5 @@ dependencies {
     "../elb-access-logs",
     "../heatmap-optimization",
     "../redis",
-    "../../../accounts/idseq-newdev",
   ]
 }

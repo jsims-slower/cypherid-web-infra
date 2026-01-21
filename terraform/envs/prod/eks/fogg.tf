@@ -41,9 +41,59 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["745463180746"]
+  allowed_account_ids = ["283694049553"]
 }
 # Aliased Providers (for doing things in every region).
+
+
+provider "aws" {
+  alias   = "czi-si-us-east-1"
+  region  = "us-east-1"
+  profile = "idseq-sandbox"
+
+  # this is the new way of injecting AWS tags to all AWS resources
+  # var.tags should be considered deprecated
+  default_tags {
+    tags = {
+      TFC_WORKSPACE_NAME                   = coalesce(var.TFC_WORKSPACE_NAME, "unknown")
+      TFC_WORKSPACE_SLUG                   = coalesce(var.TFC_WORKSPACE_SLUG, "unknown")
+      TFC_CONFIGURATION_VERSION_GIT_BRANCH = coalesce(var.TFC_CONFIGURATION_VERSION_GIT_BRANCH, "unknown")
+      TFC_CONFIGURATION_VERSION_GIT_TAG    = coalesce(var.TFC_CONFIGURATION_VERSION_GIT_TAG, "unknown")
+      TFC_PROJECT_NAME                     = coalesce(var.TFC_PROJECT_NAME, "unknown")
+      project                              = coalesce(var.tags.project, "unknown")
+      env                                  = coalesce(var.tags.env, "unknown")
+      service                              = coalesce(var.tags.service, "unknown")
+      owner                                = coalesce(var.tags.owner, "unknown")
+      managedBy                            = "terraform"
+    }
+  }
+  allowed_account_ids = ["941377154785"]
+}
+
+
+provider "aws" {
+  alias   = "czi-si"
+  region  = "us-west-2"
+  profile = "idseq-sandbox"
+
+  # this is the new way of injecting AWS tags to all AWS resources
+  # var.tags should be considered deprecated
+  default_tags {
+    tags = {
+      TFC_WORKSPACE_NAME                   = coalesce(var.TFC_WORKSPACE_NAME, "unknown")
+      TFC_WORKSPACE_SLUG                   = coalesce(var.TFC_WORKSPACE_SLUG, "unknown")
+      TFC_CONFIGURATION_VERSION_GIT_BRANCH = coalesce(var.TFC_CONFIGURATION_VERSION_GIT_BRANCH, "unknown")
+      TFC_CONFIGURATION_VERSION_GIT_TAG    = coalesce(var.TFC_CONFIGURATION_VERSION_GIT_TAG, "unknown")
+      TFC_PROJECT_NAME                     = coalesce(var.TFC_PROJECT_NAME, "unknown")
+      project                              = coalesce(var.tags.project, "unknown")
+      env                                  = coalesce(var.tags.env, "unknown")
+      service                              = coalesce(var.tags.service, "unknown")
+      owner                                = coalesce(var.tags.owner, "unknown")
+      managedBy                            = "terraform"
+    }
+  }
+  allowed_account_ids = ["941377154785"]
+}
 
 
 provider "aws" {
@@ -67,57 +117,7 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["745463180746"]
-}
-
-
-provider "aws" {
-  alias   = "czi-si-us-east-1"
-  region  = "us-east-1"
-  profile = "idseq-prod"
-
-  # this is the new way of injecting AWS tags to all AWS resources
-  # var.tags should be considered deprecated
-  default_tags {
-    tags = {
-      TFC_WORKSPACE_NAME                   = coalesce(var.TFC_WORKSPACE_NAME, "unknown")
-      TFC_WORKSPACE_SLUG                   = coalesce(var.TFC_WORKSPACE_SLUG, "unknown")
-      TFC_CONFIGURATION_VERSION_GIT_BRANCH = coalesce(var.TFC_CONFIGURATION_VERSION_GIT_BRANCH, "unknown")
-      TFC_CONFIGURATION_VERSION_GIT_TAG    = coalesce(var.TFC_CONFIGURATION_VERSION_GIT_TAG, "unknown")
-      TFC_PROJECT_NAME                     = coalesce(var.TFC_PROJECT_NAME, "unknown")
-      project                              = coalesce(var.tags.project, "unknown")
-      env                                  = coalesce(var.tags.env, "unknown")
-      service                              = coalesce(var.tags.service, "unknown")
-      owner                                = coalesce(var.tags.owner, "unknown")
-      managedBy                            = "terraform"
-    }
-  }
-  allowed_account_ids = ["626314663667"]
-}
-
-
-provider "aws" {
-  alias   = "czi-si"
-  region  = "us-west-2"
-  profile = "idseq-prod"
-
-  # this is the new way of injecting AWS tags to all AWS resources
-  # var.tags should be considered deprecated
-  default_tags {
-    tags = {
-      TFC_WORKSPACE_NAME                   = coalesce(var.TFC_WORKSPACE_NAME, "unknown")
-      TFC_WORKSPACE_SLUG                   = coalesce(var.TFC_WORKSPACE_SLUG, "unknown")
-      TFC_CONFIGURATION_VERSION_GIT_BRANCH = coalesce(var.TFC_CONFIGURATION_VERSION_GIT_BRANCH, "unknown")
-      TFC_CONFIGURATION_VERSION_GIT_TAG    = coalesce(var.TFC_CONFIGURATION_VERSION_GIT_TAG, "unknown")
-      TFC_PROJECT_NAME                     = coalesce(var.TFC_PROJECT_NAME, "unknown")
-      project                              = coalesce(var.tags.project, "unknown")
-      env                                  = coalesce(var.tags.env, "unknown")
-      service                              = coalesce(var.tags.service, "unknown")
-      owner                                = coalesce(var.tags.owner, "unknown")
-      managedBy                            = "terraform"
-    }
-  }
-  allowed_account_ids = ["626314663667"]
+  allowed_account_ids = ["283694049553"]
 }
 
 
@@ -127,12 +127,12 @@ terraform {
 
   backend "s3" {
 
-    bucket         = "idseq-prod-s3-tf-state-prod-prod-idseq-infra-prod-state"
-    dynamodb_table = "idseq-prod-s3-tf-state-prod-prod-idseq-infra-prod-state-lock"
-    key            = "terraform/czid/envs/prod/components/eks.tfstate"
-    encrypt        = true
-    region         = "us-west-2"
-    profile        = "idseq-prod"
+    bucket = "tfstate-283694049553"
+
+    key     = "terraform/idseq/envs/prod/components/eks.tfstate"
+    encrypt = true
+    region  = "us-west-2"
+    profile = "idseq-prod"
 
 
   }
@@ -155,7 +155,7 @@ terraform {
     aws = {
       source = "hashicorp/aws"
 
-      version = "~> 5.31.0"
+      version = "5.94.0"
 
     }
 
@@ -225,7 +225,7 @@ variable "env" {
 # tflint-ignore: terraform_unused_declarations
 variable "project" {
   type    = string
-  default = "czid"
+  default = "idseq"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "region" {
@@ -253,7 +253,7 @@ variable "owner" {
 variable "tags" {
   type = object({ project : string, env : string, service : string, owner : string, managedBy : string })
   default = {
-    project   = "czid"
+    project   = "idseq"
     env       = "prod"
     service   = "eks"
     owner     = "biohub-tech@chanzuckerberg.com"
@@ -266,6 +266,11 @@ variable "alignment_index_date" {
   default = "2021-01-22"
 }
 # tflint-ignore: terraform_unused_declarations
+variable "base_domain" {
+  type    = string
+  default = "seqtoid.org"
+}
+# tflint-ignore: terraform_unused_declarations
 variable "build_index_date" {
   type    = string
   default = "2021-01-22"
@@ -274,11 +279,6 @@ variable "build_index_date" {
 variable "eks_cluster_name" {
   type    = string
   default = "czid-prod-eks"
-}
-# tflint-ignore: terraform_unused_declarations
-variable "project_v1" {
-  type    = string
-  default = "czid"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_aegea_ecs_execute" {
@@ -320,31 +320,16 @@ variable "s3_bucket_workflows" {
   type    = string
   default = "idseq-workflows"
 }
-# tflint-ignore: terraform_unused_declarations
-data "terraform_remote_state" "global" {
-  backend = "s3"
-  config = {
-
-
-    bucket = "tfstate-491013321714-test"
-
-    key     = "terraform/idseq/global.tfstate"
-    region  = "us-west-2"
-    profile = "idseq-newdev"
-
-
-  }
-}
 data "terraform_remote_state" "cloud-env" {
   backend = "s3"
   config = {
 
 
-    bucket         = "idseq-prod-s3-tf-state-prod-prod-idseq-infra-prod-state"
-    dynamodb_table = "idseq-prod-s3-tf-state-prod-prod-idseq-infra-prod-state-lock"
-    key            = "terraform/idseq/envs/prod/components/cloud-env.tfstate"
-    region         = "us-west-2"
-    profile        = "idseq-prod"
+    bucket = "tfstate-283694049553"
+
+    key     = "terraform/idseq/envs/prod/components/cloud-env.tfstate"
+    region  = "us-west-2"
+    profile = "idseq-prod"
 
 
   }
@@ -358,7 +343,9 @@ variable "aws_accounts" {
 
     idseq-newdev = "491013321714"
 
-    idseq-prod = "745463180746"
+    idseq-prod = "283694049553"
+
+    idseq-staging = "030998640247"
 
   }
 }

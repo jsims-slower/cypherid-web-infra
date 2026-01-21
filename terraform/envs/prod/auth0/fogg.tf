@@ -41,15 +41,15 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["745463180746"]
+  allowed_account_ids = ["283694049553"]
 }
 # Aliased Providers (for doing things in every region).
 
 
 provider "aws" {
-  alias   = "us-west-2"
-  region  = "us-west-2"
-  profile = "idseq-prod"
+  alias   = "czi-si-us-east-1"
+  region  = "us-east-1"
+  profile = "idseq-sandbox"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -67,7 +67,32 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["745463180746"]
+  allowed_account_ids = ["941377154785"]
+}
+
+
+provider "aws" {
+  alias   = "czi-si"
+  region  = "us-west-2"
+  profile = "idseq-sandbox"
+
+  # this is the new way of injecting AWS tags to all AWS resources
+  # var.tags should be considered deprecated
+  default_tags {
+    tags = {
+      TFC_WORKSPACE_NAME                   = coalesce(var.TFC_WORKSPACE_NAME, "unknown")
+      TFC_WORKSPACE_SLUG                   = coalesce(var.TFC_WORKSPACE_SLUG, "unknown")
+      TFC_CONFIGURATION_VERSION_GIT_BRANCH = coalesce(var.TFC_CONFIGURATION_VERSION_GIT_BRANCH, "unknown")
+      TFC_CONFIGURATION_VERSION_GIT_TAG    = coalesce(var.TFC_CONFIGURATION_VERSION_GIT_TAG, "unknown")
+      TFC_PROJECT_NAME                     = coalesce(var.TFC_PROJECT_NAME, "unknown")
+      project                              = coalesce(var.tags.project, "unknown")
+      env                                  = coalesce(var.tags.env, "unknown")
+      service                              = coalesce(var.tags.service, "unknown")
+      owner                                = coalesce(var.tags.owner, "unknown")
+      managedBy                            = "terraform"
+    }
+  }
+  allowed_account_ids = ["941377154785"]
 }
 
 
@@ -92,22 +117,26 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["745463180746"]
+  allowed_account_ids = ["283694049553"]
 }
 
 
 provider "assert" {}
+
+provider "auth0" {
+  domain = "${var.auth0_domain}"
+}
 terraform {
   required_version = "=1.14.3"
 
   backend "s3" {
 
-    bucket         = "idseq-prod-s3-tf-state-prod-prod-idseq-infra-prod-state"
-    dynamodb_table = "idseq-prod-s3-tf-state-prod-prod-idseq-infra-prod-state-lock"
-    key            = "terraform/idseq/envs/prod/components/auth0.tfstate"
-    encrypt        = true
-    region         = "us-west-2"
-    profile        = "idseq-prod"
+    bucket = "tfstate-283694049553"
+
+    key     = "terraform/idseq/envs/prod/components/auth0.tfstate"
+    encrypt = true
+    region  = "us-west-2"
+    profile = "idseq-prod"
 
 
   }
@@ -124,6 +153,13 @@ terraform {
       source = "bwoznicki/assert"
 
       version = "0.0.1"
+
+    }
+
+    auth0 = {
+      source = "auth0/auth0"
+
+      version = "1.38.0"
 
     }
 
@@ -220,14 +256,19 @@ variable "alignment_index_date" {
   default = "2021-01-22"
 }
 # tflint-ignore: terraform_unused_declarations
+variable "base_domain" {
+  type    = string
+  default = "seqtoid.org"
+}
+# tflint-ignore: terraform_unused_declarations
 variable "build_index_date" {
   type    = string
   default = "2021-01-22"
 }
 # tflint-ignore: terraform_unused_declarations
-variable "project_v1" {
+variable "eks_cluster_name" {
   type    = string
-  default = "czid"
+  default = "czid-prod-eks"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_aegea_ecs_execute" {
@@ -270,21 +311,6 @@ variable "s3_bucket_workflows" {
   default = "idseq-workflows"
 }
 # tflint-ignore: terraform_unused_declarations
-data "terraform_remote_state" "global" {
-  backend = "s3"
-  config = {
-
-
-    bucket = "tfstate-491013321714-test"
-
-    key     = "terraform/idseq/global.tfstate"
-    region  = "us-west-2"
-    profile = "idseq-newdev"
-
-
-  }
-}
-# tflint-ignore: terraform_unused_declarations
 variable "aws_accounts" {
   type = map(string)
   default = {
@@ -293,7 +319,9 @@ variable "aws_accounts" {
 
     idseq-newdev = "491013321714"
 
-    idseq-prod = "745463180746"
+    idseq-prod = "283694049553"
+
+    idseq-staging = "030998640247"
 
   }
 }

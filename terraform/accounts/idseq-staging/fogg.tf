@@ -265,11 +265,6 @@ variable "dynamodb_enabled" {
   default = "false"
 }
 # tflint-ignore: terraform_unused_declarations
-variable "project_v1" {
-  type    = string
-  default = "czid"
-}
-# tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_idseq_bench" {
   type    = string
   default = "idseq-bench"
@@ -303,7 +298,7 @@ variable "aws_accounts" {
 
     idseq-newdev = "491013321714"
 
-    idseq-prod = "745463180746"
+    idseq-prod = "283694049553"
 
     idseq-staging = "030998640247"
 

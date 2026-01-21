@@ -265,11 +265,6 @@ variable "eks_cluster_name" {
   default = "czid-staging-eks"
 }
 # tflint-ignore: terraform_unused_declarations
-variable "project_v1" {
-  type    = string
-  default = "czid"
-}
-# tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_aegea_ecs_execute" {
   type    = string
   default = "aegea-ecs-execute-staging-030998640247"
@@ -327,7 +322,7 @@ variable "aws_accounts" {
 
     idseq-newdev = "491013321714"
 
-    idseq-prod = "745463180746"
+    idseq-prod = "283694049553"
 
     idseq-staging = "030998640247"
 
