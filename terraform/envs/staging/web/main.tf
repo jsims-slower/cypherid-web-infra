@@ -243,8 +243,8 @@ module "parameters-policy" {
 }
 
 resource "random_string" "secret_key_base" {
-  length  = 32
-  special = false
+  length    = 32
+  special   = false
   min_lower = 8
   min_upper = 8
   # min_digits = 8
@@ -252,7 +252,7 @@ resource "random_string" "secret_key_base" {
 }
 
 module "web-service-params" {
-  source  = "github.com/chanzuckerberg/cztack//aws-ssm-params-writer?ref=v0.103.2"
+  source  = "github.com/chanzuckerberg/cztack//aws-ssm-params-writer?ref=v0.104.2"
   project = var.project
   env     = var.env
   service = var.component
@@ -271,13 +271,14 @@ module "web-service-params" {
     S3_DATABASE_BUCKET            = var.s3_bucket_public_references
     CLI_UPLOAD_ROLE_ARN           = aws_iam_role.idseq-upload.arn
     SECRET_KEY_BASE               = random_string.secret_key_base.result
+    SERVER_DOMAIN                 = "https://${data.terraform_remote_state.route53.outputs.env_seqtoid_org_fqdn}"
   }
 }
 
 # Our dev environment uses staging to run alignments
 #   The ALIGNMENT_CONFIG_DEFAULT_NAME must be in sync between them
 module "web-service-params-dev" {
-  source  = "github.com/chanzuckerberg/cztack//aws-ssm-params-writer?ref=v0.103.2"
+  source  = "github.com/chanzuckerberg/cztack//aws-ssm-params-writer?ref=v0.104.2"
   project = var.project
   env     = "dev"
   service = var.component
@@ -329,7 +330,7 @@ module "web-service" {
   vpc_id              = data.terraform_remote_state.cloud-env.outputs.vpc_id
   cluster_id          = data.terraform_remote_state.ecs.outputs.cluster_id
   task_role_arn       = aws_iam_role.idseq-web.arn
-  desired_count       = 2
+  desired_count       = 1
   lb_subnets          = data.terraform_remote_state.cloud-env.outputs.public_subnets
   route53_zone_id     = local.zone_id
   subdomain           = ""
@@ -359,7 +360,7 @@ resource "aws_route53_record" "www" {
 resource "aws_ecr_repository" "web-repository" {
   name                 = "idseq-web"
   image_tag_mutability = "MUTABLE"
-  tags         = var.tags
+  tags                 = var.tags
   #force_delete = var.force_delete
 
   image_scanning_configuration {

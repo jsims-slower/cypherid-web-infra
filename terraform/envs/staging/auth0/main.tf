@@ -121,7 +121,7 @@ data "auth0_client" "idseq_web_management" {
 }
 
 module "auth0-ssm-params" {
-  source  = "github.com/chanzuckerberg/cztack//aws-ssm-params-writer?ref=v0.41.0"
+  source  = "github.com/chanzuckerberg/cztack//aws-ssm-params-writer?ref=v0.104.2"
   project = var.project
   env     = var.env
   service = "web" # var.component

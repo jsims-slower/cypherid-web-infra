@@ -3,10 +3,10 @@ locals {
   billing_mode                = "PAY_PER_REQUEST"
   dynamodb_enabled            = var.dynamodb_enabled
   environment                 = "staging"
-  name                        = "idseq-infra-staging"
-  namespace                   = "${var.tags.project}-staging-${var.tags.service}"
+  name                        = "${var.project}-infra-${local.environment}"
+  namespace                   = "${var.tags.project}-${local.environment}-${var.tags.service}"
   s3_bucket_name              = var.s3_bucket_name
-  prevent_unencrypted_uploads = var.prevent_unencrypted_uploads
+  # prevent_unencrypted_uploads = var.prevent_unencrypted_uploads
   stage                       = var.env
   tags                        = var.tags
   terraform_version           = "1.3.6"

@@ -47,7 +47,7 @@ resource "aws_security_group_rule" "sec_group_outbound_czid" {
 }
 
 module "idseq-heatmap-es-param" {
-  source  = "github.com/chanzuckerberg/cztack//aws-ssm-params-writer?ref=v0.103.2"
+  source  = "github.com/chanzuckerberg/cztack//aws-ssm-params-writer?ref=v0.104.2"
   project = var.project
   env     = var.env
   service = "web"
