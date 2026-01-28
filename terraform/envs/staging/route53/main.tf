@@ -59,4 +59,3 @@ resource "aws_route53_record" "happy-env-seqtoid-org" {
   ttl     = 300
   records = aws_route53_zone.happy-env-seqtoid-org.name_servers
 }
-

@@ -23,7 +23,7 @@ data "aws_iam_policy_document" "gen_linkerd_ca_policy" {
 }
 
 module "linkerd-service-account" {
-  source              = "../happy-iam-service-account-eks"
+  source = "git@github.com:chanzuckerberg/happy//terraform/modules/happy-iam-service-account-eks?ref=v0.128.8"
   aws_iam_policy_json = data.aws_iam_policy_document.gen_linkerd_ca_policy.json
   eks_cluster         = var.eks_cluster
   k8s_namespace       = "kube-system"
@@ -186,16 +186,14 @@ resource "helm_release" "linkerd" {
   namespace        = var.linkerd_namespace
   create_namespace = false
   version          = var.linkerd_control_plane_chart_version
-  set = [
-    {
-      name  = "identityTrustAnchorsPEM"
-      value = data.aws_ssm_parameter.ca_cert.value
-    },
-    {
-      name  = "identity.issuer.scheme"
-      value = "kubernetes.io/tls"
-    }
-  ]
+  set {
+    name  = "identityTrustAnchorsPEM"
+    value = data.aws_ssm_parameter.ca_cert.value
+  }
+  set {
+    name  = "identity.issuer.scheme"
+    value = "kubernetes.io/tls"
+  }
   values = [
     file("${path.module}/ha.yml")
   ]

@@ -1,6 +1,3 @@
-data "aws_caller_identity" "current" {
-
-}
 provider "kubernetes" {
   host                   = module.eks-cluster.cluster_endpoint
   cluster_ca_certificate = base64decode(module.eks-cluster.cluster_certificate_authority_data)

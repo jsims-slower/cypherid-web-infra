@@ -13,10 +13,10 @@ module "ecs-cluster" {
 
   instance_type       = "m5.2xlarge"
   vpc_id              = data.terraform_remote_state.cloud-env.outputs.vpc_id
-  //ssh_key_name        = "idseq-${var.env}"
+  #ssh_key_name        = "idseq-${var.env}"
   subnets             = data.terraform_remote_state.cloud-env.outputs.private_subnets
   allowed_cidr_blocks = [data.terraform_remote_state.cloud-env.outputs.vpc_cidr_block]
-  //ssh_users           = data.terraform_remote_state.global.outputs.ssh_users
+  #ssh_users           = data.terraform_remote_state.global.outputs.ssh_users
   docker_storage_size = "214"
 }
 
@@ -102,3 +102,4 @@ resource "aws_s3_bucket" "aegea-ecs-execute" {
     terraform = "true"
   }
 }
+

@@ -272,6 +272,7 @@ module "web-service-params" {
     CLI_UPLOAD_ROLE_ARN           = aws_iam_role.idseq-upload.arn
     SECRET_KEY_BASE               = random_string.secret_key_base.result
     SERVER_DOMAIN                 = "https://${data.terraform_remote_state.route53.outputs.env_seqtoid_org_fqdn}"
+    S3_AEGEA_ECS_EXECUTE_BUCKET   = var.s3_bucket_aegea_ecs_execute
   }
 }
 

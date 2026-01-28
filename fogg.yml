@@ -87,6 +87,28 @@ defaults:
     auth0:
       version: 1.38.0 # 0.26.2
       source: auth0/auth0
+    kubernetes:
+      enabled: true
+      #version: 2.23.0
+      #version: 2.38.0
+      version: 3.0.1
+    kubectl:
+      #version: 1.14.0
+      version: 1.19.0
+    helm:
+      #version: 2.11.0
+      version: 2.17.0
+      #version: 3.1.1
+    #datadog:
+    #  custom_provider: true
+    #  version: 3.20.0
+    #opsgenie:
+    #  version: 0.6.14
+    #okta:
+    #  custom_provider: true
+    #  version: 3.41.0
+    #  registry_namespace: okta
+    #  org_name: czi-prod
   terraform_version: 1.14.3
   tools:
     github_actions_ci:
@@ -111,15 +133,23 @@ envs:
       aws:
         account_id: 491013321714
         profile: idseq-newdev
+      # TODO: All provider versions should be made consistent by defining in "defaults" above, but DEV is currently divergent
+      kubernetes:
+        enabled: true
+        version: 2.23.0
+        #version: 2.38.0
+      kubectl:
+        version: 1.14.0
+        #ersion: 1.19.0
+      helm:
+        version: 2.11.0
+        #version: 2.17.0
     components:
       # used to code generate our configuration for the s3 storing state files outisde of TFE buckets
       # s3-tf-state:
       #   depends_on:
       #     components: []
       #     accounts: []
-      #   providers:
-      #     aws:
-      #       version: ~> 4.0
       #   module_source: git@github.com:cloudposse/terraform-aws-tfstate-backend?ref=1.4.0
       #   variables:
       #     - billing_mode
@@ -147,14 +177,6 @@ envs:
         module_name: eks-cluster
         provider_aliases:
           aws.us-east-1: aws.us-east-1
-        providers:
-          kubernetes:
-            enabled: true
-            version: 2.23.0
-          kubectl:
-            version: 1.14.0
-          helm:
-            version: 2.11.0
       #route53:
       #  module_source: terraform/modules/happy-route53
       #  module_name: happy-route53
@@ -170,15 +192,6 @@ envs:
           ie_ops_genie_team: Core Infra Eng
         variables:
           - additional_addons
-        #providers:
-        #  datadog:
-        #    custom_provider: true
-        #    version: 3.20.0
-        #  kubernetes:
-        #    enabled: true
-        #    version: 2.23.0
-        #  opsgenie:
-        #    version: 0.6.14
       happy:
         project: czid
         depends_on:
@@ -197,17 +210,6 @@ envs:
         module_name: happy
         #provider_aliases:
         #  "aws.czi-si": aws.czi-si
-        #providers:
-        #  datadog:
-        #    custom_provider: true
-        #    version: 3.20.0
-        #  opsgenie:
-        #    version: 0.6.14
-        #  okta:
-        #    custom_provider: true
-        #    version: 3.41.0
-        #    registry_namespace: okta
-        #    org_name: czi-prod
       auth0:
         providers:
           auth0:
@@ -247,6 +249,8 @@ envs:
             - web
       web:
         depends_on:
+          accounts:
+            - idseq-newdev
           components:
             - route53
             - cloud-env
@@ -296,14 +300,6 @@ envs:
         module_name: eks-cluster
         provider_aliases:
           aws.us-east-1: aws.us-east-1
-        providers:
-          kubernetes:
-            enabled: true
-            version: 2.23.0
-          kubectl:
-            version: 1.14.0
-          helm:
-            version: 2.11.0
       k8s-core:
         project: czid
         depends_on:
@@ -317,15 +313,6 @@ envs:
           ie_ops_genie_team: Core Infra Eng
         variables:
           - additional_addons
-        providers:
-          datadog:
-            custom_provider: true
-            version: 3.20.0
-          kubernetes:
-            enabled: true
-            version: 2.23.0
-          opsgenie:
-            version: 0.6.14
       happy:
         project: czid
         depends_on:
@@ -344,17 +331,6 @@ envs:
         module_name: happy
         provider_aliases:
           "aws.czi-si": aws.czi-si
-        providers:
-          datadog:
-            custom_provider: true
-            version: 3.20.0
-          opsgenie:
-            version: 0.6.14
-          okta:
-            custom_provider: true
-            version: 3.41.0
-            registry_namespace: okta
-            org_name: czi-prod
       db:
         depends_on:
           components:
@@ -425,14 +401,6 @@ envs:
         module_name: eks-cluster
         provider_aliases:
           aws.us-east-1: aws.us-east-1
-        providers:
-          kubernetes:
-            enabled: true
-            version: 2.23.0
-          kubectl:
-            version: 1.14.0
-          helm:
-            version: 2.11.0
       route53:
       fivetran-ssh-nextgen:
         depends_on:
@@ -451,15 +419,6 @@ envs:
         #  ie_ops_genie_team: Core Infra Eng
         variables:
           - additional_addons
-        #providers:
-        #  datadog:
-        #    custom_provider: true
-        #    version: 3.20.0
-        #  kubernetes:
-        #    enabled: true
-        #    version: 2.23.0
-        #  opsgenie:
-        #    version: 0.6.14
       happy:
         depends_on:
           components:
@@ -486,17 +445,6 @@ envs:
         module_name: happy
         #provider_aliases:
         #  "aws.czi-si": aws.czi-si
-        #providers:
-        #  datadog:
-        #    custom_provider: true
-        #    version: 3.20.0
-        #  opsgenie:
-        #    version: 0.6.14
-        #  okta:
-        #    custom_provider: true
-        #    version: 3.41.0
-        #    registry_namespace: okta
-        #    org_name: czi-prod
       access-management:
       auth0:
         providers:
@@ -596,9 +544,6 @@ envs:
       #   depends_on:
       #     components: []
       #     accounts: []
-      #   providers:
-      #     aws:
-      #       version: ~> 4.0
       #   module_source: git@github.com:cloudposse/terraform-aws-tfstate-backend?ref=1.4.0
       #   variables:
       #     - billing_mode
@@ -625,14 +570,6 @@ envs:
         module_name: eks-cluster
         provider_aliases:
           aws.us-east-1: aws.us-east-1
-        providers:
-          kubernetes:
-            enabled: true
-            version: 2.23.0
-          kubectl:
-            version: 1.14.0
-          helm:
-            version: 2.11.0
       k8s-core:
         depends_on:
           components:
@@ -645,15 +582,6 @@ envs:
           ie_ops_genie_team: Core Infra Eng
         variables:
           - additional_addons
-        providers:
-          datadog:
-            custom_provider: true
-            version: 3.20.0
-          kubernetes:
-            enabled: true
-            version: 2.23.0
-          opsgenie:
-            version: 0.6.14
       happy:
         depends_on:
           components:
@@ -671,17 +599,6 @@ envs:
         module_name: happy
         provider_aliases:
           "aws.czi-si": aws.czi-si
-        providers:
-          datadog:
-            custom_provider: true
-            version: 3.20.0
-          opsgenie:
-            version: 0.6.14
-          okta:
-            custom_provider: true
-            version: 3.41.0
-            registry_namespace: okta
-            org_name: czi-prod
       access-management:
       auth0:
         providers:
@@ -737,9 +654,6 @@ envs:
             - ecs
             - web
       web:
-        providers:
-          aws:
-            version: 4.61.0
         depends_on:
           components:
             - route53
@@ -750,9 +664,6 @@ envs:
             - redis
             - heatmap-optimization
       web-waf:
-        providers:
-          aws:
-            version: 4.44.0
       zendesk:
         depends_on:
           components:
