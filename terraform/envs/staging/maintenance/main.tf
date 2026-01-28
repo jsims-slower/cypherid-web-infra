@@ -38,7 +38,7 @@ resource "aws_s3_bucket_policy" "s3_bucket_policy" {
 }
 
 module "assets-cert" {
-  source = "github.com/chanzuckerberg/cztack//aws-acm-certificate?ref=v0.103.2"
+  source = "github.com/chanzuckerberg/cztack//aws-acm-certificate?ref=v0.104.2"
 
   cert_domain_name               = local.full_domain
   aws_route53_zone_id            = local.zone_id

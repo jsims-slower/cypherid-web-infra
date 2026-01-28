@@ -233,7 +233,7 @@ resource "aws_iam_role_policy" "idseq-upload" {
 }
 
 module "parameters-policy" {
-  source = "github.com/chanzuckerberg/cztack//aws-params-reader-policy?ref=v0.103.2"
+  source = "github.com/chanzuckerberg/cztack//aws-params-reader-policy?ref=v0.104.2"
 
   project   = var.project
   env       = var.env
@@ -291,7 +291,7 @@ module "web-service-params-dev" {
 }
 
 module "staging" {
-  source = "github.com/chanzuckerberg/cztack//aws-acm-certificate?ref=v0.103.2"
+  source = "github.com/chanzuckerberg/cztack//aws-acm-certificate?ref=v0.104.2"
 
   cert_domain_name    = local.env_fqdn
   aws_route53_zone_id = local.zone_id
@@ -303,7 +303,7 @@ module "staging" {
 }
 
 module "staging_east" {
-  source = "github.com/chanzuckerberg/cztack//aws-acm-certificate?ref=v0.103.2"
+  source = "github.com/chanzuckerberg/cztack//aws-acm-certificate?ref=v0.104.2"
 
   cert_domain_name    = local.env_fqdn
   aws_route53_zone_id = local.zone_id
