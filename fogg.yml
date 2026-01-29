@@ -76,7 +76,7 @@ defaults:
         - us-east-1
       profile: invalid-profile
       region: us-west-2
-      version: 5.94.0
+      version: 5.100.0
       additional_providers:
         czi-si:
           account_id: 941377154785
@@ -389,7 +389,7 @@ envs:
         depends_on:
           components:
             - cloud-env
-        module_source: terraform/modules/eks-cluster-v2-v7.3.0
+        module_source: "github.com/chanzuckerberg/cztack//aws-eks-cluster?ref=v0.104.2"
         variables:
           - cluster_name
           #- iam_cluster_name_prefix
@@ -426,7 +426,7 @@ envs:
             - cloud-env
             - k8s-core
             - eks
-        module_source: terraform/modules/happy-env-eks-v4.14.3
+        module_source: terraform/modules/happy-env-eks-v4.14.3 # TODO: Branch is main, and there is no tag or release, so remove version #
         variables:
           - additional_secrets
           - base_zone_id

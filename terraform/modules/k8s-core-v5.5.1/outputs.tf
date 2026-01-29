@@ -8,10 +8,14 @@ output "default_namespace" {
 # }
 
 output "datadog_agent_hostname" {
-  value = one(module.datadog[*].datadog_agent_hostname)
+  value = "DEPRECATED"
 }
 
 output "additional_addons" {
   value     = var.additional_addons
   sensitive = true
+}
+
+output "rancher_manifest_url" {
+  value = "DEPRECATED"
 }

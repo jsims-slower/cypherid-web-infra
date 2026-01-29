@@ -1,5 +1,5 @@
 # module "aws-ssm" {
-#   source  = "../kubernetes-aws-ssm"
+#   source  = "../kubernetes-aws-ssm-k8s-core-v5"
 #   project = var.tags.project
 #   env     = var.tags.env
 #   service = "${var.tags.service}-aws-ssm"
