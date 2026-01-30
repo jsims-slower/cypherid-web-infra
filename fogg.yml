@@ -1,5 +1,9 @@
 # TODO: Re-enable when we are ready to turn on SSH Users in ECS
-#global: {}
+global:
+  providers:
+    aws:
+      account_id: invalid-account-id
+      profile: invalid-profile
 accounts:
   idseq-newdev:
     backend:
@@ -62,7 +66,6 @@ defaults:
     base_domain: seqtoid.org
     alignment_index_date: "2021-01-22"
     build_index_date: "2021-01-22"
-    #project_v1: czid
     s3_bucket_public_references: czid-public-references
     s3_bucket_idseq_bench: idseq-bench
     s3_bucket_secrets: idseq-secrets
@@ -71,10 +74,10 @@ defaults:
   project: idseq
   providers:
     aws:
-      account_id: invalid-account-id
+      #account_id: invalid-account-id
       additional_regions:
         - us-east-1
-      profile: invalid-profile
+      #profile: invalid-profile
       region: us-west-2
       version: 5.100.0
       additional_providers:
@@ -266,6 +269,7 @@ envs:
       s3_bucket_samples_v1: czi-infectious-disease-dev-samples-491013321714
       eks_cluster_name: czid-dev-eks
       auth0_domain: dev-ep4y3efh1vxvw06z.us.auth0.com
+      project_v1: czid # TODO: Remove 'project_v1' and redeploy DEV, using `project` instead
   sandbox:
     backend:
       kind: s3

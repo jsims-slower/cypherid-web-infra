@@ -1,5 +1,5 @@
 module "web-service-waf" {
-  source = "../../../modules/web-acl-regional-v2.3.0"
+  source = "../../../modules/web-acl-regional-v3.3.1"
   tags = {
     project   = var.project
     env       = var.env

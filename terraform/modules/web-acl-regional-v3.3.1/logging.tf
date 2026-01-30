@@ -26,7 +26,7 @@ data "aws_iam_account_alias" "current" {}
 data "aws_caller_identity" "current" {}
 
 locals {
-  bucket_name   = substr("aws-waf-logs-${local.web_acl_name}", 0, 63)
+  bucket_name   = substr("aws-waf-logs-${local.web_acl_name}-${data.aws_caller_identity.current.account_id}", 0, 63)
   account_id    = data.aws_caller_identity.current.account_id
   account_alias = data.aws_iam_account_alias.current.account_alias
 }
@@ -107,14 +107,14 @@ module "logs_bucket" {
 # Caveat(aku): If teams start to require notifications to other endpoints,
 #   Revise this resource rather than creating new ones. 
 #   S3 Buckets only support a single notification configuration. 
-resource "aws_s3_bucket_notification" "bucket_notification" {
-  count  = var.enable_panther_ingest ? 1 : 0
-  bucket = module.logs_bucket.id
+# resource "aws_s3_bucket_notification" "bucket_notification" {
+#   count  = var.enable_panther_ingest ? 1 : 0
+#   bucket = module.logs_bucket.id
 
-  topic {
-    id            = "notify-panther-new-events"
-    topic_arn     = module.panther-s3[0].topic_arn
-    events        = ["s3:ObjectCreated:*"]
-    filter_prefix = "AWSLogs/"
-  }
-}
+#   topic {
+#     id            = "notify-panther-new-events"
+#     topic_arn     = module.panther-s3[0].topic_arn
+#     events        = ["s3:ObjectCreated:*"]
+#     filter_prefix = "AWSLogs/"
+#   }
+# }

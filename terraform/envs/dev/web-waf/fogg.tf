@@ -265,6 +265,11 @@ variable "eks_cluster_name" {
   default = "czid-dev-eks"
 }
 # tflint-ignore: terraform_unused_declarations
+variable "project_v1" {
+  type    = string
+  default = "czid"
+}
+# tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_aegea_ecs_execute" {
   type    = string
   default = "aegea-ecs-execute-dev-491013321714"

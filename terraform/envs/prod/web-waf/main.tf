@@ -4,7 +4,7 @@ moved {
 }
 
 module "web-service-waf" {
-  source = "git@github.com:chanzuckerberg/shared-infra//terraform/modules/web-acl-regional?ref=web-acl-regional-v2.3.0"
+  source = "../../../modules/web-acl-regional-v3.3.1"
   tags = {
     project   = var.project
     env       = var.env
