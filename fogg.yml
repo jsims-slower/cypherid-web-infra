@@ -220,7 +220,7 @@ envs:
         variables:
           - single_nat_gateway
           - k8s_cluster_names
-      #downloads:
+      downloads:
       maintenance:
       db:
         depends_on:

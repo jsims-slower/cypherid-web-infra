@@ -155,7 +155,28 @@ terraform {
     aws = {
       source = "hashicorp/aws"
 
-      version = "5.94.0"
+      version = "5.100.0"
+
+    }
+
+    helm = {
+      source = "hashicorp/helm"
+
+      version = "2.11.0"
+
+    }
+
+    kubectl = {
+      source = "gavinbunney/kubectl"
+
+      version = "1.14.0"
+
+    }
+
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+
+      version = "2.23.0"
 
     }
 
