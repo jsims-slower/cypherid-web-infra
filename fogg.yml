@@ -474,7 +474,7 @@ envs:
         depends_on:
           components:
             - cloud-env
-      #downloads:
+      downloads:
       ecs:
         depends_on:
           components:
