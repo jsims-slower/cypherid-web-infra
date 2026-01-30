@@ -1,3 +1,18 @@
+
+module "georestriction-rule" {
+  # tflint-ignore: terraform_module_pinned_source
+  source = "../../../modules/waf-georestriction-main"
+
+  scope = "REGIONAL"
+  tags = {
+    project   = var.project
+    env       = var.env
+    service   = "web"
+    owner     = var.owner
+    managedBy = var.owner
+  }
+}
+
 module "web-service-waf" {
   source = "../../../modules/web-acl-regional-v3.3.1"
   tags = {
@@ -7,6 +22,7 @@ module "web-service-waf" {
     owner     = var.owner
     managedBy = var.owner
   }
+  rule_groups           = [{ arn : module.georestriction-rule.arn, name : module.georestriction-rule.name }]
   enable_panther_ingest = false
   czi_baseline_count_rules = {
     CommonRuleSet = [
@@ -14,7 +30,6 @@ module "web-service-waf" {
       "UserAgent_BadBots_HEADER",
       "SizeRestrictions_QUERYSTRING",
       "SizeRestrictions_Cookie_HEADER",
-      "SizeRestrictions_BODY",
       "SizeRestrictions_URIPATH",
       "EC2MetaDataSSRF_BODY",
       "EC2MetaDataSSRF_COOKIE",
