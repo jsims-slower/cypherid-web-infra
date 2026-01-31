@@ -4,7 +4,7 @@ locals {
 }
 
 module "ecs-cluster" {
-  source = "../../../modules/ecs-cluster-v2.2.1"
+  source = "../../../modules/ecs-cluster-v2.4.0"
 
   region  = var.region
   project = var.project
