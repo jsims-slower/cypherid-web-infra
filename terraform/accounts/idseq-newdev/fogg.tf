@@ -260,9 +260,19 @@ variable "build_index_date" {
   default = "2021-01-22"
 }
 # tflint-ignore: terraform_unused_declarations
+variable "dynamodb_enabled" {
+  type    = string
+  default = "false"
+}
+# tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_idseq_bench" {
   type    = string
   default = "idseq-bench"
+}
+# tflint-ignore: terraform_unused_declarations
+variable "s3_bucket_name" {
+  type    = string
+  default = "tfstate-491013321714-test"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_public_references" {

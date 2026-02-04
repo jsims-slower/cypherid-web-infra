@@ -1,11 +1,11 @@
 locals {
-  base_domain = "seqtoid.org"
-  sub_domain  = "${var.env}.${local.base_domain}"
+  env_fqdn       = "${var.env}.${var.base_domain}"
+  happy_env_fqdn = "happy.${var.env}.${var.base_domain}"
 }
 
 # TODO: Determine what method to use in the future; the old CZI way, or the newer way in this file
 #  Note: Either way, the base_domain should be housed in prod (idseq-prod), and not in sandbox (idseq-dev)
-#  Currently: Routes are created by adding the sub_domain (dev.seqtoid.org) to the base_domain (seqtoid.org) by using an additional_provider.
+#  Currently: Routes are created by adding the sub_domain (staging.seqtoid.org) to the base_domain (seqtoid.org) by using an additional_provider.
 #             The additional_provider points to sandbox (idseq-dev/941377154785), as sandbox owns the base_domain.
 #             The additional_provider adds a NS record for the sub_domain into the base_domain route53 zone.
 #             IE: This Terraform code adds a NS record to a separate AWS account, and so both AWS accounts need to be configured (provider and additional_provider)
@@ -16,26 +16,46 @@ locals {
 #
 
 resource "aws_route53_zone" "env-seqtoid-org" {
-  name = local.sub_domain
+  name = local.env_fqdn
   tags = {
     owner   = var.owner
-    project = var.project_v1
+    project = var.project
     service = "seqtoid"
     env     = var.env
   }
 }
 
 data "aws_route53_zone" "root-seqtoid-org" {
-  name         = local.base_domain
+  name         = var.base_domain
   private_zone = false
   provider     = aws.czi-si-us-east-1
 }
 
 resource "aws_route53_record" "env-seqtoid-org" {
   zone_id  = data.aws_route53_zone.root-seqtoid-org.zone_id
-  name     = local.sub_domain
+  name     = local.env_fqdn
   type     = "NS"
   ttl      = 300
   records  = aws_route53_zone.env-seqtoid-org.name_servers
   provider = aws.czi-si-us-east-1
+}
+
+# Zones for happy dev/sandbox/staging envs
+
+resource "aws_route53_zone" "happy-env-seqtoid-org" {
+  name = local.happy_env_fqdn
+  tags = {
+    owner   = var.owner
+    project = var.project
+    service = "seqtoid"
+    env     = var.env
+  }
+}
+
+resource "aws_route53_record" "happy-env-seqtoid-org" {
+  zone_id = aws_route53_zone.env-seqtoid-org.id
+  name    = local.happy_env_fqdn
+  type    = "NS"
+  ttl     = 300
+  records = aws_route53_zone.happy-env-seqtoid-org.name_servers
 }

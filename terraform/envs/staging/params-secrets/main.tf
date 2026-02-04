@@ -2,7 +2,7 @@
 # Make improvements in fogg, so that everyone can benefit.
 
 module "aws-params-secrets-setup" {
-  source     = "github.com/chanzuckerberg/cztack//aws-params-secrets-setup?ref=v0.103.2"
+  source     = "github.com/chanzuckerberg/cztack//aws-params-secrets-setup?ref=v0.104.2"
   alias_name = local.alias_name
   env        = local.env
   owner      = local.owner
