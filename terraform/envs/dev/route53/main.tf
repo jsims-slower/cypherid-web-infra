@@ -1,6 +1,6 @@
 locals {
   env_fqdn       = "${var.env}.${var.base_domain}"
-  happy_env_fqdn = "happy.${var.env}.${var.base_domain}"
+  happy_env_fqdn = "happy.${local.env_fqdn}"
 }
 
 # TODO: Determine what method to use in the future; the old CZI way, or the newer way in this file

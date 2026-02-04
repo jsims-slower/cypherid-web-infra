@@ -120,10 +120,10 @@ resource "aws_iam_role" "aws_batch_service_role" {
   assume_role_policy = data.aws_iam_policy_document.aws_batch_service_role.json
 }
 
-module "orgwide-secrets" {
-  source    = "git@github.com:chanzuckerberg/shared-infra//terraform/modules/aws-iam-policy-orgwide-secrets?ref=v0.66.0"
-  role_name = aws_iam_role.aws_batch_service_role.name
-}
+# module "orgwide-secrets" {
+#   source    = "git@github.com:chanzuckerberg/shared-infra//terraform/modules/aws-iam-policy-orgwide-secrets?ref=v0.66.0"
+#   role_name = aws_iam_role.aws_batch_service_role.name
+# }
 
 resource "aws_iam_role_policy_attachment" "aws_batch_service_role" {
   role       = aws_iam_role.aws_batch_service_role.name
@@ -151,7 +151,7 @@ resource "aws_batch_compute_environment" "idseq_244GB_32CPU" {
       "r5d.8xlarge",
     ]
 
-    ec2_key_pair       = "idseq-${var.env}"
+    #ec2_key_pair       = "idseq-${var.env}"
     max_vcpus          = 1024
     min_vcpus          = 0
     security_group_ids = [random_id.batch.keepers.security_group_id]
@@ -183,7 +183,7 @@ resource "aws_batch_compute_environment" "idseq_122GB_16CPU" {
       "r5d.4xlarge",
     ]
 
-    ec2_key_pair       = "idseq-${var.env}"
+    #ec2_key_pair       = "idseq-${var.env}"
     max_vcpus          = 1024
     min_vcpus          = 0
     security_group_ids = [random_id.batch.keepers.security_group_id]

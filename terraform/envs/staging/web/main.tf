@@ -1,6 +1,6 @@
 locals {
   zone_id      = data.terraform_remote_state.route53.outputs.env_seqtoid_org_zone_id
-  env_fqdn     = "${var.env}.${var.base_domain}"
+  env_fqdn     = data.terraform_remote_state.route53.outputs.env_seqtoid_org_fqdn
   www_env_fqdn = "www.${local.env_fqdn}"
 }
 
@@ -189,6 +189,10 @@ resource "aws_iam_role_policy" "idseq-web" {
   policy = data.aws_iam_policy_document.idseq-web.json
 }
 
+# data "aws_iam_role" "poweruser" {
+#   name = "poweruser"
+# }
+
 data "aws_iam_policy_document" "idseq-upload-assume-role" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -200,6 +204,16 @@ data "aws_iam_policy_document" "idseq-upload-assume-role" {
       identifiers = [aws_iam_role.idseq-web.arn]
     }
   }
+#   statement {
+#     actions = ["sts:AssumeRole"]
+#     effect  = "Allow"
+#     sid     = "PowerUserAssumeRoleForDevEnvironments"
+
+#     principals {
+#       type        = "AWS"
+#       identifiers = [data.aws_iam_role.poweruser.arn]
+#     }
+#   }
 }
 
 resource "aws_iam_role" "idseq-upload" {
