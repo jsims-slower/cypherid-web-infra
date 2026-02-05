@@ -7,12 +7,12 @@ data "aws_ami" "ecs_ami" {
   filter {
     name = "name"
     #values = ["amzn-ami*amazon-ecs-optimized"] # This leads to older 2025 images, instead of 2026 or later
-    values = ["*-ami-ecs-hvm-*-x86_64"]
+    values = ["*-ami-ecs-hvm-*-${var.architecture}"]
   }
 
   filter {
     name   = "architecture"
-    values = ["x86_64"]
+    values = [var.architecture]
   }
 
   filter {

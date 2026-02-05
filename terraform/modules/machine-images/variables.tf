@@ -1,3 +1,8 @@
+variable "architecture" {
+  type    = string
+  default = "x86_64"
+}
+
 # TODO: Rerun update-pinned.sh to make this more stable
 # variable "czi_ubuntu16_main_pinned" {
 #   type = map(string)

@@ -8,7 +8,7 @@ locals {
   ]
 
   cluster_name            = var.eks_cluster_name
-  iam_cluster_name_prefix = ""
+  #iam_cluster_name_prefix = ""
 
   tags            = var.tags
   vpc_id          = data.terraform_remote_state.cloud-env.outputs.vpc_id

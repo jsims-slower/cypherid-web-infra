@@ -41,7 +41,7 @@ resource "aws_ecs_cluster" "cluster" {
 }
 
 module "images" {
-  source = "../machine-images-v0.66.0"
+  source = "../machine-images"
 }
 
 module "logs" {
