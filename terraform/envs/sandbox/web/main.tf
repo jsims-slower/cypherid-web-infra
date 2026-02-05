@@ -246,7 +246,7 @@ data "aws_iam_policy_document" "idseq-upload" {
     resources = [
       "arn:aws:s3:::${var.s3_bucket_samples}/samples/*",
       // allows sandbox role to write to dev bucket for uploads
-      "arn:aws:s3:::idseq-samples-development/samples/*",
+      # "arn:aws:s3:::idseq-samples-development/samples/*",
     ]
   }
 }

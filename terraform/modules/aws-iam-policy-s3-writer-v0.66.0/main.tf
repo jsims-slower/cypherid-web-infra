@@ -1,7 +1,7 @@
 locals {
   bucket_arn         = "arn:aws:s3:::${var.bucket_name}"
   bucket_objects_arn = "arn:aws:s3:::${var.bucket_name}${var.bucket_prefix}/*"
-  policy_name        = "${length(var.policy_name) > 0 ? var.policy_name : "${var.project}-${var.service}-${var.env}-s3writer-${var.bucket_name}"}"
+  policy_name        = length(var.policy_name) > 0 ? var.policy_name : "${var.project}-${var.service}-${var.env}-s3writer-${var.bucket_name}"
 }
 
 data aws_iam_policy_document s3-bucket-writer {
@@ -15,8 +15,8 @@ data aws_iam_policy_document s3-bucket-writer {
     ]
 
     resources = [
-      "${local.bucket_arn}",
-      "${local.bucket_objects_arn}",
+      local.bucket_arn,
+      local.bucket_objects_arn,
     ]
   }
 }

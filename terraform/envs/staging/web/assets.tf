@@ -1,6 +1,6 @@
 locals {
-  assets_fqdn = "assets.${local.env_fqdn}"
-  www_assets_fqdn    = "www.${local.assets_fqdn}"
+  assets_fqdn     = "assets.${local.env_fqdn}"
+  www_assets_fqdn = "www.${local.assets_fqdn}"
 
   assets_aliases = {
     "${local.www_assets_fqdn}" = local.zone_id
