@@ -6,10 +6,10 @@ output "azs" {
   sensitive = false
 }
 
-output "bastion_configuration" {
-  value     = module.aws-env.bastion_configuration
-  sensitive = false
-}
+# output "bastion_configuration" {
+#   value     = module.aws-env.bastion_configuration
+#   sensitive = false
+# }
 
 output "database_route_table_ids" {
   value     = module.aws-env.database_route_table_ids
