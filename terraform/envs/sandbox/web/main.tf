@@ -6,7 +6,7 @@ data "aws_iam_policy_document" "idseq-web-assume-role" {
   statement {
     principals {
       type        = "Service"
-      identifiers = ["ecs-tasks.amazonaws.com"]
+      identifiers = ["ecs-tasks.amazonaws.com", "ec2.amazonaws.com"]
     }
 
     actions = ["sts:AssumeRole"]
