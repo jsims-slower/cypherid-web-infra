@@ -107,14 +107,14 @@ module "logs_bucket" {
 # Caveat(aku): If teams start to require notifications to other endpoints,
 #   Revise this resource rather than creating new ones. 
 #   S3 Buckets only support a single notification configuration. 
-# resource "aws_s3_bucket_notification" "bucket_notification" {
-#   count  = var.enable_panther_ingest ? 1 : 0
-#   bucket = module.logs_bucket.id
+resource "aws_s3_bucket_notification" "bucket_notification" {
+  count  = var.enable_panther_ingest ? 1 : 0
+  bucket = module.logs_bucket.id
 
-#   topic {
-#     id            = "notify-panther-new-events"
-#     topic_arn     = module.panther-s3[0].topic_arn
-#     events        = ["s3:ObjectCreated:*"]
-#     filter_prefix = "AWSLogs/"
-#   }
-# }
+  topic {
+    id            = "notify-panther-new-events"
+    topic_arn     = module.panther-s3[0].topic_arn
+    events        = ["s3:ObjectCreated:*"]
+    filter_prefix = "AWSLogs/"
+  }
+}
