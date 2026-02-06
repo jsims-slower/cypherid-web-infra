@@ -14,7 +14,7 @@ locals {
 }
 
 module "idseq-heatmap-es-param" {
-  source  = "github.com/chanzuckerberg/cztack//aws-ssm-params-writer?ref=v0.43.3"
+  source  = "github.com/chanzuckerberg/cztack//aws-ssm-params-writer?ref=v0.104.2"
   project = var.project
   env     = var.env
   service = "web"
@@ -121,7 +121,7 @@ resource "aws_iam_role_policy_attachment" "glue-service-role-policy" {
 }
 
 module "aws-s3-batch-taxon-indexing-private-bucket" {
-  source      = "github.com/chanzuckerberg/cztack//aws-s3-private-bucket?ref=v0.73.0"
+  source      = "github.com/chanzuckerberg/cztack//aws-s3-private-bucket?ref=v0.104.2"
   bucket_name = local.bucket_name
   env         = var.env
   owner       = var.owner
@@ -160,27 +160,27 @@ resource "aws_glue_job" "batch-taxon-indexing" {
   }
 }
 
-# module "gh_actions_executor" {
-#   source = "git@github.com:chanzuckerberg/shared-infra//terraform/modules/aws-iam-role-github-action?ref=v0.125.0"
-#
-#   tags = local.tags
-#   role = {
-#     name = "gh_actions_executor"
-#   }
-#   authorized_github_repos = {
-#     chanzuckerberg : ["czid-heatmap-spark-service"]
-#   }
-# }
-#
-# module "idseq-heatmap-iam-s3-writer" {
-#   source = "git@github.com:chanzuckerberg/shared-infra//terraform/modules/aws-iam-policy-s3-writer?ref=v0.66.0"
-#
-#   bucket_name   = "idseq-prod-heatmap"
-#   bucket_prefix = ""
-#
-#   env       = var.env
-#   owner     = var.owner
-#   project   = var.project
-#   role_name = module.gh_actions_executor.role.name
-#   service   = var.component
-# }
+module "gh_actions_executor" {
+  source = "github.com/chanzuckerberg/cztack//aws-iam-role-github-action?ref=v0.104.2"
+
+  tags = local.tags
+  role = {
+    name = "gh_actions_executor"
+  }
+  authorized_github_repos = {
+    chanzuckerberg : ["czid-heatmap-spark-service"]
+  }
+}
+
+module "idseq-heatmap-iam-s3-writer" {
+  source = "../../../modules/aws-iam-policy-s3-writer-v0.66.0"
+
+  bucket_name   = "idseq-prod-heatmap"
+  bucket_prefix = ""
+
+  env       = var.env
+  owner     = var.owner
+  project   = var.project
+  role_name = module.gh_actions_executor.role.name
+  service   = var.component
+}

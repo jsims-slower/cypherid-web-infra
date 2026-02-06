@@ -1,6 +1,6 @@
 
 module "czid_web_private_gh_actions_executor" {
-  source = "git@github.com:chanzuckerberg/shared-infra//terraform/modules/aws-iam-role-github-action?ref=v0.199.1"
+  source = "github.com/chanzuckerberg/cztack//aws-iam-role-github-action?ref=v0.104.2"
 
   tags = var.tags
 
