@@ -23,7 +23,7 @@ variable "TFC_PROJECT_NAME" {
 provider "aws" {
 
   region  = "us-west-2"
-  profile = "idseq-prod"
+  profile = "idseq-newdev"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -41,7 +41,7 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["283694049553"]
+  allowed_account_ids = ["491013321714"]
 }
 # Aliased Providers (for doing things in every region).
 
@@ -99,7 +99,7 @@ provider "aws" {
 provider "aws" {
   alias   = "us-east-1"
   region  = "us-east-1"
-  profile = "idseq-prod"
+  profile = "idseq-newdev"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -117,7 +117,7 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["283694049553"]
+  allowed_account_ids = ["491013321714"]
 }
 
 
@@ -127,12 +127,12 @@ terraform {
 
   backend "s3" {
 
-    bucket = "tfstate-283694049553"
+    bucket = "tfstate-491013321714-test"
 
-    key     = "terraform/idseq/envs/prod/components/heatmap-optimization.tfstate"
+    key     = "terraform/idseq/envs/dev/components/route53.tfstate"
     encrypt = true
     region  = "us-west-2"
-    profile = "idseq-prod"
+    profile = "idseq-newdev"
 
 
   }
@@ -220,7 +220,7 @@ terraform {
 # tflint-ignore: terraform_unused_declarations
 variable "env" {
   type    = string
-  default = "prod"
+  default = "dev"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "project" {
@@ -235,12 +235,12 @@ variable "region" {
 # tflint-ignore: terraform_unused_declarations
 variable "component" {
   type    = string
-  default = "heatmap-optimization"
+  default = "route53"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "aws_profile" {
   type    = string
-  default = "idseq-prod"
+  default = "idseq-newdev"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "owner" {
@@ -254,8 +254,8 @@ variable "tags" {
   type = object({ project : string, env : string, service : string, owner : string, managedBy : string })
   default = {
     project   = "idseq"
-    env       = "prod"
-    service   = "heatmap-optimization"
+    env       = "dev"
+    service   = "route53"
     owner     = "biohub-tech@chanzuckerberg.com"
     managedBy = "terraform"
   }
@@ -264,6 +264,11 @@ variable "tags" {
 variable "alignment_index_date" {
   type    = string
   default = "2021-01-22"
+}
+# tflint-ignore: terraform_unused_declarations
+variable "auth0_domain" {
+  type    = string
+  default = "dev-ep4y3efh1vxvw06z.us.auth0.com"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "base_domain" {
@@ -278,22 +283,17 @@ variable "build_index_date" {
 # tflint-ignore: terraform_unused_declarations
 variable "eks_cluster_name" {
   type    = string
-  default = "czid-prod-eks"
+  default = "czid-dev-eks"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_aegea_ecs_execute" {
   type    = string
-  default = "idseq-prod-aegea-ecs-execute-us-west-2"
+  default = "aegea-ecs-execute-dev-491013321714"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_idseq_bench" {
   type    = string
   default = "idseq-bench"
-}
-# tflint-ignore: terraform_unused_declarations
-variable "s3_bucket_pipeline_public_assets" {
-  type    = string
-  default = "idseq-prod-pipeline-public-assets-us-west-2"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_public_references" {
@@ -303,12 +303,12 @@ variable "s3_bucket_public_references" {
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_samples" {
   type    = string
-  default = "idseq-prod-samples-us-west-2"
+  default = "idseq-samples-dev-491013321714"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_samples_v1" {
   type    = string
-  default = "czi-infectious-disease-prod-samples"
+  default = "czi-infectious-disease-dev-samples-491013321714"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_secrets" {
@@ -319,20 +319,6 @@ variable "s3_bucket_secrets" {
 variable "s3_bucket_workflows" {
   type    = string
   default = "idseq-workflows"
-}
-data "terraform_remote_state" "cloud-env" {
-  backend = "s3"
-  config = {
-
-
-    bucket = "tfstate-283694049553"
-
-    key     = "terraform/idseq/envs/prod/components/cloud-env.tfstate"
-    region  = "us-west-2"
-    profile = "idseq-prod"
-
-
-  }
 }
 # tflint-ignore: terraform_unused_declarations
 variable "aws_accounts" {

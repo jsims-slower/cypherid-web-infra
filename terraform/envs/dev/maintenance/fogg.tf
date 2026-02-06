@@ -123,7 +123,7 @@ provider "aws" {
 
 provider "assert" {}
 terraform {
-  required_version = "=1.14.3"
+  required_version = "=1.14.4"
 
   backend "s3" {
 
@@ -155,7 +155,28 @@ terraform {
     aws = {
       source = "hashicorp/aws"
 
-      version = "5.94.0"
+      version = "5.100.0"
+
+    }
+
+    helm = {
+      source = "hashicorp/helm"
+
+      version = "2.17.0"
+
+    }
+
+    kubectl = {
+      source = "gavinbunney/kubectl"
+
+      version = "1.19.0"
+
+    }
+
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+
+      version = "3.0.1"
 
     }
 
@@ -298,6 +319,20 @@ variable "s3_bucket_secrets" {
 variable "s3_bucket_workflows" {
   type    = string
   default = "idseq-workflows"
+}
+data "terraform_remote_state" "route53" {
+  backend = "s3"
+  config = {
+
+
+    bucket = "tfstate-491013321714-test"
+
+    key     = "terraform/idseq/envs/dev/components/route53.tfstate"
+    region  = "us-west-2"
+    profile = "idseq-newdev"
+
+
+  }
 }
 # tflint-ignore: terraform_unused_declarations
 variable "aws_accounts" {

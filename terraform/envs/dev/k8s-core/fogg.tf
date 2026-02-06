@@ -123,7 +123,7 @@ provider "aws" {
 
 provider "assert" {}
 terraform {
-  required_version = "=1.14.3"
+  required_version = "=1.14.4"
 
   backend "s3" {
 
@@ -155,7 +155,28 @@ terraform {
     aws = {
       source = "hashicorp/aws"
 
-      version = "5.94.0"
+      version = "5.100.0"
+
+    }
+
+    helm = {
+      source = "hashicorp/helm"
+
+      version = "2.17.0"
+
+    }
+
+    kubectl = {
+      source = "gavinbunney/kubectl"
+
+      version = "1.19.0"
+
+    }
+
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+
+      version = "3.0.1"
 
     }
 
@@ -265,11 +286,6 @@ variable "eks_cluster_name" {
   default = "czid-dev-eks"
 }
 # tflint-ignore: terraform_unused_declarations
-variable "ie_ops_genie_team" {
-  type    = string
-  default = "Core Infra Eng"
-}
-# tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_aegea_ecs_execute" {
   type    = string
   default = "aegea-ecs-execute-dev-491013321714"
@@ -312,6 +328,20 @@ data "terraform_remote_state" "eks" {
     bucket = "tfstate-491013321714-test"
 
     key     = "terraform/czid/envs/dev/components/eks.tfstate"
+    region  = "us-west-2"
+    profile = "idseq-newdev"
+
+
+  }
+}
+data "terraform_remote_state" "route53" {
+  backend = "s3"
+  config = {
+
+
+    bucket = "tfstate-491013321714-test"
+
+    key     = "terraform/idseq/envs/dev/components/route53.tfstate"
     region  = "us-west-2"
     profile = "idseq-newdev"
 

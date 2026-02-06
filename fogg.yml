@@ -16,6 +16,10 @@ accounts:
       aws:
         account_id: 491013321714
         profile: idseq-newdev
+    extra_vars:
+      dynamodb_enabled: false
+      #prevent_unencrypted_uploads: false
+      s3_bucket_name: tfstate-491013321714-test
   idseq-dev:
     backend:
       kind: s3
@@ -112,7 +116,7 @@ defaults:
     #  version: 3.41.0
     #  registry_namespace: okta
     #  org_name: czi-prod
-  terraform_version: 1.14.3
+  terraform_version: 1.14.4
   tools:
     github_actions_ci:
       aws_iam_role_name: infraci
@@ -136,17 +140,6 @@ envs:
       aws:
         account_id: 491013321714
         profile: idseq-newdev
-      # TODO: All provider versions should be made consistent by defining in "defaults" above, but DEV is currently divergent
-      kubernetes:
-        enabled: true
-        version: 2.23.0
-        #version: 2.38.0
-      kubectl:
-        version: 1.14.0
-        #ersion: 1.19.0
-      helm:
-        version: 2.11.0
-        #version: 2.17.0
     components:
       # used to code generate our configuration for the s3 storing state files outisde of TFE buckets
       # s3-tf-state:
@@ -163,12 +156,22 @@ envs:
       #     - environment
       #     - tags
       #     - attributes
+      params-secrets:
+        module_source: "github.com/chanzuckerberg/cztack//aws-params-secrets-setup?ref=v0.104.2"
+        module_name: aws-params-secrets-setup
+        variables:
+          - alias_name
+          - env
+          - owner
+          - project
+          - service
       eks:
         project: czid
         depends_on:
           components:
             - cloud-env
-        module_source: terraform/modules/eks-cluster-v2-v7.3.0
+        module_source: terraform/modules/eks-cluster-v2-v7.3.0 # TODO: Use cztack module instead
+        #module_source: "github.com/chanzuckerberg/cztack//aws-eks-cluster?ref=v0.104.2"
         variables:
           - cluster_name
           #- iam_cluster_name_prefix
@@ -180,9 +183,7 @@ envs:
         module_name: eks-cluster
         provider_aliases:
           aws.us-east-1: aws.us-east-1
-      #route53:
-      #  module_source: terraform/modules/happy-route53
-      #  module_name: happy-route53
+      route53:
       k8s-core:
         project: czid
         depends_on:
@@ -191,8 +192,8 @@ envs:
             - route53
         module_source: terraform/modules/k8s-core-v5.5.1
         module_name: k8s-core
-        extra_vars:
-          ie_ops_genie_team: Core Infra Eng
+        #extra_vars:
+        #  ie_ops_genie_team: Core Infra Eng
         variables:
           - additional_addons
       happy:
@@ -203,13 +204,21 @@ envs:
             - cloud-env
             - k8s-core
             - eks
-        module_source: terraform/modules/happy-env-eks-v4.14.3
+        module_source: terraform/modules/happy-env-eks
         variables:
-          - ecr_repos
-          - s3_buckets
-          - github_actions_roles
           - additional_secrets
-          - okta_teams
+          - base_zone_id
+          - cloud-env
+          #- default_db_engine_version
+          - ecr_repos
+          - eks-cluster
+          - github_actions_roles
+          #- hapi_base_url
+          #- oidc_config
+          #- okta_teams
+          #- rds_dbs
+          - s3_buckets
+          #- waf_arn
         module_name: happy
         #provider_aliases:
         #  "aws.czi-si": aws.czi-si
@@ -225,6 +234,9 @@ envs:
           - k8s_cluster_names
       downloads:
       maintenance:
+        depends_on:
+          components:
+            - route53
       db:
         depends_on:
           components:
@@ -252,24 +264,23 @@ envs:
             - web
       web:
         depends_on:
-          accounts:
-            - idseq-newdev
           components:
             - route53
             - cloud-env
-            - ecs
-            - elb-access-logs
             - db
-            - redis
+            - ecs
             - heatmap-optimization
+            - elb-access-logs
+            - redis
       web-waf:
+        extra_vars:
+          project_v1: czid # TODO: Remove 'project_v1' and redeploy DEV, using `project` instead
     extra_vars:
       s3_bucket_aegea_ecs_execute: aegea-ecs-execute-dev-491013321714
       s3_bucket_samples: idseq-samples-dev-491013321714
       s3_bucket_samples_v1: czi-infectious-disease-dev-samples-491013321714
       eks_cluster_name: czid-dev-eks
-      auth0_domain: dev-ep4y3efh1vxvw06z.us.auth0.com
-      project_v1: czid # TODO: Remove 'project_v1' and redeploy DEV, using `project` instead
+      auth0_domain: dev-ep4y3efh1vxvw06z.us.auth0.com # <- TODO: Separate organization, Tenant or Application?
   sandbox:
     backend:
       kind: s3
@@ -325,7 +336,7 @@ envs:
             - cloud-env
             - k8s-core
             - eks
-        module_source: terraform/modules/happy-env-eks-v4.14.3
+        module_source: terraform/modules/happy-env-eks
         variables:
           - ecr_repos
           - s3_buckets
@@ -402,6 +413,7 @@ envs:
           - node_groups
           - authorized_github_repos
           - addons
+          #- aws_org_id # TODO: determine if this being set correctly matters or not, as the default is some CZI Org (probably)
         module_name: eks-cluster
         provider_aliases:
           aws.us-east-1: aws.us-east-1
@@ -430,7 +442,7 @@ envs:
             - cloud-env
             - k8s-core
             - eks
-        module_source: terraform/modules/happy-env-eks-v4.14.3 # TODO: Branch is main, and there is no tag or release, so remove version #
+        module_source: terraform/modules/happy-env-eks
         variables:
           - additional_secrets
           - base_zone_id
@@ -460,7 +472,7 @@ envs:
             - ecs
             - cloud-env
       params-secrets:
-        module_source: "github.com/chanzuckerberg/cztack//aws-params-secrets-setup?ref=v0.103.2"
+        module_source: "github.com/chanzuckerberg/cztack//aws-params-secrets-setup?ref=v0.104.2"
         module_name: aws-params-secrets-setup
         variables:
           - alias_name
@@ -556,7 +568,6 @@ envs:
       #     - name
       #     - stage
       #     - environment
-      #     - tags
       #     - attributes
       eks:
         depends_on:
@@ -593,7 +604,7 @@ envs:
             - cloud-env
             - k8s-core
             - eks
-        module_source: terraform/modules/happy-env-eks-v4.14.3
+        module_source: terraform/modules/happy-env-eks
         variables:
           - ecr_repos
           - s3_buckets

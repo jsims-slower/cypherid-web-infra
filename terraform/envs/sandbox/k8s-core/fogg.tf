@@ -123,7 +123,7 @@ provider "aws" {
 
 provider "assert" {}
 terraform {
-  required_version = "=1.14.3"
+  required_version = "=1.14.4"
 
   backend "s3" {
 
@@ -155,21 +155,28 @@ terraform {
     aws = {
       source = "hashicorp/aws"
 
-      version = "5.94.0"
+      version = "5.100.0"
 
     }
 
-    datadog = {
-      source = "datadog/datadog"
+    helm = {
+      source = "hashicorp/helm"
 
-      version = "3.20.0"
+      version = "2.17.0"
+
+    }
+
+    kubectl = {
+      source = "gavinbunney/kubectl"
+
+      version = "1.19.0"
 
     }
 
     kubernetes = {
       source = "hashicorp/kubernetes"
 
-      version = "2.23.0"
+      version = "3.0.1"
 
     }
 
@@ -191,13 +198,6 @@ terraform {
       source = "okta/okta"
 
       version = "> 3.30"
-
-    }
-
-    opsgenie = {
-      source = "opsgenie/opsgenie"
-
-      version = "0.6.14"
 
     }
 

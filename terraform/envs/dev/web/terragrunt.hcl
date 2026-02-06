@@ -6,5 +6,6 @@ dependencies {
     "../elb-access-logs",
     "../heatmap-optimization",
     "../redis",
+    "../route53",
   ]
 }

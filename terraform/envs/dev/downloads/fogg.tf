@@ -123,7 +123,7 @@ provider "aws" {
 
 provider "assert" {}
 terraform {
-  required_version = "=1.14.3"
+  required_version = "=1.14.4"
 
   backend "s3" {
 
@@ -162,21 +162,21 @@ terraform {
     helm = {
       source = "hashicorp/helm"
 
-      version = "2.11.0"
+      version = "2.17.0"
 
     }
 
     kubectl = {
       source = "gavinbunney/kubectl"
 
-      version = "1.14.0"
+      version = "1.19.0"
 
     }
 
     kubernetes = {
       source = "hashicorp/kubernetes"
 
-      version = "2.23.0"
+      version = "3.0.1"
 
     }
 
