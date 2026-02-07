@@ -221,6 +221,14 @@ resource "auth0_connection" "username_password_authentication" {
   }
 }
 
+data "auth0_client" "idseq_web" {
+  client_id = auth0_client.idseq_web.id
+}
+
+data "auth0_client" "idseq_web_management" {
+  client_id = auth0_client.idseq_web_management.id
+}
+
 module "auth0-ssm-params" {
   source  = "github.com/chanzuckerberg/cztack//aws-ssm-params-writer?ref=v0.104.2"
   project = var.project
@@ -230,10 +238,10 @@ module "auth0-ssm-params" {
 
   parameters = {
     AUTH0_CLIENT_ID                = auth0_client.idseq_web.client_id
-    AUTH0_CLIENT_SECRET            = auth0_client.idseq_web.client_secret
-    AUTH0_DOMAIN                   = var.auth0_m2m_domain
+    AUTH0_CLIENT_SECRET            = data.auth0_client.idseq_web.client_secret
+    AUTH0_DOMAIN                   = var.auth0_domain
     AUTH0_MANAGEMENT_CLIENT_ID     = auth0_client.idseq_web_management.client_id
-    AUTH0_MANAGEMENT_CLIENT_SECRET = auth0_client.idseq_web_management.client_secret
-    AUTH0_MANAGEMENT_DOMAIN        = var.auth0_m2m_domain
+    AUTH0_MANAGEMENT_CLIENT_SECRET = data.auth0_client.idseq_web_management.client_secret
+    AUTH0_MANAGEMENT_DOMAIN        = var.auth0_domain
   }
 }
