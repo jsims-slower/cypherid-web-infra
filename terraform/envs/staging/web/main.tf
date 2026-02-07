@@ -189,10 +189,6 @@ resource "aws_iam_role_policy" "idseq-web" {
   policy = data.aws_iam_policy_document.idseq-web.json
 }
 
-# data "aws_iam_role" "poweruser" {
-#   name = "poweruser"
-# }
-
 data "aws_iam_policy_document" "idseq-upload-assume-role" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -204,16 +200,6 @@ data "aws_iam_policy_document" "idseq-upload-assume-role" {
       identifiers = [aws_iam_role.idseq-web.arn]
     }
   }
-  # statement {
-  #   actions = ["sts:AssumeRole"]
-  #   effect  = "Allow"
-  #   sid     = "PowerUserAssumeRoleForDevEnvironments"
-  #
-  #   principals {
-  #     type        = "AWS"
-  #     identifiers = [data.aws_iam_role.poweruser.arn]
-  #   }
-  # }
 }
 
 resource "aws_iam_role" "idseq-upload" {
