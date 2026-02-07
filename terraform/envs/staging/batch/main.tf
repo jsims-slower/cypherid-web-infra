@@ -1,13 +1,3 @@
-locals {
-  tags = {
-    project   = var.project
-    env       = var.env
-    service   = var.component
-    owner     = var.owner
-    managedBy = "terraform"
-  }
-}
-
 data "aws_region" "current" {}
 
 resource "aws_batch_job_queue" "idseq-himem" {
@@ -151,13 +141,13 @@ resource "aws_batch_compute_environment" "idseq_244GB_32CPU" {
       "r5d.8xlarge",
     ]
 
-    #ec2_key_pair       = "idseq-${var.env}"
+    # ec2_key_pair       = "idseq-${var.env}"
     max_vcpus          = 1024
     min_vcpus          = 0
     security_group_ids = [random_id.batch.keepers.security_group_id]
     subnets            = data.terraform_remote_state.cloud-env.outputs.private_subnets
     type               = "EC2"
-    tags = local.tags
+    tags = var.tags
 
     # image_id           =  random_id.batch.keepers.image_id
   }
@@ -183,13 +173,13 @@ resource "aws_batch_compute_environment" "idseq_122GB_16CPU" {
       "r5d.4xlarge",
     ]
 
-    #ec2_key_pair       = "idseq-${var.env}"
+    # ec2_key_pair       = "idseq-${var.env}"
     max_vcpus          = 1024
     min_vcpus          = 0
     security_group_ids = [random_id.batch.keepers.security_group_id]
     subnets            = data.terraform_remote_state.cloud-env.outputs.private_subnets
     type               = "EC2"
-    tags = local.tags
+    tags = var.tags
 
     # image_id           =  random_id.batch.keepers.image_id
   }

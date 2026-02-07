@@ -103,9 +103,9 @@ resource "aws_s3_bucket" "samples" {
     enabled = true
     prefix  = "samples/"
 
-    tags = {
+    tags = merge(var.tags, {
       intermediate_output = "true"
-    }
+    })
 
     expiration {
       days = 30 # TODO: was 1, but hard to debug when files disappear
@@ -123,10 +123,9 @@ resource "aws_s3_bucket" "samples" {
     }
   }
 
-  tags = {
-    env       = var.env
+  tags = merge(var.tags, {
     terraform = true
-  }
+  })
 
   cors_rule {
     allowed_headers = ["*"]
@@ -200,15 +199,14 @@ resource "aws_s3_bucket" "samples_v1" {
     abort_incomplete_multipart_upload_days = 7
   }
 
-  tags = {
-    env       = var.env
+  tags = merge(var.tags, {
     terraform = true
-  }
+  })
 
   cors_rule {
     allowed_headers = ["*"]
     allowed_methods = ["PUT", "POST", "GET", "DELETE"]
-    allowed_origins = ["https://staging.idseq.net", "https://${var.env}.czid.org", "https://${var.env}.seqtoid.org"]
+    allowed_origins = ["https://${var.env}.idseq.net", "https://${var.env}.czid.org", "https://${var.env}.seqtoid.org"]
   }
 
   // For Nextclade integration via presigned links. This allows us to use both the latest and v2 of Nextclade Web

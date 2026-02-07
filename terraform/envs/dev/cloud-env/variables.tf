@@ -1,8 +1,8 @@
 locals {
-  vpc_cidr              = "10.133.0.0/16"
-  private_subnet_cidrs  = ["10.133.101.0/24", "10.133.102.0/24"]
-  public_subnet_cidrs   = ["10.133.1.0/24", "10.133.2.0/24"]
-  database_subnet_cidrs = ["10.133.201.0/24", "10.133.202.0/24"]
+  vpc_cidr              = "10.132.0.0/16"
+  private_subnet_cidrs  = ["10.132.101.0/24", "10.132.102.0/24"]
+  public_subnet_cidrs   = ["10.132.1.0/24", "10.132.2.0/24"]
+  database_subnet_cidrs = ["10.132.201.0/24", "10.132.202.0/24"]
   azs                   = ["us-west-2a", "us-west-2b"]
   env                   = var.env
   owner                 = var.owner

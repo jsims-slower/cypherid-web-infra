@@ -256,5 +256,5 @@ resource "aws_wafv2_web_acl" "main" {
     sampled_requests_enabled   = false
   }
 
-  tags = merge(var.tags)
+  tags = var.tags
 }

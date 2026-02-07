@@ -50,6 +50,9 @@ make apply
 cd ../params-secrets
 make apply
 
+cd ../auth0
+make apply
+
 cd ../cloud-env
 make apply
 
@@ -63,6 +66,9 @@ cd ../heatmap-optimization
 make apply
 
 cd ../db
+make apply
+
+cd ../downloads
 make apply
 
 cd ../ecs
@@ -87,6 +93,12 @@ cd ../k8s-core
 make apply
 
 cd ../happy
+make apply
+
+cd ../access-management
+make apply
+
+cd ../batch
 make apply
 
 cd -

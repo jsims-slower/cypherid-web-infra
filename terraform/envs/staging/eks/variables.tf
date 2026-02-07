@@ -20,8 +20,8 @@ locals {
       max_servers   = 20
       capacity_type = "ON_DEMAND"
       architecture = {
-        ami_type = "AL2023_ARM_64_STANDARD"
-        instance_types = ["t4g.large"]
+        ami_type       = "AL2023_ARM_64_STANDARD"
+        instance_types = ["t4g.xlarge"]
       }
     },
     // please push teams to use ARM, this is just a backup in case you need it
@@ -30,8 +30,8 @@ locals {
       max_servers   = 10
       capacity_type = "ON_DEMAND"
       architecture = {
-        ami_type = "AL2023_x86_64_STANDARD"
-        instance_types = ["t3a.large"]
+        ami_type       = "AL2023_x86_64_STANDARD"
+        instance_types = ["t3.xlarge"]
       }
     }
   }
@@ -39,6 +39,6 @@ locals {
     chanzuckerberg = ["czid-graphql-federation-server"]
   }
   addons = {
-    enable_guardduty = false
+    enable_guardduty = false # true
   }
 }

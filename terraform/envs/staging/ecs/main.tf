@@ -97,9 +97,7 @@ resource "aws_s3_bucket" "aegea-ecs-execute" {
     }
   }
 
-  tags = {
-    env       = var.env
+  tags = merge(var.tags, {
     terraform = "true"
-  }
+  })
 }
-

@@ -3,23 +3,26 @@ moved {
   to   = module.web-service-waf.module.panther-s3[0]
 }
 
+module "georestriction-rule" {
+  # tflint-ignore: terraform_module_pinned_source
+  source = "../../../modules/waf-georestriction-main"
+
+  scope = "REGIONAL"
+  tags = var.tags
+}
+
 module "web-service-waf" {
   source = "../../../modules/web-acl-regional-v3.3.1"
-  tags = {
-    project   = var.project
-    env       = var.env
-    service   = "web"
-    owner     = var.owner
-    managedBy = var.owner
-  }
+  tags = var.tags
   enable_panther_ingest = true
+  rule_groups           = [{ arn : module.georestriction-rule.arn, name : module.georestriction-rule.name }]
   czi_baseline_count_rules = {
     CommonRuleSet = [
       "NoUserAgent_HEADER",
       "UserAgent_BadBots_HEADER",
       "SizeRestrictions_QUERYSTRING",
       "SizeRestrictions_Cookie_HEADER",
-      "SizeRestrictions_BODY",
+      #"SizeRestrictions_BODY",
       "SizeRestrictions_URIPATH",
       "EC2MetaDataSSRF_BODY",
       "EC2MetaDataSSRF_COOKIE",

@@ -102,21 +102,7 @@
                 redirectUrl: config.callbackURL,
                 responseType:
                     (config.internalOptions || {}).response_type ||
-                    (config.callbackOnLocatio        pushCSS("content-body-wrapper", "padding-top: 0px;");
-        pushCSS("content-wrapper", "display: flex; flex-direction: column");
-        pushCSS("cred-pane", "border-radius: 10px");
-        pushCSS("form .auth0-lock-alternative", "margin-top: 15px; text-align: center;");
-        pushCSS("form p", "text-align: left; color: #333333");
-        pushCSS("form", "padding: 20px 38px 38px 38px");
-        pushCSS("header-bg .auth0-lock-header-bg-blur", "display: none !important");
-        pushCSS("header-bg .auth0-lock-header-bg-solid", "display: none");
-        pushCSS("header-bg", "background: #F8F8F8");
-        pushCSS("header-logo.centered", "margin: 15px 0 0 0");
-        pushCSS("input-block", "margin-bottom: 14px");
-        pushCSS("input-wrap .auth0-lock-input", "border-radius: 4px; height: 34px; font-size: 14px;");
-        pushCSS("input-wrap", "border-color: #999999;");
-        pushCSS("input-wrap.auth0-lock-input-wrap-with-icon", "padding-left: 0");
-nHash ? "token" : "code"),
+                    (config.callbackOnLocationHash ? "token" : "code"),
                 params: config.internalOptions
             },
             autofocus: true,

@@ -4,24 +4,12 @@ module "georestriction-rule" {
   source = "../../../modules/waf-georestriction-main"
 
   scope = "REGIONAL"
-  tags = {
-    project   = var.project
-    env       = var.env
-    service   = "web"
-    owner     = var.owner
-    managedBy = var.owner
-  }
+  tags = var.tags
 }
 
 module "web-service-waf" {
   source = "../../../modules/web-acl-regional-v3.3.1"
-  tags = {
-    project   = var.project
-    env       = var.env
-    service   = "web"
-    owner     = var.owner
-    managedBy = var.owner
-  }
+  tags = var.tags
   rule_groups           = [{ arn : module.georestriction-rule.arn, name : module.georestriction-rule.name }]
   enable_panther_ingest = false
   czi_baseline_count_rules = {

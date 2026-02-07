@@ -8,12 +8,8 @@
 #   custom_login_page_on = true
 #
 #   refresh_token {
-#     rotation_type   = "rotating"
+#     rotation_type   = "non-rotating"
 #     expiration_type = "non-expiring"
-#     infinite_idle_token_lifetime = true
-#     infinite_token_lifetime      = false
-#     # token_lifetime               = 84600
-#     # idle_token_lifetime          = 1296000
 #   }
 # }
 
@@ -58,15 +54,6 @@ resource "auth0_client" "idseq_web" {
     "https://meta.dev.seqtoid.org/",
   ]
 
-  # custom_login_page_on = true
-  # is_first_party = true
-  # is_token_endpoint_ip_header_trusted = true
-  # token_endpoint_auth_method = "client_secret_post"
-  # oidc_conformant = false
-  # grant_types = [ "authorization_code", "http://auth0.com/oauth/grant-type/password-realm", "implicit", "password", "refresh_token" ]
-  # organization_usage = "deny"
-  # organization_require_behavior = "no_prompt"
-
   jwt_configuration {
     alg                 = "RS256"
     lifetime_in_seconds = 36000
@@ -101,6 +88,9 @@ resource "auth0_client_grant" "idseq_web_management_grant" {
 # resource "auth0_client" "idseq_cli_v2" {
 #   name = "idseq-cli-v2"
 #   allowed_clients = [
+#     "JuxupFFHWAkv6g3IBYKe5fGBNTOAXNOV",
+#     "https://sandbox.idseq.net",
+#     or
 #     var.auth0_m2m_client_id,
 #     "https://dev.seqtoid.org",
 #   ]
@@ -127,7 +117,9 @@ resource "auth0_client_grant" "idseq_web_management_grant" {
 #   strategy = "auth0"
 #   enabled_clients = [
 #     auth0_client.idseq_web_management.id,
-#     var.auth0_m2m_client_id,
+#     auth0_client.auth0_deploy_cli_extension.id,
+#     or
+#     auth0_m2m_client_id,
 #   ]
 #   is_domain_connection = false
 #   realms = [
@@ -165,8 +157,9 @@ resource "auth0_connection" "username_password_authentication" {
   name     = "Username-Password-Authentication"
   strategy = "auth0"
   enabled_clients = [
-    auth0_client.idseq_web.id,
     # var.auth0_m2m_client_id,
+    auth0_client.idseq_web.id,
+    # auth0_client.auth0_deploy_cli_extension.id,
     # auth0_client.idseq_web_management.id,
     # auth0_client.idseq_cli_v2.id,
   ]
@@ -182,7 +175,7 @@ resource "auth0_connection" "username_password_authentication" {
     strategy_version               = 2
     requires_username              = false
     brute_force_protection         = true
-    enabled_database_customization = false
+    enabled_database_customization = false # TODO: true when we can use a custom user DB
 
     # custom_scripts = {
     #   login    = file("${path.module}/scripts/login.js")
@@ -216,7 +209,7 @@ resource "auth0_connection" "username_password_authentication" {
     }
 
     password_complexity_options {
-      min_length = 9
+      min_length = 10
     }
   }
 }

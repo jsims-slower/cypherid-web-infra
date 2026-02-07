@@ -3,14 +3,10 @@ locals {
   name        = "${var.project}-${var.env}-${local.service}"
   account_id  = var.aws_accounts.idseq-newdev
   bucket_name = "idseq-${var.env}-heatmap-batch-jobs-${local.account_id}"
-  tags = {
-    managedBy = "terraform"
+  tags = merge(var.tags, {
     Name      = local.name
-    project   = var.project
-    env       = var.env
     service   = local.service
-    owner     = var.owner
-  }
+  })
 }
 
 # The security group is used by the taxon-indexing-lambda in the idseq codebase

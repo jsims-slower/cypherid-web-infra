@@ -1,8 +1,3 @@
-// param name /idseq-dev-web/db
-locals {
-  ssm_param_name = "/${var.project}-${var.env}-web/${var.component}"
-}
-
 resource "aws_security_group" "rds" {
   name        = "${var.project}-${var.env}-rds"
   description = "Allow mysql inbound"

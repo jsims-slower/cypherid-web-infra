@@ -21,6 +21,6 @@ locals {
     # }
   }
   github_actions_roles = [
-    # data.terraform_remote_state.eks.outputs.gh_action_role,
+    data.terraform_remote_state.eks.outputs.gh_action_role,
   ]
 }

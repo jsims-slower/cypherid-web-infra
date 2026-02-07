@@ -1,22 +1,18 @@
 locals {
-  # czid_subdomain     = "assets"
-  # czid_domain        = "${var.env}.seqtoid.org"
-  # czid_full_domain   = "${local.czid_subdomain}.${local.czid_domain}"
-  # czid_origin_domain = local.czid_domain
-  #
-  czid_assets_fqdn   = "assets.${local.czid_domain}"
+  assets_fqdn     = "assets.${local.env_fqdn}"
+  www_assets_fqdn = "www.${local.assets_fqdn}"
 
-  czid_aliases = {
-    "www.${local.czid_assets_fqdn}" = data.aws_route53_zone.czid_zone.id
+  assets_aliases = {
+    "${local.www_assets_fqdn}" = local.zone_id
   }
 }
 
-module "czid-assets-cert" {
-  source = "github.com/chanzuckerberg/cztack//aws-acm-certificate?ref=v0.41.0"
+module "assets-cert" {
+  source = "github.com/chanzuckerberg/cztack//aws-acm-certificate?ref=v0.104.2"
 
-  cert_domain_name               = local.czid_assets_fqdn
-  aws_route53_zone_id            = data.aws_route53_zone.czid_zone.id
-  cert_subject_alternative_names = local.czid_aliases
+  cert_domain_name               = local.assets_fqdn
+  aws_route53_zone_id            = local.zone_id
+  cert_subject_alternative_names = local.assets_aliases
   tags                           = var.tags
 
   # cloudfront requires us-east-1 acm certs
@@ -25,17 +21,17 @@ module "czid-assets-cert" {
   }
 }
 
-resource "aws_cloudfront_distribution" "czid-assets-distribution" {
+resource "aws_cloudfront_distribution" "distribution" {
 
   enabled = true
   comment = "Caches Rails web server static assets in Amazon's edge servers"
 
-  aliases = [local.czid_assets_fqdn]
+  aliases = [local.assets_fqdn]
 
   # Rails web server
   origin {
-    domain_name = local.czid_domain
-    origin_id   = local.czid_domain
+    domain_name = local.env_fqdn
+    origin_id   = local.env_fqdn
 
     custom_origin_config {
       http_port              = "80"
@@ -50,7 +46,7 @@ resource "aws_cloudfront_distribution" "czid-assets-distribution" {
   default_cache_behavior {
     allowed_methods        = ["GET", "HEAD", "OPTIONS"]
     cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = local.czid_domain
+    target_origin_id       = local.env_fqdn
     viewer_protocol_policy = "redirect-to-https"
 
     default_ttl = 0
@@ -70,7 +66,7 @@ resource "aws_cloudfront_distribution" "czid-assets-distribution" {
     path_pattern           = "/assets/*"
     allowed_methods        = ["GET", "HEAD", "OPTIONS"]
     cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = local.czid_domain
+    target_origin_id       = local.env_fqdn
     viewer_protocol_policy = "redirect-to-https"
     # Time-to-live is set to 1 year. Rails puts a hash in the filename of
     # static assets, so changes to assets will result in new files, which
@@ -93,7 +89,7 @@ resource "aws_cloudfront_distribution" "czid-assets-distribution" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = module.czid-assets-cert.arn
+    acm_certificate_arn      = module.assets-cert.arn
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.1_2016"
   }
@@ -104,23 +100,17 @@ resource "aws_cloudfront_distribution" "czid-assets-distribution" {
     }
   }
 
-  tags = {
-    project   = var.project_v1
-    env       = var.env
-    service   = var.component
-    owner     = var.owner
-    managedBy = "terraform"
-  }
+  tags = var.tags
 }
 
-resource "aws_route53_record" "czid-assets" {
-  zone_id = data.aws_route53_zone.czid_zone.id
-  name    = local.czid_assets_fqdn
+resource "aws_route53_record" "assets" {
+  zone_id = local.zone_id
+  name    = local.assets_fqdn
   type    = "A"
 
   alias {
-    name                   = aws_cloudfront_distribution.czid-assets-distribution.domain_name
-    zone_id                = aws_cloudfront_distribution.czid-assets-distribution.hosted_zone_id
+    name                   = aws_cloudfront_distribution.distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.distribution.hosted_zone_id
     evaluate_target_health = true
   }
 }

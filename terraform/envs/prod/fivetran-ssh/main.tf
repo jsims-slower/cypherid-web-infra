@@ -42,7 +42,7 @@ module "web-service-params" {
 
   parameters = {
     RDS_WRITER_DNS      = data.terraform_remote_state.db.outputs.db_instance_address
-    FIVETRAN_SSH_SERVER = "35.235.101.244"
+    FIVETRAN_SSH_SERVER = "34.48.124.245"
     # There is parameter manually provided (/idseq-prod-fivetran-ssh/fivetran_private_key)
     # FIVETRAN_PRIVATE_KEY = (
     #    according to this link: (https://fivetran.com/docs/databases/connection-options#reversesshtunnel)

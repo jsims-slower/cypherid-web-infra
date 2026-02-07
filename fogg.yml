@@ -233,6 +233,9 @@ envs:
           - single_nat_gateway
           - k8s_cluster_names
       downloads:
+      # TODO: Some modules only used to exist in other environments, but we added them here for testing purposes
+      #       maintenance, db, ecs, elb-access-logs, heatmap-optimization, redis, resque, web, web-waf
+      #       Possibly because they are shared across environments? Need to verify.
       maintenance:
         depends_on:
           components:
@@ -413,7 +416,7 @@ envs:
           - node_groups
           - authorized_github_repos
           - addons
-          #- aws_org_id # TODO: determine if this being set correctly matters or not, as the default is some CZI Org (probably)
+          #- aws_org_id # TODO: determine if this being set correctly matters or not, as the default is some CZI(?) Org
         module_name: eks-cluster
         provider_aliases:
           aws.us-east-1: aws.us-east-1
@@ -502,6 +505,9 @@ envs:
         depends_on:
           components:
             - cloud-env
+      # TODO: Some modules only used to exist in other environments, but we added them here for testing purposes
+      #       maintenance
+      #       Possibly because they are shared across environments? Need to verify.
       maintenance:
         depends_on:
           components:
@@ -635,7 +641,7 @@ envs:
           components:
             - cloud-env
       dashboards:
-      #downloads:
+      downloads:
       ecs:
         depends_on:
           components:

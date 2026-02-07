@@ -1,12 +1,14 @@
-# locals {
-#   zone_id = data.terraform_remote_state.idseq-dev.outputs.sandbox_idseq_net_zone_id
-# }
+locals {
+  zone_id      = data.terraform_remote_state.route53.outputs.env_seqtoid_org_zone_id
+  env_fqdn     = data.terraform_remote_state.route53.outputs.env_seqtoid_org_fqdn
+  www_env_fqdn = "www.${local.env_fqdn}"
+}
 
 data "aws_iam_policy_document" "idseq-web-assume-role" {
   statement {
     principals {
       type        = "Service"
-      identifiers = ["ecs-tasks.amazonaws.com"]
+      identifiers = ["ecs-tasks.amazonaws.com", "ec2.amazonaws.com"]
     }
 
     actions = ["sts:AssumeRole"]
@@ -17,15 +19,6 @@ resource "aws_iam_role" "idseq-web" {
   name               = "idseq-web-${var.env}"
   description        = "task role for idseq-web task in ${var.env} environment"
   assume_role_policy = data.aws_iam_policy_document.idseq-web-assume-role.json
-}
-
-resource "aws_ecr_repository" "web-repository" {
-  name                 = "idseq-web"
-  image_tag_mutability = "MUTABLE"
-
-  image_scanning_configuration {
-    scan_on_push = true
-  }
 }
 
 # Attaching these permissions for the SSRF protections provided by ssrfs-up.
@@ -101,7 +94,7 @@ data "aws_iam_policy_document" "idseq-web" {
       "arn:aws:s3:::${var.s3_bucket_idseq_bench}",
       "arn:aws:s3:::${var.s3_bucket_aegea_ecs_execute}",
       "arn:aws:s3:::${var.s3_bucket_workflows}",
-      # IDSEQ-2933 - Giving access to both buckets so migration will not causing disruption during the switch
+      # IDSEQ-2933 - Giving access to both buckets so migration will not cause disruptions during the switch
       #              The following line can be removed after public references are fully migrated:
       "arn:aws:s3:::idseq-database",
     ]
@@ -119,7 +112,7 @@ data "aws_iam_policy_document" "idseq-web" {
       "arn:aws:s3:::${var.s3_bucket_idseq_bench}/*",
       "arn:aws:s3:::${var.s3_bucket_aegea_ecs_execute}/*",
       "arn:aws:s3:::${var.s3_bucket_workflows}/*",
-      # IDSEQ-2933 - Giving access to both buckets so migration will not causing disruption during the switch
+      # IDSEQ-2933 - Giving access to both buckets so migration will not cause disruptions during the switch
       #              The following line can be removed after public references are fully migrated:
       "arn:aws:s3:::idseq-database/*",
     ]
@@ -164,9 +157,7 @@ data "aws_iam_policy_document" "idseq-web" {
     ]
 
     resources = [
-      "arn:aws:sqs:us-west-2:${data.aws_caller_identity.current.account_id}:idseq-dev-*",
       "arn:aws:sqs:us-west-2:${data.aws_caller_identity.current.account_id}:idseq-${var.env}-*",
-      "arn:aws:sqs:us-west-2:${data.aws_caller_identity.current.account_id}:idseq-swipe-dev-*",
       "arn:aws:sqs:us-west-2:${data.aws_caller_identity.current.account_id}:idseq-swipe-${var.env}-*",
     ]
   }
@@ -198,10 +189,6 @@ resource "aws_iam_role_policy" "idseq-web" {
   policy = data.aws_iam_policy_document.idseq-web.json
 }
 
-# data "aws_iam_role" "poweruser" {
-#   name = "poweruser"
-# }
-
 data "aws_iam_policy_document" "idseq-upload-assume-role" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -213,16 +200,6 @@ data "aws_iam_policy_document" "idseq-upload-assume-role" {
       identifiers = [aws_iam_role.idseq-web.arn]
     }
   }
-#   statement {
-#     actions = ["sts:AssumeRole"]
-#     effect  = "Allow"
-#     sid     = "PowerUserAssumeRoleForDevEnvironments"
-
-#     principals {
-#       type        = "AWS"
-#       identifiers = [data.aws_iam_role.poweruser.arn]
-#     }
-#   }
 }
 
 resource "aws_iam_role" "idseq-upload" {
@@ -245,8 +222,6 @@ data "aws_iam_policy_document" "idseq-upload" {
 
     resources = [
       "arn:aws:s3:::${var.s3_bucket_samples}/samples/*",
-      // allows sandbox role to write to dev bucket for uploads
-      "arn:aws:s3:::idseq-samples-development/samples/*",
     ]
   }
 }
@@ -258,7 +233,7 @@ resource "aws_iam_role_policy" "idseq-upload" {
 }
 
 module "parameters-policy" {
-  source = "github.com/chanzuckerberg/cztack//aws-params-reader-policy?ref=v0.41.0"
+  source = "github.com/chanzuckerberg/cztack//aws-params-reader-policy?ref=v0.104.2"
 
   project   = var.project
   env       = var.env
@@ -267,8 +242,17 @@ module "parameters-policy" {
   role_name = aws_iam_role.idseq-web.name
 }
 
+resource "random_string" "secret_key_base" {
+  length    = 32
+  special   = false
+  min_lower = 8
+  min_upper = 8
+  # min_digits = 8
+  # min_special = 8
+}
+
 module "web-service-params" {
-  source  = "github.com/chanzuckerberg/cztack//aws-ssm-params-writer?ref=v0.41.0"
+  source  = "github.com/chanzuckerberg/cztack//aws-ssm-params-writer?ref=v0.104.2"
   project = var.project
   env     = var.env
   service = var.component
@@ -282,10 +266,140 @@ module "web-service-params" {
     SAMPLES_BUCKET_NAME           = data.terraform_remote_state.db.outputs.samples_bucket
     SAMPLES_BUCKET_NAME_V1        = data.terraform_remote_state.db.outputs.samples_bucket_v1
     ALIGNMENT_CONFIG_DEFAULT_NAME = var.alignment_index_date
-    //ES_ADDRESS                    = "https://${data.terraform_remote_state.heatmap-optimization.outputs.elastic_search_endpoint}"
-    CLOUDFRONT_ENDPOINT           = "assets.${var.env}.seqtoid.org"
-    CZID_CLOUDFRONT_ENDPOINT      = local.czid_assets_fqdn
+    ES_ADDRESS                    = "https://${data.terraform_remote_state.heatmap-optimization.outputs.elastic_search_endpoint}"
+    CLOUDFRONT_ENDPOINT           = local.assets_fqdn
     S3_DATABASE_BUCKET            = var.s3_bucket_public_references
     CLI_UPLOAD_ROLE_ARN           = aws_iam_role.idseq-upload.arn
+    SECRET_KEY_BASE               = random_string.secret_key_base.result
+    SERVER_DOMAIN                 = "https://${data.terraform_remote_state.route53.outputs.env_seqtoid_org_fqdn}"
+    S3_AEGEA_ECS_EXECUTE_BUCKET   = var.s3_bucket_aegea_ecs_execute
   }
+}
+
+# Our dev environment uses staging to run alignments
+#   The ALIGNMENT_CONFIG_DEFAULT_NAME must be in sync between them
+module "web-service-params-dev" {
+  source  = "github.com/chanzuckerberg/cztack//aws-ssm-params-writer?ref=v0.104.2"
+  project = var.project
+  env     = "dev"
+  service = var.component
+  owner   = var.owner
+
+  parameters = {
+    ALIGNMENT_CONFIG_DEFAULT_NAME = var.alignment_index_date
+  }
+}
+
+module "staging" {
+  source = "github.com/chanzuckerberg/cztack//aws-acm-certificate?ref=v0.104.2"
+
+  cert_domain_name    = local.env_fqdn
+  aws_route53_zone_id = local.zone_id
+  tags                = var.tags
+
+  cert_subject_alternative_names = {
+    "${local.www_env_fqdn}" = local.zone_id
+  }
+}
+
+module "staging_east" {
+  source = "github.com/chanzuckerberg/cztack//aws-acm-certificate?ref=v0.104.2"
+
+  cert_domain_name    = local.env_fqdn
+  aws_route53_zone_id = local.zone_id
+  tags                = var.tags
+
+  cert_subject_alternative_names = {
+    "${local.www_env_fqdn}" = local.zone_id
+  }
+
+  # cloudfront requires us-east-1 acm certs
+  providers = {
+    aws = aws.us-east-1
+  }
+}
+
+module "web-service" {
+  source = "../../../modules/ecs-service-with-alb-v0.421.0"
+
+  service             = "web"
+  project             = var.project
+  owner               = var.owner
+  container_port      = 3000
+  container_name      = "rails"
+  env                 = var.env
+  vpc_id              = data.terraform_remote_state.cloud-env.outputs.vpc_id
+  cluster_id          = data.terraform_remote_state.ecs.outputs.cluster_id
+  task_role_arn       = aws_iam_role.idseq-web.arn
+  desired_count       = 1
+  lb_subnets          = data.terraform_remote_state.cloud-env.outputs.public_subnets
+  route53_zone_id     = local.zone_id
+  subdomain           = ""
+  health_check_path   = "/health_check"
+  acm_certificate_arn = module.staging.arn
+  lb_egress_cidrs     = [data.terraform_remote_state.cloud-env.outputs.vpc_cidr_block]
+  access_logs_bucket  = data.terraform_remote_state.elb-access-logs.outputs.bucket_name
+  # The AWS and module default is 60s. We decided to increase it after observing
+  # multiple endpoints exceeding that in production under normal loads, including
+  # bulk_upload_with_metadata and report_csv.
+  lb_idle_timeout_seconds = 300
+  ssl_policy              = "ELBSecurityPolicy-TLS-1-2-2017-01"
+}
+
+resource "aws_route53_record" "www" {
+  zone_id = local.zone_id
+  name    = local.www_env_fqdn
+  type    = "A"
+
+  alias {
+    name                   = module.web-service.alb_dns_name
+    zone_id                = module.web-service.alb_route53_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_ecr_repository" "web-repository" {
+  name                 = "idseq-web"
+  image_tag_mutability = "MUTABLE"
+  tags                 = var.tags
+  #force_delete = var.force_delete
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
+resource "aws_ecr_lifecycle_policy" "idseq-web" {
+  repository = aws_ecr_repository.web-repository.name
+
+  policy = jsonencode({
+    rules = [
+      {
+        action = {
+          type = "expire"
+        },
+        selection : {
+          countType     = "imageCountMoreThan",
+          countNumber   = 1,
+          tagStatus     = "tagged",
+          tagPrefixList = ["latest"],
+        },
+        description    = "Always keep the one image tagged as latest (there should only be one). \"An image that matches the tagging requirements of a rule cannot be expired by a rule with a lower priority.\"",
+        "rulePriority" = 1
+      },
+      {
+        rulePriority = 2,
+        description  = "Remove all images after 365 days (except for the image tagged \"latest\")",
+        selection = {
+          tagStatus   = "any",
+          countType   = "sinceImagePushed",
+          countUnit   = "days",
+          countNumber = 365
+        },
+        action = {
+          type = "expire"
+        }
+      }
+    ]
+  })
 }
