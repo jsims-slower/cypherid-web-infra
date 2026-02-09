@@ -1,7 +1,7 @@
 # This role helps the Security Engineering team monitor the WebACL effectiveness
 module "panther-s3" {
   count                                = var.enable_panther_ingest ? 1 : 0
-  source                               = "../panther-s3-ingest-panther-s3-ingest-v2.0.1"
+  source                               = "../panther-s3-ingest-v2.0.1"
   role_suffix                          = local.web_acl_name
   s3_bucket_name                       = local.bucket_name
   tags                                 = var.tags
