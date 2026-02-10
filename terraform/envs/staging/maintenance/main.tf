@@ -145,13 +145,7 @@ resource "aws_cloudfront_distribution" "distribution" {
     }
   }
 
-  tags = {
-    project   = var.project
-    env       = var.env
-    service   = var.component
-    owner     = var.owner
-    managedBy = "terraform"
-  }
+  tags = var.tags
 }
 
 resource "aws_route53_record" "assets" {

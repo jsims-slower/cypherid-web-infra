@@ -1,7 +1,5 @@
 data "aws_lb" "czid_web_service" {
-  tags = merge(var.tags, {
-    "Name" = local.web_service_alb_name
-  })
+  name = local.web_service_alb_name
 }
 
 locals {
