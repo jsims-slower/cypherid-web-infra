@@ -4,8 +4,6 @@ locals {
   www_env_fqdn = "www.${local.env_fqdn}"
 }
 
-data "aws_default_tags" "current" {}
-
 data "aws_iam_policy_document" "idseq-web-assume-role" {
   statement {
     principals {
@@ -297,7 +295,7 @@ module "staging" {
 
   cert_domain_name    = local.env_fqdn
   aws_route53_zone_id = local.zone_id
-  tags                = data.aws_default_tags.current.tags
+  tags                = local.tags
 
   cert_subject_alternative_names = {
     "${local.www_env_fqdn}" = local.zone_id
@@ -309,7 +307,7 @@ module "staging_east" {
 
   cert_domain_name    = local.env_fqdn
   aws_route53_zone_id = local.zone_id
-  tags                = data.aws_default_tags.current.tags
+  tags                = local.tags
 
   cert_subject_alternative_names = {
     "${local.www_env_fqdn}" = local.zone_id

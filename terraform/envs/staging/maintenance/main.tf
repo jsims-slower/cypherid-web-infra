@@ -9,8 +9,6 @@ locals {
   }
 }
 
-data "aws_default_tags" "current" {}
-
 resource "aws_s3_bucket" "maintenance_bucket" {
   bucket = local.full_domain
   acl    = "private"
@@ -45,7 +43,7 @@ module "assets-cert" {
   cert_domain_name               = local.full_domain
   aws_route53_zone_id            = local.zone_id
   cert_subject_alternative_names = local.aliases
-  tags                           = data.aws_default_tags.current.tags
+  tags                           = local.tags
 
   # cloudfront requires us-east-1 acm certs
   providers = {
