@@ -518,6 +518,20 @@ envs:
             - ecs
             - web
       redis:
+        module_source: "github.com/chanzuckerberg/cztack//aws-redis-replication-group?ref=v0.104.2"
+        module_name: elasticache_secure
+        variables:
+          - at_rest_encryption_enabled
+          - auth_token
+          - description
+          - engine_version
+          - ingress_security_group_ids
+          - instance_type
+          - parameter_group_name
+          - subnets
+          - tags
+          - transit_encryption_enabled
+          - vpc_id
         depends_on:
           components:
             - cloud-env
