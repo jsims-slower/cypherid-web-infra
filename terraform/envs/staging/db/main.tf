@@ -11,8 +11,8 @@ resource "aws_security_group" "rds" {
     cidr_blocks = [data.terraform_remote_state.cloud-env.outputs.vpc_cidr_block]
   }
 
-  tags = merge(var.tags, {
+  tags = {
     terraform = true
     Name      = "${var.project}-${var.env}-rds"
-  })
+  }
 }
