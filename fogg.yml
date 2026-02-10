@@ -501,6 +501,8 @@ envs:
       elb-access-logs:
         module_source: terraform/modules/aws-elb-access-logs-bucket-v0.420.0
         module_name: aws-elb-access-logs-bucket
+      individual-attr:
+        module_source: ./terraform/modules/individual-attr
       heatmap-optimization:
         depends_on:
           components:

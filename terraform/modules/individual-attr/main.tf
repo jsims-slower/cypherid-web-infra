@@ -40,7 +40,7 @@ resource "aws_iam_role_policy_attachment" "comp_bio_managed_policies" {
     "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess",
     "arn:aws:iam::aws:policy/AmazonEC2FullAccess",
     "arn:aws:iam::aws:policy/IAMReadOnlyAccess",
-    "arn:aws:iam::${var.aws_account_id}:policy/OrgwideSecretsReader",
+    #"arn:aws:iam::${var.aws_account_id}:policy/OrgwideSecretsReader", # TODO: Org-wide secrets are currently disabled
   ])
 
   role       = aws_iam_role.comp_bio.name

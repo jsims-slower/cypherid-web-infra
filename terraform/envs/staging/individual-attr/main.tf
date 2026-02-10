@@ -6,4 +6,6 @@ module "individual-attr" {
   aws_account_id    = local.aws_account_id
   s3_bucket_samples = local.s3_bucket_samples
 
+
+
 }
