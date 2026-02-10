@@ -4,6 +4,8 @@ locals {
   www_env_fqdn = "www.${local.env_fqdn}"
 }
 
+data "aws_default_tags" "current" {}
+
 data "aws_iam_policy_document" "idseq-web-assume-role" {
   statement {
     principals {
@@ -262,7 +264,7 @@ module "web-service-params" {
     RDS_ADDRESS                   = data.terraform_remote_state.db.outputs.db_instance_address
     DB_PORT                       = data.terraform_remote_state.db.outputs.db_instance_port
     DB_USERNAME                   = data.terraform_remote_state.db.outputs.db_instance_username
-    REDISCLOUD_URL                = "rediss://${data.terraform_remote_state.redis.outputs.elasticache_secure_dns_name}:6379"
+    REDISCLOUD_URL                = "rediss://${data.terraform_remote_state.redis.outputs.primary_endpoint_address}:6379"
     SAMPLES_BUCKET_NAME           = data.terraform_remote_state.db.outputs.samples_bucket
     SAMPLES_BUCKET_NAME_V1        = data.terraform_remote_state.db.outputs.samples_bucket_v1
     ALIGNMENT_CONFIG_DEFAULT_NAME = var.alignment_index_date
@@ -295,7 +297,7 @@ module "staging" {
 
   cert_domain_name    = local.env_fqdn
   aws_route53_zone_id = local.zone_id
-  tags                = var.tags
+  tags                = data.aws_default_tags.current.tags
 
   cert_subject_alternative_names = {
     "${local.www_env_fqdn}" = local.zone_id
@@ -307,7 +309,7 @@ module "staging_east" {
 
   cert_domain_name    = local.env_fqdn
   aws_route53_zone_id = local.zone_id
-  tags                = var.tags
+  tags                = data.aws_default_tags.current.tags
 
   cert_subject_alternative_names = {
     "${local.www_env_fqdn}" = local.zone_id
@@ -361,7 +363,6 @@ resource "aws_route53_record" "www" {
 resource "aws_ecr_repository" "web-repository" {
   name                 = "idseq-web"
   image_tag_mutability = "MUTABLE"
-  tags                 = var.tags
   #force_delete = var.force_delete
 
   image_scanning_configuration {

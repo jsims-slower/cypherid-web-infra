@@ -77,9 +77,9 @@ resource "aws_db_parameter_group" "db_8" {
   }
 
   parameter {
-    name  = "log_output"
-    value = "FILE"
-    # apply_method = "pending-reboot"
+    apply_method = "pending-reboot"
+    name         = "log_output"
+    value        = "FILE"
   }
 
   parameter {

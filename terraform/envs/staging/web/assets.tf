@@ -13,7 +13,7 @@ module "assets-cert" {
   cert_domain_name               = local.assets_fqdn
   aws_route53_zone_id            = local.zone_id
   cert_subject_alternative_names = local.assets_aliases
-  tags                           = var.tags
+  tags                           = data.aws_default_tags.current.tags
 
   # cloudfront requires us-east-1 acm certs
   providers = {
@@ -99,8 +99,6 @@ resource "aws_cloudfront_distribution" "distribution" {
       restriction_type = "none"
     }
   }
-
-  tags = var.tags
 }
 
 resource "aws_route53_record" "assets" {
