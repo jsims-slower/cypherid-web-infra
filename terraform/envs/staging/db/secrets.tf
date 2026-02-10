@@ -17,8 +17,8 @@ ephemeral "random_password" "db_password" {
   min_special      = 1
 }
 
-//This could be a secret in Secrets Manager instead of SSM parameter store. That includes built-in rotation, but also costs money whereas SSM parameter store is free.
-//TDB if UCSF has a preference
+# This could be a secret in Secrets Manager instead of SSM parameter store. That includes built-in rotation, but also costs money whereas SSM parameter store is free.
+# TODO: TDB if UCSF has a preference
 resource "aws_ssm_parameter" "db_master_password" {
   name             = "/${var.project}-${var.env}-web/${local.parameter_name}"
   description      = "RDS DB password for ${var.env} MySQL DB supporting web app"

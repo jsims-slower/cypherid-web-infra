@@ -17,7 +17,6 @@ locals {
 
 resource "aws_route53_zone" "env-seqtoid-org" {
   name = local.env_fqdn
-  tags = var.tags
 }
 
 data "aws_route53_zone" "root-seqtoid-org" {
@@ -39,7 +38,6 @@ resource "aws_route53_record" "env-seqtoid-org" {
 
 resource "aws_route53_zone" "happy-env-seqtoid-org" {
   name = local.happy_env_fqdn
-  tags = var.tags
 }
 
 resource "aws_route53_record" "happy-env-seqtoid-org" {

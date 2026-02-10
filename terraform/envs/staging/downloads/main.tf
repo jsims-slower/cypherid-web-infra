@@ -47,7 +47,7 @@ module "downloads_v1_iam_policy" {
   service   = var.component
 }
 
-// The "czi-infectious-disease-downloads-staging" task role also needs access to the old samples bucket to read the src_urls of an ECS bulk download.
+# The "czi-infectious-disease-downloads-${var.env}" task role also needs access to the old samples bucket to read the src_urls of an ECS bulk download.
 module "downloads_v1_iam_policy_for_old_samples_bucket" {
   source = "../../../modules/aws-iam-policy-s3-writer-v0.66.0"
 

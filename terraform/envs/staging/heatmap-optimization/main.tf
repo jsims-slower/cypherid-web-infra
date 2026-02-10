@@ -5,6 +5,8 @@ locals {
   account_id  = var.aws_accounts.idseq-staging
 }
 
+data "aws_default_tags" "current" {}
+
 # The security group is used by the taxon-indexing-lambda in the idseq codebase
 resource "aws_security_group" "glue_sec_group" {
   name   = "${var.project}_${var.env}_glue_sec_group"
@@ -127,7 +129,6 @@ resource "aws_glue_job" "batch-taxon-indexing" {
   execution_class = "STANDARD"
   role_arn        = aws_iam_role.glue-batch-taxon-indexing-role.arn
   glue_version    = "3.0"
-  tags            = var.tags
 
   command {
     name            = "pythonshell"
@@ -155,7 +156,7 @@ resource "aws_glue_job" "batch-taxon-indexing" {
 module "gh_actions_executor" {
   source = "github.com/chanzuckerberg/cztack//aws-iam-role-github-action?ref=v0.104.2"
 
-  tags = var.tags
+  tags = data.aws_default_tags.current.tags
   role = {
     name = "gh_actions_executor"
   }
