@@ -3,7 +3,7 @@ locals {
   cloud-env    = data.terraform_remote_state.cloud-env.outputs
   eks-cluster  = data.terraform_remote_state.eks.outputs
   k8s-core     = data.terraform_remote_state.k8s-core.outputs
-  tags         = var.tags
+  tags         = data.aws_default_tags.current.tags
 
   okta_teams = [
     # By default all CZI has access, change this value to limit which
@@ -24,3 +24,5 @@ locals {
     data.terraform_remote_state.eks.outputs.gh_action_role,
   ]
 }
+
+data "aws_default_tags" "current" {}

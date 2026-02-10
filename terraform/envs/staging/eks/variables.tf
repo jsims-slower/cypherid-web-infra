@@ -8,12 +8,13 @@ locals {
   ]
 
   cluster_name            = var.eks_cluster_name
-  iam_cluster_name_prefix = ""
+  iam_cluster_name_prefix = null
 
-  tags            = var.tags
+  tags            = data.aws_default_tags.current.tags
   vpc_id          = data.terraform_remote_state.cloud-env.outputs.vpc_id
   subnet_ids      = data.terraform_remote_state.cloud-env.outputs.private_subnets
   cluster_version = "1.35"
+
   node_groups = {
     "arm" = {
       #size          = 1
@@ -42,3 +43,5 @@ locals {
     enable_guardduty = false # true
   }
 }
+
+data "aws_default_tags" "current" {}

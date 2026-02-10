@@ -1,6 +1,6 @@
 locals {
   eks_cluster = data.terraform_remote_state.eks.outputs
-  tags        = var.tags
+  tags        = data.aws_default_tags.current.tags
   additional_addons = {
     # datadog = {
     #   mute                 = true
@@ -9,3 +9,5 @@ locals {
     # }
   }
 }
+
+data "aws_default_tags" "current" {}

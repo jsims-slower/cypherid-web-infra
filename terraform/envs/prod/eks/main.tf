@@ -2,11 +2,12 @@
 # Make improvements in fogg, so that everyone can benefit.
 
 module "eks-cluster" {
-  source                  = "../../../modules/eks-cluster-v2-v7.3.0"
+  source                  = "github.com/chanzuckerberg/cztack//aws-eks-cluster?ref=v0.104.2"
   addons                  = local.addons
   authorized_github_repos = local.authorized_github_repos
   cluster_name            = local.cluster_name
   cluster_version         = local.cluster_version
+  iam_cluster_name_prefix = local.iam_cluster_name_prefix
   node_groups             = local.node_groups
   owner_roles             = local.owner_roles
   subnet_ids              = local.subnet_ids
