@@ -4,7 +4,7 @@
 include scripts/common.mk
 
 ENVS=dev prod sandbox staging
-MODULES=config individual-attr machine-images
+MODULES=config idseq-s3-tar-writer individual-attr machine-images
 ACCOUNTS=idseq-dev idseq-newdev idseq-prod idseq-staging
 
 all: check

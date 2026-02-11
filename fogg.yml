@@ -503,6 +503,8 @@ envs:
         module_name: aws-elb-access-logs-bucket
       individual-attr:
         module_source: ./terraform/modules/individual-attr
+      idseq-s3-tar-writer:
+        module_source: "git@github.com:chanzuckerberg/cztack//aws-ecr-repo?ref=v0.104.2"
       heatmap-optimization:
         depends_on:
           components:
@@ -717,6 +719,7 @@ modules:
   config: {}
   machine-images: {}
   individual-attr: {}
+  idseq-s3-tar-writer: {}
 plugins:
   custom_plugins:
     tflint:
