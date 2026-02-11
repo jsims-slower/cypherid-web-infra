@@ -251,6 +251,8 @@ envs:
       elb-access-logs:
         module_source: terraform/modules/aws-elb-access-logs-bucket-v0.420.0
         module_name: aws-elb-access-logs-bucket
+      idseq-s3-tar-writer:
+        module_source: "git@github.com:chanzuckerberg/cztack//aws-ecr-repo?ref=v0.104.2"
       heatmap-optimization:
         depends_on:
           components:
