@@ -1,15 +1,10 @@
 locals {
-  allow_lambda_pull   = false
-  ecr_resource_policy = null
-  force_delete        = true
-  lifecycle_policy    = ""
-  max_image_count     = 10 # 100 in cztack//aws-ecr-repo
-  name                = "idseq-s3-tar-writer"
-  read_arns           = []
-  scan_on_push        = false
-  tag_mutability      = true
-  tags                = data.aws_default_tags.current.tags
-  write_arns          = []
+  aws_account         = var.aws_accounts.idseq-dev
+  aws_profile         = var.aws_profile
+  ecr_repo_name       = null
+  force_image_rebuild = null
+  image_tag           = null
+  max_image_count     = null
+  region              = var.region
+  tags                = {}
 }
-
-data "aws_default_tags" "current" {}

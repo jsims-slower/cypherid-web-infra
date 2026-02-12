@@ -252,7 +252,7 @@ envs:
         module_source: terraform/modules/aws-elb-access-logs-bucket-v0.420.0
         module_name: aws-elb-access-logs-bucket
       idseq-s3-tar-writer:
-        module_source: "git@github.com:chanzuckerberg/cztack//aws-ecr-repo?ref=v0.104.2"
+        module_source: terraform/modules/idseq-s3-tar-writer
       heatmap-optimization:
         depends_on:
           components:
@@ -506,7 +506,7 @@ envs:
       individual-attr:
         module_source: ./terraform/modules/individual-attr
       idseq-s3-tar-writer:
-        module_source: "git@github.com:chanzuckerberg/cztack//aws-ecr-repo?ref=v0.104.2"
+        module_source: terraform/modules/idseq-s3-tar-writer
       heatmap-optimization:
         depends_on:
           components:
