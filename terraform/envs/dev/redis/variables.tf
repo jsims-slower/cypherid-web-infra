@@ -8,6 +8,6 @@ locals {
   transit_encryption_enabled = true
   vpc_id                     = data.terraform_remote_state.cloud-env.outputs.vpc_id
   description                = "resque-secure"
-  tags                       = {}
+  tags                       = var.tags # TODO: var.tags is deprecated
   auth_token                 = null
 }
