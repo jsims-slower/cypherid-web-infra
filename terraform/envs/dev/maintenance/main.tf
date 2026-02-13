@@ -3,7 +3,7 @@ locals {
   domain      = "${var.env}.seqtoid.org"
   full_domain = "${local.subdomain}.${local.domain}"
   # TODO: Use aws_route53_zone zone data block instead of using an unrelated statefile
-  zone_id     = data.terraform_remote_state.idseq-newdev.outputs.env_seqtoid_org_zone_id
+  zone_id = data.terraform_remote_state.route53.outputs.env_seqtoid_org_zone_id
 
   aliases = {
     "www.${local.full_domain}" = local.zone_id
@@ -44,7 +44,7 @@ module "assets-cert" {
   cert_domain_name               = local.full_domain
   aws_route53_zone_id            = local.zone_id
   cert_subject_alternative_names = local.aliases
-  tags                           = var.tags
+  tags                           = var.tags # TODO: var.tags is deprecated
 
   # cloudfront requires us-east-1 acm certs
   providers = {
@@ -145,8 +145,6 @@ resource "aws_cloudfront_distribution" "distribution" {
       restriction_type = "none"
     }
   }
-
-  tags = var.tags
 }
 
 resource "aws_route53_record" "assets" {

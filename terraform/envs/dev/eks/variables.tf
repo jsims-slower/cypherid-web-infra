@@ -10,7 +10,7 @@ locals {
   cluster_name            = var.eks_cluster_name
   iam_cluster_name_prefix = null
 
-  tags            = data.aws_default_tags.current.tags
+  tags            = var.tags # TODO: var.tags is deprecated
   vpc_id          = data.terraform_remote_state.cloud-env.outputs.vpc_id
   subnet_ids      = data.terraform_remote_state.cloud-env.outputs.private_subnets
   cluster_version = "1.35"
@@ -41,5 +41,3 @@ locals {
     enable_guardduty = false # true
   }
 }
-
-data "aws_default_tags" "current" {}

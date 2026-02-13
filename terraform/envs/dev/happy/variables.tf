@@ -3,7 +3,7 @@ locals {
   cloud-env    = data.terraform_remote_state.cloud-env.outputs
   eks-cluster  = data.terraform_remote_state.eks.outputs
   k8s-core     = data.terraform_remote_state.k8s-core.outputs
-  tags         = var.tags
+  tags         = var.tags # TODO: var.tags is deprecated
 
   okta_teams = [
     # By default all CZI has access, change this value to limit which

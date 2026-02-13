@@ -8,6 +8,6 @@ locals {
   s3_bucket_name              = var.s3_bucket_name
   # prevent_unencrypted_uploads = var.prevent_unencrypted_uploads
   stage                       = var.env
-  tags                        = var.tags
+  tags                        = var.tags # TODO: var.tags is deprecated
   terraform_version           = "1.3.6"
 }

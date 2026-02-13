@@ -204,16 +204,16 @@ data "aws_iam_policy_document" "idseq-upload-assume-role" {
       identifiers = [aws_iam_role.idseq-web.arn]
     }
   }
-#   statement {
-#     actions = ["sts:AssumeRole"]
-#     effect  = "Allow"
-#     sid     = "PowerUserAssumeRoleForDevEnvironments"
+  # statement {
+  #   actions = ["sts:AssumeRole"]
+  #   effect  = "Allow"
+  #   sid     = "PowerUserAssumeRoleForDevEnvironments"
 
-#     principals {
-#       type        = "AWS"
-#       identifiers = [data.aws_iam_role.poweruser.arn]
-#     }
-#   }
+  #   principals {
+  #     type        = "AWS"
+  #     identifiers = [data.aws_iam_role.poweruser.arn]
+  #   }
+  # }
 }
 
 resource "aws_iam_role" "idseq-upload" {
@@ -288,20 +288,7 @@ module "web-service-params" {
     SERVER_DOMAIN                  = "https://${data.terraform_remote_state.route53.outputs.env_seqtoid_org_fqdn}"
     GRAPHQL_FEDERATION_SERVICE_URL = "/graphqlfed"
     S3_AEGEA_ECS_EXECUTE_BUCKET    = var.s3_bucket_aegea_ecs_execute
-  }
-}
-
-# Our dev environment uses staging to run alignments
-#   The ALIGNMENT_CONFIG_DEFAULT_NAME must be in sync between them
-module "web-service-params-dev" {
-  source  = "github.com/chanzuckerberg/cztack//aws-ssm-params-writer?ref=v0.104.2"
-  project = var.project
-  env     = "dev"
-  service = var.component
-  owner   = var.owner
-
-  parameters = {
-    ALIGNMENT_CONFIG_DEFAULT_NAME = var.alignment_index_date
+    AUTO_ACCOUNT_CREATION_V1       = 1
   }
 }
 
@@ -310,7 +297,7 @@ module "staging" {
 
   cert_domain_name    = local.env_fqdn
   aws_route53_zone_id = local.zone_id
-  tags            = var.tags # TODO: var.tags is deprecated
+  tags                = var.tags # TODO: var.tags is deprecated
 
   cert_subject_alternative_names = {
     "${local.www_env_fqdn}" = local.zone_id
@@ -322,7 +309,7 @@ module "staging_east" {
 
   cert_domain_name    = local.env_fqdn
   aws_route53_zone_id = local.zone_id
-  tags            = var.tags # TODO: var.tags is deprecated
+  tags                = var.tags # TODO: var.tags is deprecated
 
   cert_subject_alternative_names = {
     "${local.www_env_fqdn}" = local.zone_id

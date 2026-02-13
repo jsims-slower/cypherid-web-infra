@@ -274,20 +274,7 @@ module "web-service-params" {
     SERVER_DOMAIN                  = "https://${data.terraform_remote_state.route53.outputs.env_seqtoid_org_fqdn}"
     GRAPHQL_FEDERATION_SERVICE_URL = "/graphqlfed"
     S3_AEGEA_ECS_EXECUTE_BUCKET    = var.s3_bucket_aegea_ecs_execute
-  }
-}
-
-# Our dev environment uses staging to run alignments
-#   The ALIGNMENT_CONFIG_DEFAULT_NAME must be in sync between them
-module "web-service-params-dev" {
-  source  = "github.com/chanzuckerberg/cztack//aws-ssm-params-writer?ref=v0.104.2"
-  project = var.project
-  env     = "dev"
-  service = var.component
-  owner   = var.owner
-
-  parameters = {
-    ALIGNMENT_CONFIG_DEFAULT_NAME = var.alignment_index_date
+    AUTO_ACCOUNT_CREATION_V1       = 1
   }
 }
 

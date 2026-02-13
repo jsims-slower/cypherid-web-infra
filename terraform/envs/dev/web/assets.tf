@@ -13,7 +13,7 @@ module "assets-cert" {
   cert_domain_name               = local.assets_fqdn
   aws_route53_zone_id            = local.zone_id
   cert_subject_alternative_names = local.assets_aliases
-  tags                           = var.tags
+  tags                           = var.tags # TODO: var.tags is deprecated
 
   # cloudfront requires us-east-1 acm certs
   providers = {
