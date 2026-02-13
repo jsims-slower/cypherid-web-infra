@@ -189,6 +189,10 @@ resource "aws_iam_role_policy" "idseq-web" {
   policy = data.aws_iam_policy_document.idseq-web.json
 }
 
+# data "aws_iam_role" "poweruser" {
+#   name = "poweruser"
+# }
+
 data "aws_iam_policy_document" "idseq-upload-assume-role" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -200,6 +204,16 @@ data "aws_iam_policy_document" "idseq-upload-assume-role" {
       identifiers = [aws_iam_role.idseq-web.arn]
     }
   }
+#   statement {
+#     actions = ["sts:AssumeRole"]
+#     effect  = "Allow"
+#     sid     = "PowerUserAssumeRoleForDevEnvironments"
+
+#     principals {
+#       type        = "AWS"
+#       identifiers = [data.aws_iam_role.poweruser.arn]
+#     }
+#   }
 }
 
 resource "aws_iam_role" "idseq-upload" {
@@ -259,20 +273,21 @@ module "web-service-params" {
   owner   = var.owner
 
   parameters = {
-    RDS_ADDRESS                   = data.terraform_remote_state.db.outputs.db_instance_address
-    DB_PORT                       = data.terraform_remote_state.db.outputs.db_instance_port
-    DB_USERNAME                   = data.terraform_remote_state.db.outputs.db_instance_username
-    REDISCLOUD_URL                = "rediss://${data.terraform_remote_state.redis.outputs.elasticache_secure_dns_name}:6379"
-    SAMPLES_BUCKET_NAME           = data.terraform_remote_state.db.outputs.samples_bucket
-    SAMPLES_BUCKET_NAME_V1        = data.terraform_remote_state.db.outputs.samples_bucket_v1
-    ALIGNMENT_CONFIG_DEFAULT_NAME = var.alignment_index_date
-    ES_ADDRESS                    = "https://${data.terraform_remote_state.heatmap-optimization.outputs.elastic_search_endpoint}"
-    CLOUDFRONT_ENDPOINT           = local.assets_fqdn
-    S3_DATABASE_BUCKET            = var.s3_bucket_public_references
-    CLI_UPLOAD_ROLE_ARN           = aws_iam_role.idseq-upload.arn
-    SECRET_KEY_BASE               = random_string.secret_key_base.result
-    SERVER_DOMAIN                 = "https://${data.terraform_remote_state.route53.outputs.env_seqtoid_org_fqdn}"
-    S3_AEGEA_ECS_EXECUTE_BUCKET   = var.s3_bucket_aegea_ecs_execute
+    RDS_ADDRESS                    = data.terraform_remote_state.db.outputs.db_instance_address
+    DB_PORT                        = data.terraform_remote_state.db.outputs.db_instance_port
+    DB_USERNAME                    = data.terraform_remote_state.db.outputs.db_instance_username
+    REDISCLOUD_URL                 = "rediss://${data.terraform_remote_state.redis.outputs.primary_endpoint_address}:6379"
+    SAMPLES_BUCKET_NAME            = data.terraform_remote_state.db.outputs.samples_bucket
+    SAMPLES_BUCKET_NAME_V1         = data.terraform_remote_state.db.outputs.samples_bucket_v1
+    ALIGNMENT_CONFIG_DEFAULT_NAME  = var.alignment_index_date
+    ES_ADDRESS                     = "https://${data.terraform_remote_state.heatmap-optimization.outputs.elastic_search_endpoint}"
+    CLOUDFRONT_ENDPOINT            = local.assets_fqdn
+    S3_DATABASE_BUCKET             = var.s3_bucket_public_references
+    CLI_UPLOAD_ROLE_ARN            = aws_iam_role.idseq-upload.arn
+    SECRET_KEY_BASE                = random_string.secret_key_base.result
+    SERVER_DOMAIN                  = "https://${data.terraform_remote_state.route53.outputs.env_seqtoid_org_fqdn}"
+    GRAPHQL_FEDERATION_SERVICE_URL = "/graphqlfed"
+    S3_AEGEA_ECS_EXECUTE_BUCKET    = var.s3_bucket_aegea_ecs_execute
   }
 }
 
@@ -295,7 +310,7 @@ module "staging" {
 
   cert_domain_name    = local.env_fqdn
   aws_route53_zone_id = local.zone_id
-  tags                = var.tags
+  tags            = var.tags # TODO: var.tags is deprecated
 
   cert_subject_alternative_names = {
     "${local.www_env_fqdn}" = local.zone_id
@@ -307,7 +322,7 @@ module "staging_east" {
 
   cert_domain_name    = local.env_fqdn
   aws_route53_zone_id = local.zone_id
-  tags                = var.tags
+  tags            = var.tags # TODO: var.tags is deprecated
 
   cert_subject_alternative_names = {
     "${local.www_env_fqdn}" = local.zone_id
@@ -361,7 +376,6 @@ resource "aws_route53_record" "www" {
 resource "aws_ecr_repository" "web-repository" {
   name                 = "idseq-web"
   image_tag_mutability = "MUTABLE"
-  tags                 = var.tags
   #force_delete = var.force_delete
 
   image_scanning_configuration {

@@ -296,7 +296,7 @@ module "staging" {
 
   cert_domain_name    = local.env_fqdn
   aws_route53_zone_id = local.zone_id
-  tags                = local.tags
+  tags                = var.tags # TODO: var.tags is deprecated
 
   cert_subject_alternative_names = {
     "${local.www_env_fqdn}" = local.zone_id
@@ -308,7 +308,7 @@ module "staging_east" {
 
   cert_domain_name    = local.env_fqdn
   aws_route53_zone_id = local.zone_id
-  tags                = local.tags
+  tags                = var.tags # TODO: var.tags is deprecated
 
   cert_subject_alternative_names = {
     "${local.www_env_fqdn}" = local.zone_id

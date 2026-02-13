@@ -99,8 +99,6 @@ resource "aws_cloudfront_distribution" "distribution" {
       restriction_type = "none"
     }
   }
-
-  tags = var.tags
 }
 
 resource "aws_route53_record" "assets" {

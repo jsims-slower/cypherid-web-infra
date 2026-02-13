@@ -4,12 +4,12 @@ module "georestriction-rule" {
   source = "../../../modules/waf-georestriction-main"
 
   scope = "REGIONAL"
-  tags = var.tags
+  tags  = var.tags # TODO: var.tags is deprecated
 }
 
 module "web-service-waf" {
-  source = "../../../modules/web-acl-regional-v3.3.1"
-  tags = var.tags
+  source                = "../../../modules/web-acl-regional-v3.3.1"
+  tags                  = var.tags # TODO: var.tags is deprecated
   rule_groups           = [{ arn : module.georestriction-rule.arn, name : module.georestriction-rule.name }]
   enable_panther_ingest = false
   czi_baseline_count_rules = {

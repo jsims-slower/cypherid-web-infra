@@ -9,9 +9,3 @@
 #   default     = ""
 #   description = "define this in the TFE workspace UI"
 # }
-
-locals {
-  tags = data.aws_default_tags.current.tags
-}
-
-data "aws_default_tags" "current" {}
