@@ -2,7 +2,15 @@ locals {
   service     = "es"
   name        = "${var.project}-${var.env}-${local.service}"
   bucket_name = "idseq-${var.env}-heatmap-batch-jobs-${local.account_id}"
-  account_id  = var.aws_accounts.idseq-staging
+  account_id  = var.aws_accounts.idseq-newdev
+  tags = {
+    managedBy = "terraform"
+    Name      = local.name
+    project   = var.project
+    env       = var.env
+    service   = local.service
+    owner     = var.owner
+  }
 }
 
 # The security group is used by the taxon-indexing-lambda in the idseq codebase
@@ -127,6 +135,7 @@ resource "aws_glue_job" "batch-taxon-indexing" {
   execution_class = "STANDARD"
   role_arn        = aws_iam_role.glue-batch-taxon-indexing-role.arn
   glue_version    = "3.0"
+  tags            = local.tags
 
   command {
     name            = "pythonshell"

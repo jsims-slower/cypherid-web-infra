@@ -39,7 +39,6 @@ variable "force_image_rebuild" {
 
 locals {
   force_delete = true # default false
-  tags         = data.aws_default_tags.current.tags
 
   ecr_registry_uri      = "${var.aws_account}.dkr.ecr.${var.region}.amazonaws.com" # ECR docker registry URI
   docker_img_src_sha256 = sha256(join("", [for f in fileset(".", "${path.module}/s3_tar_writer/**") : file(f)]))
@@ -55,6 +54,3 @@ locals {
             --push ${path.module}
     EOT
 }
-
-data "aws_default_tags" "current" {}
-

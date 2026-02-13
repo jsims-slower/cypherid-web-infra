@@ -4,7 +4,7 @@ module "aws-ecr-repo" {
   force_delete    = local.force_delete
   max_image_count = var.max_image_count
   name            = var.ecr_repo_name
-  tags            = local.tags
+  tags            = {}
 }
 
 # local-exec for build and push of docker image
