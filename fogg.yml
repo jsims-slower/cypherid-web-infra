@@ -258,6 +258,20 @@ envs:
           components:
             - cloud-env
       redis:
+        module_source: "github.com/chanzuckerberg/cztack//aws-redis-replication-group?ref=v0.104.2"
+        module_name: elasticache_secure
+        variables:
+          - at_rest_encryption_enabled
+          - auth_token
+          - description
+          - engine_version
+          - ingress_security_group_ids
+          - instance_type
+          - parameter_group_name
+          - subnets
+          - tags
+          - transit_encryption_enabled
+          - vpc_id
         depends_on:
           components:
             - cloud-env
@@ -278,8 +292,6 @@ envs:
             - elb-access-logs
             - redis
       web-waf:
-        extra_vars:
-          project_v1: czid # TODO: Remove 'project_v1' and redeploy DEV, using `project` instead
     extra_vars:
       s3_bucket_aegea_ecs_execute: aegea-ecs-execute-dev-491013321714
       s3_bucket_samples: idseq-samples-dev-491013321714

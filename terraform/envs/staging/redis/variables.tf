@@ -8,8 +8,5 @@ locals {
   transit_encryption_enabled = true
   vpc_id                     = data.terraform_remote_state.cloud-env.outputs.vpc_id
   description                = "resque-secure"
-  tags                       = data.aws_default_tags.current.tags
   auth_token                 = null
 }
-
-data "aws_default_tags" "current" {}
