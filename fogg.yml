@@ -166,12 +166,10 @@ envs:
           - project
           - service
       eks:
-        project: czid
         depends_on:
           components:
             - cloud-env
-        module_source: terraform/modules/eks-cluster-v2-v7.3.0 # TODO: Use cztack module instead
-        #module_source: "github.com/chanzuckerberg/cztack//aws-eks-cluster?ref=v0.104.2"
+        module_source: "github.com/chanzuckerberg/cztack//aws-eks-cluster?ref=v0.104.2"
         variables:
           - cluster_name
           - iam_cluster_name_prefix
@@ -180,12 +178,12 @@ envs:
           - node_groups
           - authorized_github_repos
           - addons
+          #- aws_org_id # TODO: determine if this being set correctly matters or not, as the default is some CZI(?) Org
         module_name: eks-cluster
         provider_aliases:
           aws.us-east-1: aws.us-east-1
       route53:
       k8s-core:
-        project: czid
         depends_on:
           components:
             - eks
@@ -197,7 +195,6 @@ envs:
         variables:
           - additional_addons
       happy:
-        project: czid
         depends_on:
           components:
             - route53
@@ -240,6 +237,8 @@ envs:
         depends_on:
           components:
             - route53
+      czid-services-private-key:
+        module_source: terraform/modules/czid-services-private-key
       db:
         depends_on:
           components:
@@ -251,12 +250,12 @@ envs:
       elb-access-logs:
         module_source: terraform/modules/aws-elb-access-logs-bucket-v0.420.0
         module_name: aws-elb-access-logs-bucket
-      idseq-s3-tar-writer:
-        module_source: terraform/modules/idseq-s3-tar-writer
       heatmap-optimization:
         depends_on:
           components:
             - cloud-env
+      idseq-s3-tar-writer:
+        module_source: terraform/modules/idseq-s3-tar-writer
       redis:
         module_source: "github.com/chanzuckerberg/cztack//aws-redis-replication-group?ref=v0.104.2"
         module_name: elasticache_secure
@@ -317,7 +316,6 @@ envs:
           - single_nat_gateway
           - k8s_cluster_names
       eks:
-        project: czid
         depends_on:
           components:
             - cloud-env
@@ -333,7 +331,6 @@ envs:
         provider_aliases:
           aws.us-east-1: aws.us-east-1
       k8s-core:
-        project: czid
         depends_on:
           components:
             - route53
@@ -346,7 +343,6 @@ envs:
         variables:
           - additional_addons
       happy:
-        project: czid
         depends_on:
           components:
             - route53
@@ -503,6 +499,8 @@ envs:
         variables:
           - single_nat_gateway
           - k8s_cluster_names
+      czid-services-private-key:
+        module_source: terraform/modules/czid-services-private-key
       db:
         depends_on:
           components:
@@ -734,6 +732,7 @@ modules:
   machine-images: {}
   individual-attr: {}
   idseq-s3-tar-writer: {}
+  czid-services-private-key: {}
 plugins:
   custom_plugins:
     tflint:

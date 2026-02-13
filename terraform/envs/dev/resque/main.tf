@@ -1,5 +1,5 @@
 module "resque" {
-  source        = "github.com/chanzuckerberg/cztack//aws-ecs-job?ref=v0.41.0"
+  source        = "github.com/chanzuckerberg/cztack//aws-ecs-job?ref=v0.104.2"
   desired_count = 1
   env           = var.env
   service       = "resque"
@@ -11,8 +11,34 @@ module "resque" {
   manage_task_definition = false
 }
 
+module "resque-pipeline-monitor" {
+  source        = "github.com/chanzuckerberg/cztack//aws-ecs-job?ref=v0.104.2"
+  desired_count = 1
+  env           = var.env
+  service       = "resque-pipeline-monitor"
+  project       = var.project
+  owner         = var.owner
+  cluster_id    = data.terraform_remote_state.ecs.outputs.cluster_id
+  task_role_arn = data.terraform_remote_state.web.outputs.task_role_arn
+
+  manage_task_definition = false
+}
+
+module "resque-result-monitor" {
+  source        = "github.com/chanzuckerberg/cztack//aws-ecs-job?ref=v0.104.2"
+  desired_count = 1
+  env           = var.env
+  service       = "resque-result-monitor"
+  project       = var.project
+  owner         = var.owner
+  cluster_id    = data.terraform_remote_state.ecs.outputs.cluster_id
+  task_role_arn = data.terraform_remote_state.web.outputs.task_role_arn
+
+  manage_task_definition = false
+}
+
 module "resque-scheduler" {
-  source        = "github.com/chanzuckerberg/cztack//aws-ecs-job?ref=v0.41.0"
+  source        = "github.com/chanzuckerberg/cztack//aws-ecs-job?ref=v0.104.2"
   desired_count = 1
   env           = var.env
   service       = "resque-scheduler"
@@ -25,7 +51,7 @@ module "resque-scheduler" {
 }
 
 module "shoryuken" {
-  source        = "github.com/chanzuckerberg/cztack//aws-ecs-job?ref=v0.41.0"
+  source        = "github.com/chanzuckerberg/cztack//aws-ecs-job?ref=v0.104.2"
   desired_count = 1
   env           = var.env
   service       = "shoryuken"

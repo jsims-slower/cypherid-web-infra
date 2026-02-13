@@ -16,7 +16,3 @@ resource "null_resource" "build_push_docker_img" {
     command = local.docker_build_cmd
   }
 }
-
-output "trigged_by" {
-  value = null_resource.build_push_docker_img.triggers
-}

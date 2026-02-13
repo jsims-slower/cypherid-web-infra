@@ -129,7 +129,7 @@ terraform {
 
     bucket = "tfstate-941377154785-test"
 
-    key     = "terraform/czid/envs/sandbox/components/k8s-core.tfstate"
+    key     = "terraform/idseq/envs/sandbox/components/k8s-core.tfstate"
     encrypt = true
     region  = "us-west-2"
     profile = "default"
@@ -225,7 +225,7 @@ variable "env" {
 # tflint-ignore: terraform_unused_declarations
 variable "project" {
   type    = string
-  default = "czid"
+  default = "idseq"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "region" {
@@ -253,7 +253,7 @@ variable "owner" {
 variable "tags" {
   type = object({ project : string, env : string, service : string, owner : string, managedBy : string })
   default = {
-    project   = "czid"
+    project   = "idseq"
     env       = "sandbox"
     service   = "k8s-core"
     owner     = "biohub-tech@chanzuckerberg.com"
@@ -327,7 +327,7 @@ data "terraform_remote_state" "eks" {
 
     bucket = "tfstate-941377154785-test"
 
-    key     = "terraform/czid/envs/sandbox/components/eks.tfstate"
+    key     = "terraform/idseq/envs/sandbox/components/eks.tfstate"
     region  = "us-west-2"
     profile = "default"
 

@@ -2,7 +2,7 @@
 module "czid_web_private_gh_actions_executor" {
   source = "github.com/chanzuckerberg/cztack//aws-iam-role-github-action?ref=v0.104.2"
 
-  tags = local.tags
+  tags = var.tags # TODO: var.tags is deprecated
 
   role = {
     name = "czid-${var.env}-gh-actions-executor"

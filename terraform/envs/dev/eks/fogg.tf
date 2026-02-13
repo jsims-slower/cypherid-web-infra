@@ -129,7 +129,7 @@ terraform {
 
     bucket = "tfstate-491013321714-test"
 
-    key     = "terraform/czid/envs/dev/components/eks.tfstate"
+    key     = "terraform/idseq/envs/dev/components/eks.tfstate"
     encrypt = true
     region  = "us-west-2"
     profile = "idseq-newdev"
@@ -225,7 +225,7 @@ variable "env" {
 # tflint-ignore: terraform_unused_declarations
 variable "project" {
   type    = string
-  default = "czid"
+  default = "idseq"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "region" {
@@ -253,7 +253,7 @@ variable "owner" {
 variable "tags" {
   type = object({ project : string, env : string, service : string, owner : string, managedBy : string })
   default = {
-    project   = "czid"
+    project   = "idseq"
     env       = "dev"
     service   = "eks"
     owner     = "biohub-tech@chanzuckerberg.com"

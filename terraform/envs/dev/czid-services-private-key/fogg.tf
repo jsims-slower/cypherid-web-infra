@@ -129,7 +129,7 @@ terraform {
 
     bucket = "tfstate-491013321714-test"
 
-    key     = "terraform/idseq/envs/dev/components/happy.tfstate"
+    key     = "terraform/idseq/envs/dev/components/czid-services-private-key.tfstate"
     encrypt = true
     region  = "us-west-2"
     profile = "idseq-newdev"
@@ -235,7 +235,7 @@ variable "region" {
 # tflint-ignore: terraform_unused_declarations
 variable "component" {
   type    = string
-  default = "happy"
+  default = "czid-services-private-key"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "aws_profile" {
@@ -255,7 +255,7 @@ variable "tags" {
   default = {
     project   = "idseq"
     env       = "dev"
-    service   = "happy"
+    service   = "czid-services-private-key"
     owner     = "biohub-tech@chanzuckerberg.com"
     managedBy = "terraform"
   }
@@ -319,62 +319,6 @@ variable "s3_bucket_secrets" {
 variable "s3_bucket_workflows" {
   type    = string
   default = "idseq-workflows"
-}
-data "terraform_remote_state" "cloud-env" {
-  backend = "s3"
-  config = {
-
-
-    bucket = "tfstate-491013321714-test"
-
-    key     = "terraform/idseq/envs/dev/components/cloud-env.tfstate"
-    region  = "us-west-2"
-    profile = "idseq-newdev"
-
-
-  }
-}
-data "terraform_remote_state" "eks" {
-  backend = "s3"
-  config = {
-
-
-    bucket = "tfstate-491013321714-test"
-
-    key     = "terraform/idseq/envs/dev/components/eks.tfstate"
-    region  = "us-west-2"
-    profile = "idseq-newdev"
-
-
-  }
-}
-data "terraform_remote_state" "k8s-core" {
-  backend = "s3"
-  config = {
-
-
-    bucket = "tfstate-491013321714-test"
-
-    key     = "terraform/idseq/envs/dev/components/k8s-core.tfstate"
-    region  = "us-west-2"
-    profile = "idseq-newdev"
-
-
-  }
-}
-data "terraform_remote_state" "route53" {
-  backend = "s3"
-  config = {
-
-
-    bucket = "tfstate-491013321714-test"
-
-    key     = "terraform/idseq/envs/dev/components/route53.tfstate"
-    region  = "us-west-2"
-    profile = "idseq-newdev"
-
-
-  }
 }
 # tflint-ignore: terraform_unused_declarations
 variable "aws_accounts" {

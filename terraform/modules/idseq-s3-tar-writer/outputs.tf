@@ -12,3 +12,7 @@ output "repository_url" {
   value     = module.aws-ecr-repo.repository_url
   sensitive = false
 }
+
+output "trigged_by" {
+  value = null_resource.build_push_docker_img.triggers
+}
