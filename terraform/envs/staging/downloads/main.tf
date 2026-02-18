@@ -60,3 +60,19 @@ module "downloads_v1_iam_policy_for_old_samples_bucket" {
   role_name = aws_iam_role.downloads_v1.name
   service   = var.component
 }
+
+resource "aws_iam_role" "aegea-ecs" {
+  name               = "aegea.ecs"
+  description        = "undocumented but required role needed by the idseq-${var.env}-web ECS Service"
+  assume_role_policy = data.aws_iam_policy_document.downloads-assume-role.json
+}
+
+resource "aws_iam_role_policy_attachment" "aegea-ecs-ec2-role-policy-attach" {
+  role       = aws_iam_role.aegea-ecs.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+}
+
+resource "aws_iam_role_policy_attachment" "aegea-ecs-batch-role-policy-attach" {
+  role       = aws_iam_role.aegea-ecs.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBatchServiceRole"
+}
