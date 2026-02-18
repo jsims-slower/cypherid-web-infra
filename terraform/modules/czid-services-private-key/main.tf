@@ -2,7 +2,7 @@
 # >> openssl ecparam -name secp384r1 -genkey -noout -out czid-private-key.pem
 
 locals {
-  secret_name    = "dev/czid-services-private-key"
+  secret_name    = "${var.env}/czid-services-private-key"
   rotate_version = "1" // Increment this to rotate the secret
 }
 
