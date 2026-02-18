@@ -6,5 +6,5 @@ locals {
   image_tag           = null
   max_image_count     = null
   region              = var.region
-  tags                = {}
+  tags                = var.tags
 }

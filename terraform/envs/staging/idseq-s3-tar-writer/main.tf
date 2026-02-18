@@ -10,6 +10,7 @@ module "idseq-s3-tar-writer" {
   image_tag           = local.image_tag
   max_image_count     = local.max_image_count
   region              = local.region
+  tags                = local.tags
 
 
 

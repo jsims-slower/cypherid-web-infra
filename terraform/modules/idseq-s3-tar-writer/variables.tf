@@ -37,6 +37,17 @@ variable "force_image_rebuild" {
   nullable = false
 }
 
+variable "tags" {
+  type = object({
+    project : string,
+    env : string,
+    service : string,
+    owner : string,
+    managedBy : string
+  })
+  description = "Tags to apply to ECR repo"
+}
+
 locals {
   force_delete = true # default false
 
