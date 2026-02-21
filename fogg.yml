@@ -256,6 +256,10 @@ envs:
             - cloud-env
       idseq-s3-tar-writer:
         module_source: terraform/modules/idseq-s3-tar-writer
+        variables:
+          - force_image_rebuild
+        extra_vars:
+          force_image_rebuild: false
       redis:
         module_source: "github.com/chanzuckerberg/cztack//aws-redis-replication-group?ref=v0.104.2"
         module_name: elasticache_secure
