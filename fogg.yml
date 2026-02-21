@@ -73,7 +73,7 @@ defaults:
     s3_bucket_public_references: czid-public-references
     s3_bucket_idseq_bench: idseq-bench
     s3_bucket_secrets: idseq-secrets
-    s3_bucket_workflows: idseq-workflows
+    s3_bucket_workflows: cypherid-samples-deleteme
   owner: biohub-tech@chanzuckerberg.com
   project: idseq
   providers:
@@ -116,7 +116,7 @@ defaults:
     #  version: 3.41.0
     #  registry_namespace: okta
     #  org_name: czi-prod
-  terraform_version: 1.14.4
+  terraform_version: 1.14.5
   tools:
     github_actions_ci:
       aws_iam_role_name: infraci
@@ -319,7 +319,7 @@ envs:
         depends_on:
           components:
             - cloud-env
-        module_source: terraform/modules/eks-cluster-v2-v7.3.0
+        module_source: "github.com/chanzuckerberg/cztack//aws-eks-cluster?ref=v0.104.2"
         variables:
           - cluster_name
           - cluster_version
@@ -517,6 +517,10 @@ envs:
         module_source: ./terraform/modules/individual-attr
       idseq-s3-tar-writer:
         module_source: terraform/modules/idseq-s3-tar-writer
+        variables:
+          - force_image_rebuild
+        extra_vars:
+          force_image_rebuild: false
       heatmap-optimization:
         depends_on:
           components:

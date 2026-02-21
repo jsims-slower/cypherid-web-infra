@@ -7,15 +7,15 @@ output "default_namespace" {
 #   value = module.aws-ssm.aws_ssm_iam_role_name
 # }
 
-output "datadog_agent_hostname" {
-  value = "DEPRECATED"
-}
+# output "datadog_agent_hostname" {
+#   value = "DEPRECATED"
+# }
 
 output "additional_addons" {
   value     = var.additional_addons
   sensitive = true
 }
 
-output "rancher_manifest_url" {
-  value = "DEPRECATED"
-}
+# output "rancher_manifest_url" {
+#   value = "DEPRECATED"
+# }

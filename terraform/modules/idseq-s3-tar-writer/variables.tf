@@ -51,16 +51,16 @@ variable "tags" {
 locals {
   force_delete = true # default false
 
-  ecr_registry_uri      = "${var.aws_account}.dkr.ecr.${var.region}.amazonaws.com" # ECR docker registry URI
-  docker_img_src_sha256 = sha256(join("", [for f in fileset(".", "${path.module}/s3_tar_writer/**") : file(f)]))
+  ecr_registry          = trimsuffix(module.aws-ecr-repo.repository_url, "/${module.aws-ecr-repo.repository_name}")
+  docker_img_src_sha256 = var.force_image_rebuild == true ? timestamp() : sha256(join("", [for f in fileset(".", "${path.module}/s3_tar_writer/**") : file(f)]))
 
   docker_build_cmd = <<-EOT
         aws ecr get-login-password --profile ${var.aws_profile} --region ${var.region} | \
-            docker login --username AWS --password-stdin ${local.ecr_registry_uri}
+            docker login --username AWS --password-stdin ${local.ecr_registry}
 
         docker buildx build \
             --platform linux/amd64 \
-            -t ${local.ecr_registry_uri}/${var.ecr_repo_name}:${var.image_tag} \
+            -t ${module.aws-ecr-repo.repository_url}:${var.image_tag} \
             -f ${path.module}/Dockerfile \
             --push ${path.module}
     EOT

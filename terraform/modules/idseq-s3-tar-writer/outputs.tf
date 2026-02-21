@@ -14,5 +14,5 @@ output "repository_url" {
 }
 
 output "trigged_by" {
-  value = null_resource.build_push_docker_img.triggers
+  value = terraform_data.build_push_docker_img.triggers_replace
 }

@@ -5,10 +5,7 @@ module "idseq-s3-tar-writer" {
   source              = "../../../modules/idseq-s3-tar-writer"
   aws_account         = local.aws_account
   aws_profile         = local.aws_profile
-  ecr_repo_name       = local.ecr_repo_name
   force_image_rebuild = local.force_image_rebuild
-  image_tag           = local.image_tag
-  max_image_count     = local.max_image_count
   region              = local.region
   tags                = local.tags
 
