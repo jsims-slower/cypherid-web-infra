@@ -123,7 +123,7 @@ provider "aws" {
 
 provider "assert" {}
 terraform {
-  required_version = "=1.14.4"
+  required_version = "=1.14.5"
 
   backend "s3" {
 
@@ -286,6 +286,11 @@ variable "eks_cluster_name" {
   default = "czid-staging-eks"
 }
 # tflint-ignore: terraform_unused_declarations
+variable "force_image_rebuild" {
+  type    = string
+  default = "false"
+}
+# tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_aegea_ecs_execute" {
   type    = string
   default = "aegea-ecs-execute-staging-030998640247"
@@ -318,7 +323,7 @@ variable "s3_bucket_secrets" {
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_workflows" {
   type    = string
-  default = "idseq-workflows"
+  default = "cypherid-samples-deleteme"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "aws_accounts" {

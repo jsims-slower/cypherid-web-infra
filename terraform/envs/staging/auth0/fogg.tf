@@ -127,7 +127,7 @@ provider "auth0" {
   domain = "${var.auth0_domain}"
 }
 terraform {
-  required_version = "=1.14.4"
+  required_version = "=1.14.5"
 
   backend "s3" {
 
@@ -329,7 +329,7 @@ variable "s3_bucket_secrets" {
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_workflows" {
   type    = string
-  default = "idseq-workflows"
+  default = "cypherid-samples-deleteme"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "aws_accounts" {
