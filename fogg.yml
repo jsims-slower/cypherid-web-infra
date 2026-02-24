@@ -230,6 +230,9 @@ envs:
           - single_nat_gateway
           - k8s_cluster_names
       downloads:
+        depends_on:
+          components:
+            - cloud-env
       # TODO: Some modules only used to exist in other environments, but we added them here for testing purposes
       #       maintenance, db, ecs, elb-access-logs, heatmap-optimization, redis, resque, web, web-waf
       #       Possibly because they are shared across environments? Need to verify.
@@ -510,6 +513,9 @@ envs:
           components:
             - cloud-env
       downloads:
+        depends_on:
+          components:
+            - cloud-env
       ecs:
         depends_on:
           components:

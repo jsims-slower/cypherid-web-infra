@@ -76,3 +76,17 @@ resource "aws_iam_role_policy_attachment" "aegea-ecs-batch-role-policy-attach" {
   role       = aws_iam_role.aegea-ecs.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBatchServiceRole"
 }
+
+resource "aws_security_group" "aegea-ecs-sg" {
+  name        = "aegea.ecs"
+  description = "undocumented but required Security Group needed by Downloads from the idseq-${var.env}-web ECS Service"
+  vpc_id      = data.terraform_remote_state.cloud-env.outputs.vpc_id
+  ingress     = []
+  egress      = []
+}
+
+resource "aws_vpc_security_group_egress_rule" "aegea-ecs-allow_all_traffic_ipv4" {
+  security_group_id = aws_security_group.aegea-ecs-sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1" # semantically equivalent to all ports
+}

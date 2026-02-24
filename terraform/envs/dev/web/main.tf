@@ -88,6 +88,7 @@ data "aws_iam_policy_document" "idseq-web" {
     ]
 
     resources = [
+      "arn:aws:s3:::seqtoid-sandbox",
       "arn:aws:s3:::${var.s3_bucket_samples}",
       "arn:aws:s3:::${var.s3_bucket_samples_v1}",
       "arn:aws:s3:::${var.s3_bucket_public_references}",
@@ -106,6 +107,7 @@ data "aws_iam_policy_document" "idseq-web" {
     ]
 
     resources = [
+      "arn:aws:s3:::seqtoid-sandbox/*",
       "arn:aws:s3:::${var.s3_bucket_samples}/*",
       "arn:aws:s3:::${var.s3_bucket_samples_v1}/*",
       "arn:aws:s3:::${var.s3_bucket_public_references}/*",

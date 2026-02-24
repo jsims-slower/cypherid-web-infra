@@ -320,6 +320,20 @@ variable "s3_bucket_workflows" {
   type    = string
   default = "cypherid-samples-deleteme"
 }
+data "terraform_remote_state" "cloud-env" {
+  backend = "s3"
+  config = {
+
+
+    bucket = "tfstate-491013321714-test"
+
+    key     = "terraform/idseq/envs/dev/components/cloud-env.tfstate"
+    region  = "us-west-2"
+    profile = "idseq-newdev"
+
+
+  }
+}
 # tflint-ignore: terraform_unused_declarations
 variable "aws_accounts" {
   type = map(string)
