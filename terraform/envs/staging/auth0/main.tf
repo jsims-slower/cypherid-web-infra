@@ -8,36 +8,42 @@
 #   description = "Administrator"
 # }
 
+locals {
+  env_seqtoid_org_fqdn     = data.terraform_remote_state.route53.outputs.env_seqtoid_org_fqdn
+  env_seqtoid_org_url      = "https://${local.env_seqtoid_org_fqdn}"
+  meta_env_seqtoid_org_url = "https://meta.${local.env_seqtoid_org_fqdn}"
+}
+
 resource "auth0_client" "idseq_web" {
-  name        = "idseq-web-staging"
-  description = "Seqtoid Staging Web Application"
+  name        = "idseq-web-${var.env}"
+  description = "Seqtoid ${var.env} Web Application"
   allowed_clients = [
     # var.auth0_m2m_client_id,
-    "https://staging.seqtoid.org",
+    local.env_seqtoid_org_url
   ]
   allowed_logout_urls = [
     "http://localhost:3000",
-    "https://staging.seqtoid.org",
-    "https://meta.staging.seqtoid.org",
+    local.env_seqtoid_org_url,
+    local.meta_env_seqtoid_org_url,
   ]
   allowed_origins = [
     "http://localhost:3000",
-    "https://staging.seqtoid.org",
-    "https://meta.staging.seqtoid.org",
+    local.env_seqtoid_org_url,
+    local.meta_env_seqtoid_org_url,
   ]
   app_type = "regular_web"
   callbacks = [
     # "http://localhost:3000/auth/auth0/callback",
     # "http://127.0.0.2:4000/auth/auth0/callback",
-    "https://staging.seqtoid.org/auth/auth0/callback",
-    # "https://meta.staging.seqtoid.org/auth/auth0/callback",
+    "${local.env_seqtoid_org_url}/auth/auth0/callback",
+    # "${local.meta_env_seqtoid_org_url}/auth/auth0/callback",
   ]
   logo_uri = "https://assets.prod.czid.org/assets/CZID_Favicon_Black.png"
   sso      = true
   web_origins = [
     "http://localhost:3000",
-    "https://staging.seqtoid.org",
-    "https://meta.staging.seqtoid.org",
+    local.env_seqtoid_org_url,
+    local.meta_env_seqtoid_org_url,
   ]
 
   # custom_login_page_on = true
@@ -58,19 +64,19 @@ resource "auth0_client" "idseq_web" {
 
 resource "auth0_client_grant" "idseq_web_grant" {
   client_id    = auth0_client.idseq_web.id
-  audience     = "https://${var.auth0_domain}/api/v2/" # "https://staging.seqtoid.org" TODO: Should be this?!!!
+  audience     = "https://${var.auth0_domain}/api/v2/" # "https://${var.env}.seqtoid.org" TODO: Should be this?!!!
   subject_type = "user"
   scopes       = []
 }
 
 resource "auth0_client" "idseq_web_management" {
-  name     = "idseq-web-staging-management"
+  name     = "idseq-web-${var.env}-management"
   app_type = "non_interactive"
 }
 
 resource "auth0_client_grant" "idseq_web_management_grant" {
   client_id = auth0_client.idseq_web_management.id
-  audience     = "https://${var.auth0_domain}/api/v2/" # "https://staging.seqtoid.org" TODO: Should be this?!!!
+  audience  = "https://${var.auth0_domain}/api/v2/" # "https://${var.env}.seqtoid.org" TODO: Should be this?!!!
   scopes = [
     "read:users",
     "update:users",
@@ -88,6 +94,11 @@ data "auth0_connection" "username_password_authentication" {
 resource "auth0_connection_client" "idseq_web_connection_client" {
   connection_id = data.auth0_connection.username_password_authentication.id
   client_id     = auth0_client.idseq_web.id
+}
+
+resource "auth0_connection_client" "idseq_web_management_connection_client" {
+  connection_id = data.auth0_connection.username_password_authentication.id
+  client_id     = auth0_client.idseq_web_management.id
 }
 
 #

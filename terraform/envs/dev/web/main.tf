@@ -292,6 +292,7 @@ module "web-service-params" {
     S3_AEGEA_ECS_EXECUTE_BUCKET    = var.s3_bucket_aegea_ecs_execute
     AUTO_ACCOUNT_CREATION_V1       = 1
     S3_WORKFLOWS_BUCKET            = var.s3_bucket_workflows
+    LAMBDA_ENV                     = var.env # TODO: Only necessary for dev, as it defaults to Rails.env ('development') in the code
   }
 }
 

@@ -14,9 +14,9 @@
 # }
 
 locals {
-  env_seqtoid_org_fqdn = data.terraform_remote_state.route53.outputs.env_seqtoid_org_fqdn
-  env_seqtoid_org_url  = "https://${local.env_seqtoid_org_fqdn}"
-  meta_env_seqtoid_org_url  = "https://meta.${local.env_seqtoid_org_fqdn}"
+  env_seqtoid_org_fqdn     = data.terraform_remote_state.route53.outputs.env_seqtoid_org_fqdn
+  env_seqtoid_org_url      = "https://${local.env_seqtoid_org_fqdn}"
+  meta_env_seqtoid_org_url = "https://meta.${local.env_seqtoid_org_fqdn}"
 }
 
 resource "auth0_role" "admin" {
@@ -25,8 +25,8 @@ resource "auth0_role" "admin" {
 }
 
 resource "auth0_client" "idseq_web" {
-  name        = "idseq-web"
-  description = "Seqtoid DEV Web Application"
+  name        = "idseq-web-${var.env}"
+  description = "Seqtoid ${var.env} Web Application"
   allowed_clients = [
     # var.auth0_m2m_client_id,
     local.env_seqtoid_org_url
@@ -64,20 +64,21 @@ resource "auth0_client" "idseq_web" {
 }
 
 resource "auth0_client_grant" "idseq_web_grant" {
-  client_id = auth0_client.idseq_web.id
-  audience  = "https://${var.auth0_domain}/api/v2/" # "https://dev.seqtoid.org" ## TODO: Should be this?!!!
-  scope     = []
+  client_id    = auth0_client.idseq_web.id
+  audience     = "https://${var.auth0_domain}/api/v2/" # "https://${var.env}.seqtoid.org" TODO: Should be this?!!!
+  subject_type = "user"
+  scopes       = []
 }
 
 resource "auth0_client" "idseq_web_management" {
-  name     = "idseq-web-management"
+  name     = "idseq-web-${var.env}-management"
   app_type = "non_interactive"
 }
 
 resource "auth0_client_grant" "idseq_web_management_grant" {
   client_id = auth0_client.idseq_web_management.id
-  audience  = "https://${var.auth0_domain}/api/v2/" # "https://dev.seqtoid.org" ## TODO: Should be this?!!!
-  scope = [
+  audience  = "https://${var.auth0_domain}/api/v2/" # "https://${var.env}.seqtoid.org" TODO: Should be this?!!!
+  scopes = [
     "read:users",
     "update:users",
     "delete:users",
@@ -156,15 +157,8 @@ resource "auth0_client_grant" "idseq_web_management_grant" {
 # }
 
 resource "auth0_connection" "username_password_authentication" {
-  name     = "Username-Password-Authentication"
-  strategy = "auth0"
-  enabled_clients = [
-    # var.auth0_m2m_client_id,
-    auth0_client.idseq_web.id,
-    # auth0_client.auth0_deploy_cli_extension.id,
-    # auth0_client.idseq_web_management.id,
-    # auth0_client.idseq_cli_v2.id,
-  ]
+  name                 = "Username-Password-Authentication"
+  strategy             = "auth0"
   is_domain_connection = false
   realms = [
     "Username-Password-Authentication",
@@ -214,6 +208,16 @@ resource "auth0_connection" "username_password_authentication" {
       min_length = 10
     }
   }
+}
+
+resource "auth0_connection_client" "idseq_web_connection_client" {
+  connection_id = auth0_connection.username_password_authentication.id
+  client_id     = auth0_client.idseq_web.id
+}
+
+resource "auth0_connection_client" "idseq_web_management_connection_client" {
+  connection_id = auth0_connection.username_password_authentication.id
+  client_id     = auth0_client.idseq_web_management.id
 }
 
 data "auth0_client" "idseq_web" {
