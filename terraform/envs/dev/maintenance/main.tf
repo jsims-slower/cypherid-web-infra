@@ -1,9 +1,6 @@
 locals {
-  subdomain   = "maintenance"
-  domain      = "${var.env}.seqtoid.org"
-  full_domain = "${local.subdomain}.${local.domain}"
-  # TODO: Use aws_route53_zone zone data block instead of using an unrelated statefile
-  zone_id = data.terraform_remote_state.route53.outputs.env_seqtoid_org_zone_id
+  full_domain = "${var.component}.${data.terraform_remote_state.route53.outputs.env_seqtoid_org_fqdn}"
+  zone_id     = data.terraform_remote_state.route53.outputs.env_seqtoid_org_zone_id
 
   aliases = {
     "www.${local.full_domain}" = local.zone_id
@@ -13,6 +10,7 @@ locals {
 resource "aws_s3_bucket" "maintenance_bucket" {
   bucket = local.full_domain
   acl    = "private"
+  force_destroy = true
 
   website {
     index_document = "index.html"

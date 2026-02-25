@@ -32,6 +32,7 @@ module "aws-bucket" {
   env           = var.env
   service       = var.service
   owner         = var.owner
+  force_destroy = true
 }
 
 data "aws_iam_policy_document" "bucket_policy" {

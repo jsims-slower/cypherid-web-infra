@@ -121,12 +121,13 @@ resource "aws_iam_role_policy_attachment" "glue-service-role-policy" {
 }
 
 module "aws-s3-batch-taxon-indexing-private-bucket" {
-  source      = "github.com/chanzuckerberg/cztack//aws-s3-private-bucket?ref=v0.104.2"
-  bucket_name = local.bucket_name
-  env         = var.env
-  owner       = var.owner
-  project     = var.project
-  service     = var.component
+  source        = "github.com/chanzuckerberg/cztack//aws-s3-private-bucket?ref=v0.104.2"
+  bucket_name   = local.bucket_name
+  env           = var.env
+  owner         = var.owner
+  project       = var.project
+  service       = var.component
+  force_destroy = true
 }
 
 resource "aws_glue_job" "batch-taxon-indexing" {

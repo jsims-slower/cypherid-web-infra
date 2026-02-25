@@ -223,6 +223,9 @@ envs:
         providers:
           auth0:
             domain: "${var.auth0_domain}"
+        depends_on:
+          components:
+              - route53
       cloud-env:
         module_source: terraform/modules/aws-env-v4.0.0
         module_name: aws-env
@@ -246,6 +249,7 @@ envs:
         depends_on:
           components:
             - cloud-env
+            - route53
       ecs:
         depends_on:
           components:
@@ -370,6 +374,7 @@ envs:
         depends_on:
           components:
             - cloud-env
+            - route53
       ecs:
         depends_on:
           components:
@@ -486,6 +491,9 @@ envs:
         providers:
           auth0:
             domain: "${var.auth0_domain}"
+        depends_on:
+          components:
+            - route53
       batch:
         depends_on:
           components:
@@ -512,6 +520,7 @@ envs:
         depends_on:
           components:
             - cloud-env
+            - route53
       downloads:
         depends_on:
           components:
@@ -669,6 +678,9 @@ envs:
         providers:
           auth0:
             domain: "${var.auth0_domain}"
+        depends_on:
+          components:
+            - route53
       batch:
         depends_on:
           components:
@@ -684,6 +696,7 @@ envs:
         depends_on:
           components:
             - cloud-env
+            - route53
       dashboards:
       downloads:
       ecs:

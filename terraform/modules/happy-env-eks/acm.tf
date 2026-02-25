@@ -5,7 +5,7 @@ data "aws_route53_zone" "base_zone" {
 }
 
 module "cert" {
-  source = "github.com/chanzuckerberg/cztack//aws-acm-certificate?ref=v0.43.1"
+  source = "github.com/chanzuckerberg/cztack//aws-acm-certificate?ref=v0.104.2"
 
   cert_domain_name = data.aws_route53_zone.base_zone.name
   cert_subject_alternative_names = {

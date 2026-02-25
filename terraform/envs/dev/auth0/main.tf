@@ -13,6 +13,12 @@
 #   }
 # }
 
+locals {
+  env_seqtoid_org_fqdn = data.terraform_remote_state.route53.outputs.env_seqtoid_org_fqdn
+  env_seqtoid_org_url  = "https://${local.env_seqtoid_org_fqdn}"
+  meta_env_seqtoid_org_url  = "https://meta.${local.env_seqtoid_org_fqdn}"
+}
+
 resource "auth0_role" "admin" {
   name        = "Admin"
   description = "Administrator"
@@ -23,35 +29,31 @@ resource "auth0_client" "idseq_web" {
   description = "Seqtoid DEV Web Application"
   allowed_clients = [
     # var.auth0_m2m_client_id,
-    "https://dev.seqtoid.org",
+    local.env_seqtoid_org_url
   ]
   allowed_logout_urls = [
     "http://localhost:3000/",
-    "https://dev.seqtoid.org/",
-    "http://dev.seqtoid.org/",
-    "https://meta.dev.seqtoid.org/",
-    "http://meta.dev.seqtoid.org/",
+    local.env_seqtoid_org_url,
+    local.meta_env_seqtoid_org_url,
   ]
   allowed_origins = [
     "http://localhost:3000",
-    "https://dev.seqtoid.org",
-    "http://dev.seqtoid.org",
-    "https://meta.dev.seqtoid.org/",
-    "http://meta.dev.seqtoid.org/",
+    local.env_seqtoid_org_url,
+    local.meta_env_seqtoid_org_url,
   ]
   app_type = "regular_web"
   callbacks = [
     # "http://localhost:3000/auth/auth0/callback",
     # "http://127.0.0.2:4000/auth/auth0/callback",
-    "https://dev.seqtoid.org/auth/auth0/callback",
-    # "https://meta.dev.seqtoid.org/auth/auth0/callback",
+    "${local.env_seqtoid_org_url}/auth/auth0/callback",
+    # "${local.meta_env_seqtoid_org_url}/auth/auth0/callback",
   ]
   logo_uri = "https://assets.prod.czid.org/assets/CZID_Favicon_Black.png"
   sso      = true
   web_origins = [
     "http://localhost:3000",
-    "https://dev.seqtoid.org",
-    "https://meta.dev.seqtoid.org/",
+    local.env_seqtoid_org_url,
+    local.meta_env_seqtoid_org_url,
   ]
 
   jwt_configuration {
@@ -92,7 +94,7 @@ resource "auth0_client_grant" "idseq_web_management_grant" {
 #     "https://sandbox.idseq.net",
 #     or
 #     var.auth0_m2m_client_id,
-#     "https://dev.seqtoid.org",
+#       local.env_seqtoid_org_url,
 #   ]
 #   app_type = "native"
 # }
