@@ -2,6 +2,7 @@ resource "aws_s3_bucket" "samples" {
   bucket              = var.s3_bucket_samples
   acl                 = "private"
   acceleration_status = "Enabled"
+  force_destroy       = true
 
   versioning {
     enabled = false
@@ -145,6 +146,7 @@ resource "aws_s3_bucket" "samples_v1" {
   bucket              = var.s3_bucket_samples_v1
   acl                 = "private"
   acceleration_status = "Enabled"
+  force_destroy       = true
 
   versioning {
     enabled = true
