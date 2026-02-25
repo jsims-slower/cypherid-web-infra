@@ -156,9 +156,10 @@ envs:
       #     - environment
       #     - tags
       #     - attributes
+      iam-password-policy:
+        module_source: "github.com/chanzuckerberg/cztack//aws-iam-password-policy?ref=v0.104.2"
       params-secrets:
         module_source: "github.com/chanzuckerberg/cztack//aws-params-secrets-setup?ref=v0.104.2"
-        module_name: aws-params-secrets-setup
         variables:
           - alias_name
           - env
@@ -499,6 +500,8 @@ envs:
           components:
             - ecs
             - cloud-env
+      iam-password-policy:
+        module_source: "github.com/chanzuckerberg/cztack//aws-iam-password-policy?ref=v0.104.2"
       params-secrets:
         module_source: "github.com/chanzuckerberg/cztack//aws-params-secrets-setup?ref=v0.104.2"
         module_name: aws-params-secrets-setup
