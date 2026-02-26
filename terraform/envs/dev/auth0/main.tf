@@ -32,7 +32,7 @@ resource "auth0_client" "idseq_web" {
     local.env_seqtoid_org_url
   ]
   allowed_logout_urls = [
-    "http://localhost:3000/",
+    "http://localhost:3000",
     local.env_seqtoid_org_url,
     local.meta_env_seqtoid_org_url,
   ]
@@ -165,7 +165,7 @@ resource "auth0_connection" "username_password_authentication" {
   ]
 
   options {
-    import_mode                    = false
+    import_mode                    = false # TODO: true when we can use a custom user DB?
     disable_signup                 = false
     password_policy                = "excellent"
     strategy_version               = 2

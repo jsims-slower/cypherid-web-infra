@@ -2,7 +2,7 @@ locals {
   owner_roles = [
     "poweruser",                                              // TODO - Where are these created, and are they necessary? Appear to be deployed via terraform from 'shared-infra'. For now, manually created a 'poweruser' IAM role that matches what is in the CZI dev account.
     "AWSReservedSSO_AWSAdministratorAccess_0527ae95c0a72f8c", // SSO role used when locally applying terraform with an SSO profile
-    #"gha-seqtoid" // Role used by GH Actions for applying terraform (cypherid-infra & cypherid-web-infra)
+    # "gha-seqtoid", // Role used by GH Actions for applying terraform (cypherid-infra & cypherid-web-infra)
     # "okta-czi-admin",
     # "tfe-si",
   ]
@@ -38,6 +38,6 @@ locals {
     chanzuckerberg = ["czid-graphql-federation-server"]
   }
   addons = {
-    enable_guardduty = false # true
+    enable_guardduty = false # TODO: true
   }
 }

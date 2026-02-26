@@ -87,11 +87,11 @@ resource "aws_db_parameter_group" "db_8" {
     value = "1"
   }
 
-  # TODO: This got removed for some reason sometime April-December 2025
-  # parameter {
-  #   name  = "group_concat_max_len"
-  #   value = "1073741824"
-  # }
+  # TODO: This got removed for some reason sometime April-December 2025; Re-added Feb 2026
+  parameter {
+    name  = "group_concat_max_len"
+    value = "1073741824"
+  }
 
   tags = {
     terraform = true

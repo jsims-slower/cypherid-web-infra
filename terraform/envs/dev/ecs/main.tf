@@ -48,7 +48,6 @@ resource "aws_autoscaling_policy" "scale-down" {
   autoscaling_group_name = module.ecs-cluster.asg_name
 }
 
-# TODO - for prod, this is the definition that will be used, as the prod ASG will not scale down off hours, so the alarm should always be active
 resource "aws_cloudwatch_metric_alarm" "memory-res-high" {
   alarm_name  = "mem-res-high-ecs-${var.env}"
   namespace   = "AWS/ECS"
@@ -101,7 +100,6 @@ resource "aws_cloudwatch_metric_alarm" "memory-res-high" {
 #   }
 # }
 
-//TODO - for prod, this is the definition that will be used, as the prod ASG will not scale down off hours, so the alarm should always be active
 resource "aws_cloudwatch_metric_alarm" "memory-res-low" {
   alarm_name  = "mem-res-low-ecs-${var.env}"
   namespace   = "AWS/ECS"

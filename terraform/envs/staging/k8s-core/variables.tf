@@ -1,6 +1,6 @@
 locals {
   eks_cluster = data.terraform_remote_state.eks.outputs
-  tags         = var.tags # TODO: var.tags is deprecated
+  tags        = var.tags # TODO: var.tags is deprecated
   additional_addons = {
     # datadog = {
     #   mute                 = true

@@ -2,17 +2,17 @@
 #     AUTH0_CLIENT_ID
 #     AUTH0_CLIENT_SECRET
 
-# TODO: This is created by DEV already
-# resource "auth0_role" "admin" {
-#   name        = "Admin"
-#   description = "Administrator"
-# }
-
 locals {
   env_seqtoid_org_fqdn     = data.terraform_remote_state.route53.outputs.env_seqtoid_org_fqdn
   env_seqtoid_org_url      = "https://${local.env_seqtoid_org_fqdn}"
   meta_env_seqtoid_org_url = "https://meta.${local.env_seqtoid_org_fqdn}"
 }
+
+# TODO: This is created by DEV already
+# resource "auth0_role" "admin" {
+#   name        = "Admin"
+#   description = "Administrator"
+# }
 
 resource "auth0_client" "idseq_web" {
   name        = "idseq-web-${var.env}"
@@ -87,6 +87,7 @@ resource "auth0_client_grant" "idseq_web_management_grant" {
   ]
 }
 
+# TODO: This is created by DEV already
 data "auth0_connection" "username_password_authentication" {
   name = "Username-Password-Authentication"
 }
