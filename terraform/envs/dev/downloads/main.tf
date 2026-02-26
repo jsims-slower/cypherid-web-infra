@@ -81,8 +81,9 @@ resource "aws_security_group" "aegea-ecs-sg" {
   name        = "aegea.ecs"
   description = "undocumented but required Security Group needed by Downloads from the idseq-${var.env}-web ECS Service"
   vpc_id      = data.terraform_remote_state.cloud-env.outputs.vpc_id
-  ingress     = []
-  egress      = []
+  tags = {
+    Name = "aegea.ecs"
+  }
 }
 
 resource "aws_vpc_security_group_egress_rule" "aegea-ecs-allow_all_traffic_ipv4" {
