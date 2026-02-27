@@ -216,17 +216,18 @@ envs:
           #- okta_teams
           #- rds_dbs
           - s3_buckets
+          - tags
           #- waf_arn
         module_name: happy
-        #provider_aliases:
-        #  "aws.czi-si": aws.czi-si
+        provider_aliases:
+          "aws.czi-si": aws.czi-si
       auth0:
         providers:
           auth0:
             domain: "${var.auth0_domain}"
         depends_on:
           components:
-              - route53
+            - route53
       cloud-env:
         module_source: terraform/modules/aws-env-v4.0.0
         module_name: aws-env
@@ -479,14 +480,14 @@ envs:
           - github_actions_roles
           #- hapi_base_url
           #- oidc_config
-          - okta_teams
+          #- okta_teams
           #- rds_dbs
           - s3_buckets
           - tags
           #- waf_arn
         module_name: happy
-        #provider_aliases:
-        #  "aws.czi-si": aws.czi-si
+        provider_aliases:
+          "aws.czi-si": aws.czi-si
       access-management:
       auth0:
         providers:

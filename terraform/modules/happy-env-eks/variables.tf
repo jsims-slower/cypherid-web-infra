@@ -100,11 +100,11 @@ variable "github_actions_roles" {
 }
 
 # deprecated, use OIDC config instead to specify okta teams
-variable "okta_teams" {
-  type        = set(string)
-  description = "The set of Okta teams to give access to the Okta app"
-  default     = null
-}
+# variable "okta_teams" {
+#   type        = set(string)
+#   description = "The set of Okta teams to give access to the Okta app"
+#   default     = null
+# }
 
 variable "hapi_base_url" {
   type        = string

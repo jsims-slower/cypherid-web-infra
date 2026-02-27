@@ -9,10 +9,11 @@ module "happy" {
   ecr_repos            = local.ecr_repos
   eks-cluster          = local.eks-cluster
   github_actions_roles = local.github_actions_roles
-  okta_teams           = local.okta_teams
   s3_buckets           = local.s3_buckets
   tags                 = local.tags
 
 
-
+  providers = {
+    aws.czi-si = aws.czi-si
+  }
 }
