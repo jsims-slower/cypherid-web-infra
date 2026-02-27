@@ -16,7 +16,7 @@ module "ecs-cluster" {
   ssh_key_name        = null # "idseq-${var.env}"
   subnets             = data.terraform_remote_state.cloud-env.outputs.private_subnets
   allowed_cidr_blocks = [data.terraform_remote_state.cloud-env.outputs.vpc_cidr_block]
-  #ssh_users           = data.terraform_remote_state.global.outputs.ssh_users
+  # ssh_users           = data.terraform_remote_state.global.outputs.ssh_users
   docker_storage_size = "214"
 }
 

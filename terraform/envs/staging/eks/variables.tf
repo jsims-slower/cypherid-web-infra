@@ -10,7 +10,7 @@ locals {
   cluster_name            = var.eks_cluster_name
   iam_cluster_name_prefix = null
 
-  tags         = var.tags # TODO: var.tags is deprecated
+  tags            = var.tags # TODO: var.tags is deprecated
   vpc_id          = data.terraform_remote_state.cloud-env.outputs.vpc_id
   subnet_ids      = data.terraform_remote_state.cloud-env.outputs.private_subnets
   cluster_version = "1.35"
@@ -40,6 +40,6 @@ locals {
     chanzuckerberg = ["czid-graphql-federation-server"]
   }
   addons = {
-    enable_guardduty = false # true
+    enable_guardduty = false # TODO: true
   }
 }

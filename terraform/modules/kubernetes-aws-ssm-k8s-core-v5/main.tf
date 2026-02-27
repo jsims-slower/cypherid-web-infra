@@ -1,23 +1,19 @@
 locals {
   metrics_port = "9999"
-  name         = "${var.project}-${var.env}-${var.service}"
   replicas     = "1"
 }
 
 data "aws_region" "current" {} // the AWS region configured on the provider
 
 module "service-account-role" {
-  source               = "../aws-iam-eks-service-account-role-k8s-core-v5"
-  project              = var.project
-  env                  = var.env
-  service              = var.service
-  owner                = var.owner
-  eks_cluster_id       = var.eks_cluster_id
-  iam_path             = var.iam_role_path
-  oidc_provider_url    = var.cluster_oidc_issuer_url
-  oidc_provider_arn    = var.oidc_provider_arn
-  namespace            = var.namespace
-  service_account_name = var.service
+  source        = "github.com/chanzuckerberg/cztack//aws-iam-service-account-eks?ref=v0.104.2"
+  eks_cluster   = var.eks_cluster
+  iam_path      = var.iam_role_path
+  k8s_namespace = var.namespace
+  tags          = var.tags
+  # service_account_name = var.tags.service
+  # role_permissions_boundary_arn
+  # max_session_duration
 }
 
 data "aws_iam_policy_document" "policy" {
@@ -35,7 +31,7 @@ data "aws_iam_policy_document" "policy" {
 }
 
 resource "aws_iam_role_policy" "policy" {
-  name   = "${local.name}-policy"
+  name   = "${module.service-account-role.iam_role}-policy"
   role   = module.service-account-role.iam_role
   policy = data.aws_iam_policy_document.policy.json
 }
@@ -43,10 +39,10 @@ resource "aws_iam_role_policy" "policy" {
 resource "kubernetes_deployment" "kubernetes-aws-ssm" {
   metadata {
     labels = {
-      app = var.service
+      app = var.tags.service
     }
 
-    name      = var.service
+    name      = var.tags.service
     namespace = var.namespace
   }
 
@@ -55,7 +51,7 @@ resource "kubernetes_deployment" "kubernetes-aws-ssm" {
 
     selector {
       match_labels = {
-        app = var.service
+        app = var.tags.service
       }
     }
 
@@ -72,7 +68,7 @@ resource "kubernetes_deployment" "kubernetes-aws-ssm" {
 
       metadata {
         labels = {
-          app = var.service
+          app = var.tags.service
         }
       }
 
@@ -81,7 +77,7 @@ resource "kubernetes_deployment" "kubernetes-aws-ssm" {
         automount_service_account_token = true
 
         container {
-          name              = var.service
+          name              = var.tags.service
           image             = "${var.image_name}:${var.image_tag}"
           image_pull_policy = "Always"
 
@@ -139,7 +135,7 @@ resource "kubernetes_deployment" "kubernetes-aws-ssm" {
 
 resource "kubernetes_service_account" "aws-ssm" {
   metadata {
-    name      = var.service
+    name      = var.tags.service
     namespace = var.namespace
 
     annotations = {
@@ -150,7 +146,7 @@ resource "kubernetes_service_account" "aws-ssm" {
 
 resource "kubernetes_cluster_role" "aws-ssm" {
   metadata {
-    name = var.service
+    name = var.tags.service
   }
 
   rule {
@@ -168,7 +164,7 @@ resource "kubernetes_cluster_role" "aws-ssm" {
 
 resource "kubernetes_cluster_role_binding" "aws-ssm" {
   metadata {
-    name = var.service
+    name = var.tags.service
   }
 
   role_ref {

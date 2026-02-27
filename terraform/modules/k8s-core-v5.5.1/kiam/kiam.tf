@@ -46,17 +46,14 @@ EOF
 }
 
 module "kiam-role" {
-  source               = "../../aws-iam-eks-service-account-role-k8s-core-v5"
-  project              = var.tags.project
-  env                  = var.tags.env
-  service              = "${var.tags.service}-kiam"
-  owner                = var.tags.owner
-  eks_cluster_id       = var.eks_cluster.cluster_id
+  source               = "github.com/chanzuckerberg/cztack//aws-iam-service-account-eks?ref=v0.104.2"
+  eks_cluster          = var.eks_cluster
   iam_path             = var.iam_role_path
-  oidc_provider_url    = var.eks_cluster.cluster_oidc_issuer_url
-  oidc_provider_arn    = var.eks_cluster.oidc_provider_arn
-  namespace            = var.namespace
+  k8s_namespace        = var.namespace
   service_account_name = local.kiam_server_fullname
+  tags = merge(var.tags, {
+    service = "${var.tags.service}-kiam"
+  }) # TODO: var.tags is deprecated
 }
 
 data "aws_iam_policy_document" "kiam" {
