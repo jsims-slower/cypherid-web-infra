@@ -19,7 +19,7 @@ module "ecs-cluster" {
   # off_hour_utc = local.off_hour_utc
   # on_hour_utc  = local.on_hour_utc
 
-  instance_type       = "c6a.xlarge"
+  instance_type       = "m5.2xlarge"
   vpc_id              = data.terraform_remote_state.cloud-env.outputs.vpc_id
   ssh_key_name        = null # "idseq-${var.env}"
   subnets             = data.terraform_remote_state.cloud-env.outputs.private_subnets
