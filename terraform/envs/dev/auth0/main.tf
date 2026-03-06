@@ -29,7 +29,7 @@ resource "auth0_client" "idseq_web" {
   description = "Seqtoid ${var.env} Web Application"
   allowed_clients = [
     # var.auth0_m2m_client_id,
-    local.env_seqtoid_org_url
+    # local.env_seqtoid_org_url
   ]
   allowed_logout_urls = [
     "http://localhost:3000",
@@ -48,7 +48,8 @@ resource "auth0_client" "idseq_web" {
     "${local.env_seqtoid_org_url}/auth/auth0/callback",
     # "${local.meta_env_seqtoid_org_url}/auth/auth0/callback",
   ]
-  logo_uri = "https://assets.prod.czid.org/assets/CZID_Favicon_Black.png"
+  # logo_uri = "https://assets.prod.czid.org/assets/CZID_Favicon_Black.png"
+  logo_uri = "https://assets.${var.env}.seqtoid.org/assets/logo-new.png"
   sso      = true
   web_origins = [
     "http://localhost:3000",
@@ -100,12 +101,25 @@ resource "auth0_client_grant" "idseq_web_management_grant" {
 #   app_type = "native"
 # }
 #
+
+# resource "auth0_custom_domain" "env_seqtoid_org" {
+#   domain     = "auth.sequtoid.com"
+#   type       = "auth0_managed_certs"
+#   tls_policy = "recommended"
+#   # domain_metadata = {
+#   #   key1 : "value1"
+#   #   key2 : "value2"
+#   # }
+# }
+#
 # resource "auth0_branding" "brand" {
-#   logo_url = "https://assets.prod.czid.org/assets/CZID_Logo_Black.png"
+#   depends_on = [auth0_custom_domain.env_seqtoid_org]
+#   # logo_url = "https://assets.prod.czid.org/assets/CZID_Logo_Black.png"
+#   logo_url = "https://assets.dev.seqtoid.org/assets/logo-new.png"
 #
 #   colors {
 #     primary         = "#3867fa"
-#     page_background = "#FFFFFF"
+#     page_background = "#9a9996"
 #   }
 #
 #   # font {}

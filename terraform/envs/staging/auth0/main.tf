@@ -19,7 +19,7 @@ resource "auth0_client" "idseq_web" {
   description = "Seqtoid ${var.env} Web Application"
   allowed_clients = [
     # var.auth0_m2m_client_id,
-    local.env_seqtoid_org_url
+    # local.env_seqtoid_org_url
   ]
   allowed_logout_urls = [
     "http://localhost:3000",
@@ -38,7 +38,8 @@ resource "auth0_client" "idseq_web" {
     "${local.env_seqtoid_org_url}/auth/auth0/callback",
     # "${local.meta_env_seqtoid_org_url}/auth/auth0/callback",
   ]
-  logo_uri = "https://assets.prod.czid.org/assets/CZID_Favicon_Black.png"
+  # logo_uri = "https://assets.prod.czid.org/assets/CZID_Favicon_Black.png"
+  logo_uri = "https://assets.${var.env}.seqtoid.org/assets/logo-new.png"
   sso      = true
   web_origins = [
     "http://localhost:3000",
