@@ -5,7 +5,7 @@ locals {
 // New zones for CZ ID
 
 resource "aws_route53_zone" "root-czid-org" {
-  name = "${local.domain}"
+  name = local.domain
   tags = {
     owner   = var.owner
     project = var.project_v1
@@ -15,11 +15,11 @@ resource "aws_route53_zone" "root-czid-org" {
 }
 
 resource "aws_route53_record" "cluster_env_zone_bind" {
-  zone_id  = aws_route53_zone.root-czid-org.zone_id
-  name     = "sandbox.${local.domain}"
-  type     = "NS"
-  ttl      = 300
-  records  = aws_route53_zone.sandbox-czid-org.name_servers
+  zone_id = aws_route53_zone.root-czid-org.zone_id
+  name    = "sandbox.${local.domain}"
+  type    = "NS"
+  ttl     = 300
+  records = aws_route53_zone.sandbox-czid-org.name_servers
 }
 
 # resource "aws_route53_zone" "dev-czid-org" {

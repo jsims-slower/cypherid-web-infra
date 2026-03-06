@@ -124,10 +124,10 @@ provider "aws" {
 provider "assert" {}
 
 provider "auth0" {
-  domain = "${var.auth0_domain}"
+  domain = "dev-ep4y3efh1vxvw06z.us.auth0.com"
 }
 terraform {
-  required_version = "=1.14.5"
+  required_version = "=1.14.6"
 
   backend "s3" {
 

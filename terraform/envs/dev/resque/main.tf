@@ -59,5 +59,6 @@ module "shoryuken" {
   owner         = var.owner
   cluster_id    = data.terraform_remote_state.ecs.outputs.cluster_id
   task_role_arn = data.terraform_remote_state.web.outputs.task_role_arn
+
   manage_task_definition = false
 }

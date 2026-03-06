@@ -332,6 +332,7 @@ module "web-service" {
   acm_certificate_arn = module.staging.arn
   lb_egress_cidrs     = [data.terraform_remote_state.cloud-env.outputs.vpc_cidr_block]
   access_logs_bucket  = data.terraform_remote_state.elb-access-logs.outputs.bucket_name
+
   # The AWS and module default is 60s. We decided to increase it after observing
   # multiple endpoints exceeding that in production under normal loads, including
   # bulk_upload_with_metadata and report_csv.

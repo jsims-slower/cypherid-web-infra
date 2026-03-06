@@ -8,8 +8,8 @@ locals {
 }
 
 resource "aws_s3_bucket" "maintenance_bucket" {
-  bucket = local.full_domain
-  acl    = "private"
+  bucket        = local.full_domain
+  acl           = "private"
   force_destroy = true
 
   website {
