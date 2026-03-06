@@ -343,6 +343,7 @@ module "web-service" {
   route53_zone_id     = local.zone_id
   subdomain           = ""
   health_check_path   = "/health_check"
+  health_check_grace_period_seconds = 600
   acm_certificate_arn = module.staging.arn
   lb_egress_cidrs     = [data.terraform_remote_state.cloud-env.outputs.vpc_cidr_block]
   access_logs_bucket  = data.terraform_remote_state.elb-access-logs.outputs.bucket_name
