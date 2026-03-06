@@ -48,9 +48,7 @@ resource "auth0_client" "idseq_web" {
     "${local.env_seqtoid_org_url}/auth/auth0/callback",
     # "${local.meta_env_seqtoid_org_url}/auth/auth0/callback",
   ]
-  # logo_uri = "https://assets.prod.czid.org/assets/CZID_Favicon_Black.png"
-  logo_uri = "https://assets.${var.env}.seqtoid.org/assets/logo-new.png"
-  sso      = true
+  sso = true
   web_origins = [
     "http://localhost:3000",
     local.env_seqtoid_org_url,
@@ -102,33 +100,6 @@ resource "auth0_client_grant" "idseq_web_management_grant" {
 # }
 #
 
-# resource "auth0_custom_domain" "env_seqtoid_org" {
-#   domain     = "auth.sequtoid.com"
-#   type       = "auth0_managed_certs"
-#   tls_policy = "recommended"
-#   # domain_metadata = {
-#   #   key1 : "value1"
-#   #   key2 : "value2"
-#   # }
-# }
-#
-# resource "auth0_branding" "brand" {
-#   depends_on = [auth0_custom_domain.env_seqtoid_org]
-#   # logo_url = "https://assets.prod.czid.org/assets/CZID_Logo_Black.png"
-#   logo_url = "https://assets.dev.seqtoid.org/assets/logo-new.png"
-#
-#   colors {
-#     primary         = "#3867fa"
-#     page_background = "#9a9996"
-#   }
-#
-#   # font {}
-#
-#   universal_login {
-#     body = "<!DOCTYPE html><code><html><head>{%- auth0:head -%}</head><body>{%- auth0:widget -%}</body></html></code>"
-#   }
-# }
-
 # resource "auth0_connection" "idseq_legacy_users" {
 #   name     = "idseq-legacy-users"
 #   strategy = "auth0"
@@ -169,6 +140,84 @@ resource "auth0_client_grant" "idseq_web_management_grant" {
 #     }
 #   }
 # }
+
+# resource "auth0_custom_domain" "env_seqtoid_org" {
+#   domain     = "auth.sequtoid.com"
+#   type       = "auth0_managed_certs"
+#   tls_policy = "recommended"
+#   # domain_metadata = {
+#   #   key1 : "value1"
+#   #   key2 : "value2"
+#   # }
+# }
+#
+# resource "auth0_organization" "seqtoid_org" {
+#   name         = "seqtoid"
+#   display_name = "Seqtoid Org"
+#
+#   branding {
+#     logo_url = "https://assets.prod.czid.org/assets/CZID_Favicon_Black.png"
+#     colors = {
+#       primary         = "#f2f2f2"
+#       page_background = "#e1e1e1"
+#     }
+#   }
+# }
+#
+# resource "auth0_organization_connection" "seqtoid_org_connection" {
+#   organization_id            = auth0_organization.seqtoid_org.id
+#   connection_id              = auth0_connection.username_password_authentication.id
+#   assign_membership_on_login = true
+#   is_signup_enabled          = false
+#   # show_as_button             = true
+# }
+
+resource "auth0_branding" "seqtoid_branding" {
+  # depends_on  = [auth0_custom_domain.env_seqtoid_org]
+  logo_url    = "https://assets.dev.seqtoid.org/assets/logo-new.png"
+  favicon_url = "https://assets.prod.czid.org/assets/CZID_Favicon_Black.png"
+
+  colors {
+    primary         = "#3867fa"
+    page_background = "#9a9996"
+  }
+
+  # font {}
+
+  # universal_login {
+  #   body = "<!DOCTYPE html><code><html><head>{%- auth0:head -%}</head><body>{%- auth0:widget -%}</body></html></code>"
+  # }
+}
+
+resource "auth0_prompt_custom_text" "seqtoid_login" {
+  prompt   = "login"
+  language = "en"
+
+  body = jsonencode(
+    {
+      "login" : {
+        "description" : "Log in to continue",
+        # "logoAltText" : "SeqtoID [Dev]",
+        # "pageTitle" : "Log in | SeqtoID [Dev]",
+        "title" : "Welcome to SeqtoID [Dev]",
+      }
+    }
+  )
+}
+
+resource "auth0_prompt_custom_text" "seqtoid_signup" {
+  prompt   = "signup"
+  language = "en"
+
+  body = jsonencode(
+    {
+      "signup" : {
+        "description" : "Sign Up to continue",
+        "title" : "Welcome to SeqtoID [Dev]",
+      }
+    }
+  )
+}
 
 resource "auth0_connection" "username_password_authentication" {
   name                 = "Username-Password-Authentication"

@@ -92,7 +92,7 @@ defaults:
           additional_regions:
             - us-east-1
     auth0:
-      version: 1.38.0 # 0.26.2
+      version: 1.40.0 # 0.26.2
       source: auth0/auth0
     kubernetes:
       enabled: true
