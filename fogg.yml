@@ -70,7 +70,7 @@ defaults:
     base_domain: seqtoid.org
     alignment_index_date: "2021-01-22"
     build_index_date: "2021-01-22"
-    s3_bucket_public_references: czid-public-references
+    s3_bucket_public_references: idseq-public-references
     s3_bucket_idseq_bench: idseq-bench
     s3_bucket_secrets: idseq-secrets
     s3_bucket_workflows: cypherid-samples-deleteme
@@ -83,7 +83,7 @@ defaults:
         - us-east-1
       #profile: invalid-profile
       region: us-west-2
-      version: 5.100.0
+      version: ~> 5.100.0
       additional_providers:
         czi-si:
           account_id: 941377154785
@@ -92,19 +92,19 @@ defaults:
           additional_regions:
             - us-east-1
     auth0:
-      version: 1.40.0 # 0.26.2
+      version: ~> 1.41.0 # 0.26.2
       source: auth0/auth0
     kubernetes:
       enabled: true
       #version: 2.23.0
       #version: 2.38.0
-      version: 3.0.1
+      version: ~> 3.0.1
     kubectl:
       #version: 1.14.0
-      version: 1.19.0
+      version: ~> 1.19.0
     helm:
       #version: 2.11.0
-      version: 2.17.0
+      version: ~> 2.17.0
       #version: 3.1.1
     #datadog:
     #  custom_provider: true

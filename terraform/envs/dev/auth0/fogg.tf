@@ -159,35 +159,35 @@ terraform {
     auth0 = {
       source = "auth0/auth0"
 
-      version = "1.40.0"
+      version = "~> 1.41.0"
 
     }
 
     aws = {
       source = "hashicorp/aws"
 
-      version = "5.100.0"
+      version = "~> 5.100.0"
 
     }
 
     helm = {
       source = "hashicorp/helm"
 
-      version = "2.17.0"
+      version = "~> 2.17.0"
 
     }
 
     kubectl = {
       source = "gavinbunney/kubectl"
 
-      version = "1.19.0"
+      version = "~> 1.19.0"
 
     }
 
     kubernetes = {
       source = "hashicorp/kubernetes"
 
-      version = "3.0.1"
+      version = "~> 3.0.1"
 
     }
 
@@ -309,7 +309,7 @@ variable "s3_bucket_idseq_bench" {
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_public_references" {
   type    = string
-  default = "czid-public-references"
+  default = "idseq-public-references"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_samples" {
