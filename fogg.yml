@@ -70,7 +70,7 @@ defaults:
     base_domain: seqtoid.org
     alignment_index_date: "2021-01-22"
     build_index_date: "2021-01-22"
-    s3_bucket_public_references: idseq-public-references
+    s3_bucket_public_references: seqtoid-public-references
     s3_bucket_idseq_bench: idseq-bench
     s3_bucket_secrets: idseq-secrets
     s3_bucket_workflows: cypherid-samples-deleteme

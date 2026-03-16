@@ -288,7 +288,7 @@ variable "s3_bucket_idseq_bench" {
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_public_references" {
   type    = string
-  default = "idseq-public-references"
+  default = "seqtoid-public-references"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_secrets" {

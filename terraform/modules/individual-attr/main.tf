@@ -55,6 +55,8 @@ data "aws_iam_policy_document" "comp_bio_policy" {
       "s3:List*",
     ]
     resources = [
+      "arn:aws:s3:::${var.s3_bucket_public_references}",
+      "arn:aws:s3:::${var.s3_bucket_public_references}/*",
       "arn:aws:s3:::czid-public-references",
       "arn:aws:s3:::czid-public-references/*",
     ]

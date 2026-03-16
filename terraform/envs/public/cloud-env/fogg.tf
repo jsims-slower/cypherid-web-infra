@@ -93,7 +93,7 @@ variable "s3_bucket_idseq_bench" {
 }
 variable "s3_bucket_public_references" {
   type    = string
-  default = "idseq-public-references"
+  default = "seqtoid-public-references"
 }
 variable "s3_bucket_secrets" {
   type    = string

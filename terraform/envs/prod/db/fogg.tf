@@ -298,7 +298,7 @@ variable "s3_bucket_pipeline_public_assets" {
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_public_references" {
   type    = string
-  default = "idseq-public-references"
+  default = "seqtoid-public-references"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_samples" {

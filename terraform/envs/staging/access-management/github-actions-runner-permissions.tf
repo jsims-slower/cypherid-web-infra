@@ -60,8 +60,8 @@ data "aws_iam_policy_document" "ci_cd_policy_document" {
     ]
 
     resources = [
-      "arn:aws:s3:::idseq-public-references",
-      "arn:aws:s3:::idseq-public-references/*",
+      "arn:aws:s3:::${var.s3_bucket_public_references}",
+      "arn:aws:s3:::${var.s3_bucket_public_references}/*",
       "arn:aws:s3:::czid-public-references",
       "arn:aws:s3:::czid-public-references/*",
       "arn:aws:s3:::idseq-database",
