@@ -123,7 +123,7 @@ provider "aws" {
 
 provider "assert" {}
 terraform {
-  required_version = "=1.14.6"
+  required_version = "=1.14.8"
 
   backend "" {
 
@@ -281,11 +281,6 @@ variable "s3_bucket_public_references" {
 variable "s3_bucket_secrets" {
   type    = string
   default = "idseq-secrets"
-}
-# tflint-ignore: terraform_unused_declarations
-variable "s3_bucket_workflows" {
-  type    = string
-  default = "cypherid-samples-deleteme"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "aws_accounts" {

@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "monorepo-tfstate" {
-  bucket = "tfstate-${var.aws_accounts["idseq-prod"]}"
+  bucket = "tfstate-${var.aws_accounts.idseq-prod}"
   acl    = "private"
 
   versioning {

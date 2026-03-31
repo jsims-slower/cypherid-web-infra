@@ -101,9 +101,6 @@ data "aws_iam_policy_document" "idseq-web" {
       "arn:aws:s3:::${var.s3_bucket_idseq_bench}",
       "arn:aws:s3:::${var.s3_bucket_aegea_ecs_execute}",
       "arn:aws:s3:::${var.s3_bucket_workflows}",
-      # IDSEQ-2933 - Giving access to both buckets so migration will not causing disruption during the switch
-      #              The following line can be removed after public references are fully migrated:
-      "arn:aws:s3:::idseq-database",
     ]
   }
 
@@ -119,9 +116,6 @@ data "aws_iam_policy_document" "idseq-web" {
       "arn:aws:s3:::${var.s3_bucket_idseq_bench}/*",
       "arn:aws:s3:::${var.s3_bucket_aegea_ecs_execute}/*",
       "arn:aws:s3:::${var.s3_bucket_workflows}/*",
-      # IDSEQ-2933 - Giving access to both buckets so migration will not causing disruption during the switch
-      #              The following line can be removed after public references are fully migrated:
-      "arn:aws:s3:::idseq-database/*",
     ]
   }
 

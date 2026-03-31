@@ -101,3 +101,12 @@ resource "aws_s3_bucket" "aegea-ecs-execute" {
     terraform = "true"
   }
 }
+
+resource "aws_security_group" "aegea-ecs-sg" {
+  name        = "aegea.ecs"
+  description = "undocumented but required Security Group needed by ECS to execute Download tasks"
+  vpc_id      = data.terraform_remote_state.cloud-env.outputs.vpc_id
+  tags = {
+    Name = "aegea.ecs"
+  }
+}

@@ -71,9 +71,9 @@ defaults:
     alignment_index_date: "2021-01-22"
     build_index_date: "2021-01-22"
     s3_bucket_public_references: seqtoid-public-references
-    s3_bucket_idseq_bench: idseq-bench
-    s3_bucket_secrets: idseq-secrets
-    s3_bucket_workflows: cypherid-samples-deleteme
+    s3_bucket_idseq_bench: idseq-bench # TODO: what is this used for?
+    s3_bucket_secrets: idseq-secrets # TODO: what is this used for?
+    #s3_bucket_workflows: cypherid-samples-deleteme # No longer hardcoded, but computed as "seqtoid-workflows-${env}-${account_id}"
   owner: biohub-tech@chanzuckerberg.com
   project: idseq
   providers:
@@ -116,7 +116,7 @@ defaults:
     #  version: 3.41.0
     #  registry_namespace: okta
     #  org_name: czi-prod
-  terraform_version: 1.14.6
+  terraform_version: 1.14.8
   tools:
     github_actions_ci:
       aws_iam_role_name: infraci
@@ -490,6 +490,9 @@ envs:
         provider_aliases:
           "aws.czi-si": aws.czi-si
       access-management:
+        depends_on:
+          components:
+            - web
       auth0:
         providers:
           auth0:
@@ -680,6 +683,9 @@ envs:
         provider_aliases:
           "aws.czi-si": aws.czi-si
       access-management:
+        depends_on:
+          components:
+            - web
       auth0:
         providers:
           auth0:

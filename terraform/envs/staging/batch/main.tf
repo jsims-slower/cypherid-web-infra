@@ -51,9 +51,6 @@ data "aws_iam_policy_document" "idseq-batch" {
       "arn:aws:s3:::${var.s3_bucket_samples}",
       # We use staging batch to process samples in development
       # "arn:aws:s3:::idseq-samples-development",
-      # IDSEQ-2933 - Giving access to both buckets so migration will not causing disruption during the switch
-      #              The following line can be removed after public references are fully migrated:
-      "arn:aws:s3:::idseq-database",
     ]
   }
 
@@ -68,9 +65,6 @@ data "aws_iam_policy_document" "idseq-batch" {
       "arn:aws:s3:::${var.s3_bucket_secrets}/*",
       # We use staging batch to process samples in development
       # "arn:aws:s3:::idseq-samples-development/*",
-      # IDSEQ-2933 - Giving access to both buckets so migration will not causing disruption during the switch
-      #              The following line can be removed after public references are fully migrated:
-      "arn:aws:s3:::idseq-database/*",
     ]
   }
 
@@ -147,6 +141,7 @@ resource "aws_batch_compute_environment" "idseq_244GB_32CPU" {
     security_group_ids = [random_id.batch.keepers.security_group_id]
     subnets            = data.terraform_remote_state.cloud-env.outputs.private_subnets
     type               = "EC2"
+    tags               = var.tags
 
     # image_id           =  random_id.batch.keepers.image_id
   }

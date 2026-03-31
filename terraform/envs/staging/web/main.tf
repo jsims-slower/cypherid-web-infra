@@ -1,4 +1,6 @@
 locals {
+  s3_bucket_workflows = "seqtoid-workflows-${var.env}-${var.aws_accounts.idseq-staging}"
+
   zone_id      = data.terraform_remote_state.route53.outputs.env_seqtoid_org_zone_id
   env_fqdn     = data.terraform_remote_state.route53.outputs.env_seqtoid_org_fqdn
   www_env_fqdn = "www.${local.env_fqdn}"
@@ -94,10 +96,7 @@ data "aws_iam_policy_document" "idseq-web" {
       "arn:aws:s3:::${var.s3_bucket_public_references}",
       "arn:aws:s3:::${var.s3_bucket_idseq_bench}",
       "arn:aws:s3:::${var.s3_bucket_aegea_ecs_execute}",
-      "arn:aws:s3:::${var.s3_bucket_workflows}",
-      # IDSEQ-2933 - Giving access to both buckets so migration will not cause disruptions during the switch
-      #              The following line can be removed after public references are fully migrated:
-      "arn:aws:s3:::idseq-database",
+      "arn:aws:s3:::${local.s3_bucket_workflows}",
     ]
   }
 
@@ -113,10 +112,7 @@ data "aws_iam_policy_document" "idseq-web" {
       "arn:aws:s3:::${var.s3_bucket_public_references}/*",
       "arn:aws:s3:::${var.s3_bucket_idseq_bench}/*",
       "arn:aws:s3:::${var.s3_bucket_aegea_ecs_execute}/*",
-      "arn:aws:s3:::${var.s3_bucket_workflows}/*",
-      # IDSEQ-2933 - Giving access to both buckets so migration will not cause disruptions during the switch
-      #              The following line can be removed after public references are fully migrated:
-      "arn:aws:s3:::idseq-database/*",
+      "arn:aws:s3:::${local.s3_bucket_workflows}/*",
     ]
   }
 
@@ -191,6 +187,10 @@ resource "aws_iam_role_policy" "idseq-web" {
   policy = data.aws_iam_policy_document.idseq-web.json
 }
 
+# data "aws_iam_role" "poweruser" {
+#   name = "poweruser"
+# }
+
 data "aws_iam_policy_document" "idseq-upload-assume-role" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -202,6 +202,16 @@ data "aws_iam_policy_document" "idseq-upload-assume-role" {
       identifiers = [aws_iam_role.idseq-web.arn]
     }
   }
+  # statement {
+  #   actions = ["sts:AssumeRole"]
+  #   effect  = "Allow"
+  #   sid     = "PowerUserAssumeRoleForDevEnvironments"
+
+  #   principals {
+  #     type        = "AWS"
+  #     identifiers = [data.aws_iam_role.poweruser.arn]
+  #   }
+  # }
 }
 
 resource "aws_iam_role" "idseq-upload" {
@@ -278,7 +288,7 @@ module "web-service-params" {
     GRAPHQL_FEDERATION_SERVICE_URL = "https://${data.terraform_remote_state.route53.outputs.env_seqtoid_org_fqdn}/graphqlfed"
     S3_AEGEA_ECS_EXECUTE_BUCKET    = var.s3_bucket_aegea_ecs_execute
     AUTO_ACCOUNT_CREATION_V1       = 1
-    S3_WORKFLOWS_BUCKET            = var.s3_bucket_workflows
+    S3_WORKFLOWS_BUCKET            = local.s3_bucket_workflows
     LAMBDA_ENV                     = var.env # TODO: Only necessary for dev, as it defaults to Rails.env ('development') in the code
   }
 }
@@ -329,6 +339,7 @@ module "web-service" {
   route53_zone_id     = local.zone_id
   subdomain           = ""
   health_check_path   = "/health_check"
+  # health_check_grace_period_seconds = 600
   acm_certificate_arn = module.staging.arn
   lb_egress_cidrs     = [data.terraform_remote_state.cloud-env.outputs.vpc_cidr_block]
   access_logs_bucket  = data.terraform_remote_state.elb-access-logs.outputs.bucket_name

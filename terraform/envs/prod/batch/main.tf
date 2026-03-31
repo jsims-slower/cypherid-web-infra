@@ -141,9 +141,6 @@ data "aws_iam_policy_document" "idseq-batch" {
     resources = [
       "arn:aws:s3:::${var.s3_bucket_public_references}",
       "arn:aws:s3:::${var.s3_bucket_samples}",
-      # IDSEQ-2933 - Giving access to both buckets so migration will not cause disruptions during the switch
-      #              The following line can be removed after public references are fully migrated:
-      "arn:aws:s3:::idseq-database",
     ]
   }
 
@@ -155,9 +152,6 @@ data "aws_iam_policy_document" "idseq-batch" {
     resources = [
       "arn:aws:s3:::${var.s3_bucket_public_references}/*",
       "arn:aws:s3:::${var.s3_bucket_samples}/*",
-      # IDSEQ-2933 - Giving access to both buckets so migration will not cause disruptions during the switch
-      #              The following line can be removed after public references are fully migrated:
-      "arn:aws:s3:::idseq-database/*",
     ]
   }
 

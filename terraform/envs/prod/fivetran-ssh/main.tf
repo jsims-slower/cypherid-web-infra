@@ -10,7 +10,7 @@ data "template_file" "task_definition" {
   template = file("${path.module}/templates/fivetran-ssh.json")
 
   vars = {
-    account_id                       = var.aws_accounts["idseq-prod"]
+    account_id                       = var.aws_accounts.idseq-prod
     env                              = var.env
     region                           = var.region
     aws_cloudwatch_log_group         = module.logs.name
