@@ -71,8 +71,8 @@ data "aws_iam_policy_document" "ci_cd_policy_document" {
       "arn:aws:s3:::aegea-batch-jobs-${local.account_id}",
       "arn:aws:s3:::aegea-batch-jobs-${local.account_id}/*",
       "arn:aws:s3:::idseq-${var.env}-*",
-      "arn:aws:s3:::idseq-bench",
-      "arn:aws:s3:::idseq-bench/*"
+      "arn:aws:s3:::${var.s3_bucket_idseq_bench}",
+      "arn:aws:s3:::${var.s3_bucket_idseq_bench}/*",
     ]
   }
 
@@ -224,9 +224,11 @@ data "aws_iam_policy_document" "ci_cd_policy_document" {
     ]
 
     resources = [
+      "arn:aws:ecs:*:${local.account_id}:service/${var.env}/*",
       "arn:aws:ecs:*:${local.account_id}:service/idseq-${var.env}-ecs/*",
       "arn:aws:ecs:*:${local.account_id}:task-definition/idseq-${var.env}-web:*",
       "arn:aws:ecs:*:${local.account_id}:task/idseq-${var.env}-ecs/*",
+      "arn:aws:ecs:*:${local.account_id}:task/${var.env}/*",
     ]
   }
 

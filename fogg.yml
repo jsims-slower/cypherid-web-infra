@@ -764,7 +764,6 @@ envs:
       s3_bucket_samples: idseq-prod-samples-us-west-2
       s3_bucket_samples_v1: czi-infectious-disease-prod-samples
       s3_bucket_aegea_ecs_execute: idseq-prod-aegea-ecs-execute-us-west-2
-      s3_bucket_idseq_bench: idseq-bench
       s3_bucket_pipeline_public_assets: idseq-prod-pipeline-public-assets-us-west-2
       eks_cluster_name: czid-prod-eks
 modules:
