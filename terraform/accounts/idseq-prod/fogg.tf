@@ -286,6 +286,11 @@ variable "s3_bucket_idseq_bench" {
   default = "idseq-bench"
 }
 # tflint-ignore: terraform_unused_declarations
+variable "s3_bucket_name" {
+  type    = string
+  default = "tfstate-283694049553"
+}
+# tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_public_references" {
   type    = string
   default = "seqtoid-public-references"
@@ -294,20 +299,6 @@ variable "s3_bucket_public_references" {
 variable "s3_bucket_secrets" {
   type    = string
   default = "idseq-secrets"
-}
-data "terraform_remote_state" "idseq-dev" {
-  backend = "s3"
-  config = {
-
-
-    bucket = "tfstate-941377154785-test"
-
-    key     = "terraform/idseq/accounts/idseq-dev.tfstate"
-    region  = "us-west-2"
-    profile = "default"
-
-
-  }
 }
 # tflint-ignore: terraform_unused_declarations
 variable "aws_accounts" {

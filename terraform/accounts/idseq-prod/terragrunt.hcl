@@ -1,5 +1,4 @@
 dependencies {
   paths = [
-    "../idseq-dev",
   ]
 }
