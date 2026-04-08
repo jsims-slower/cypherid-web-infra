@@ -5,32 +5,32 @@ global:
       account_id: invalid-account-id
       profile: invalid-profile
 accounts:
-  idseq-newdev:
+  idseq-dev:
     backend:
       kind: s3
       account_id: 491013321714
       bucket: tfstate-491013321714-test
       region: us-west-2
-      profile: idseq-newdev
+      profile: idseq-dev
     providers:
       aws:
         account_id: 491013321714
-        profile: idseq-newdev
+        profile: idseq-dev
     extra_vars:
       dynamodb_enabled: false
       #prevent_unencrypted_uploads: false
       s3_bucket_name: tfstate-491013321714-test
-  idseq-dev:
+  idseq-support:
     backend:
       kind: s3
       account_id: 941377154785
       bucket: tfstate-941377154785-test
       region: us-west-2
-      profile: default
+      profile: idseq-support
     providers:
       aws:
         account_id: 941377154785
-        profile: default
+        profile: idseq-support
   idseq-staging:
     backend:
       kind: s3
@@ -133,11 +133,11 @@ envs:
       account_id: 491013321714
       bucket: tfstate-491013321714-test
       region: us-west-2
-      profile: idseq-newdev
+      profile: idseq-dev
     providers:
       aws:
         account_id: 491013321714
-        profile: idseq-newdev
+        profile: idseq-dev
     components:
       # used to code generate our configuration for the s3 storing state files outisde of TFE buckets
       # s3-tf-state:

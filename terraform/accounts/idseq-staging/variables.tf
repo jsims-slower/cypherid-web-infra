@@ -1,6 +1,6 @@
 locals {
   attributes                  = ["state"]
-  billing_mode                = "PAY_PER_REQUEST"
+  # billing_mode                = "PAY_PER_REQUEST"
   dynamodb_enabled            = var.dynamodb_enabled
   environment                 = "staging"
   name                        = "${var.project}-infra-${local.environment}"

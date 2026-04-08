@@ -23,7 +23,7 @@ variable "TFC_PROJECT_NAME" {
 provider "aws" {
 
   region  = "us-west-2"
-  profile = "default"
+  profile = "idseq-dev"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -41,7 +41,7 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["941377154785"]
+  allowed_account_ids = ["491013321714"]
 }
 # Aliased Providers (for doing things in every region).
 
@@ -49,7 +49,7 @@ provider "aws" {
 provider "aws" {
   alias   = "us-east-1"
   region  = "us-east-1"
-  profile = "default"
+  profile = "idseq-dev"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -67,7 +67,7 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["941377154785"]
+  allowed_account_ids = ["491013321714"]
 }
 
 
@@ -127,12 +127,12 @@ terraform {
 
   backend "s3" {
 
-    bucket = "tfstate-941377154785-test"
+    bucket = "tfstate-491013321714-test"
 
     key     = "terraform/idseq/accounts/idseq-dev.tfstate"
     encrypt = true
     region  = "us-west-2"
-    profile = "default"
+    profile = "idseq-dev"
 
 
   }
@@ -245,7 +245,7 @@ variable "account" {
 # tflint-ignore: terraform_unused_declarations
 variable "aws_profile" {
   type    = string
-  default = "default"
+  default = "idseq-dev"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "owner" {
@@ -281,9 +281,19 @@ variable "build_index_date" {
   default = "2021-01-22"
 }
 # tflint-ignore: terraform_unused_declarations
+variable "dynamodb_enabled" {
+  type    = string
+  default = "false"
+}
+# tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_idseq_bench" {
   type    = string
   default = "idseq-bench"
+}
+# tflint-ignore: terraform_unused_declarations
+variable "s3_bucket_name" {
+  type    = string
+  default = "tfstate-491013321714-test"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_public_references" {
@@ -300,13 +310,13 @@ variable "aws_accounts" {
   type = map(string)
   default = {
 
-    idseq-dev = "941377154785"
-
-    idseq-newdev = "491013321714"
+    idseq-dev = "491013321714"
 
     idseq-prod = "283694049553"
 
     idseq-staging = "030998640247"
+
+    idseq-support = "941377154785"
 
   }
 }

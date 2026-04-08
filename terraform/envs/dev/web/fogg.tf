@@ -23,7 +23,7 @@ variable "TFC_PROJECT_NAME" {
 provider "aws" {
 
   region  = "us-west-2"
-  profile = "idseq-newdev"
+  profile = "idseq-dev"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -49,7 +49,7 @@ provider "aws" {
 provider "aws" {
   alias   = "us-east-1"
   region  = "us-east-1"
-  profile = "idseq-newdev"
+  profile = "idseq-dev"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -132,7 +132,7 @@ terraform {
     key     = "terraform/idseq/envs/dev/components/web.tfstate"
     encrypt = true
     region  = "us-west-2"
-    profile = "idseq-newdev"
+    profile = "idseq-dev"
 
 
   }
@@ -240,7 +240,7 @@ variable "component" {
 # tflint-ignore: terraform_unused_declarations
 variable "aws_profile" {
   type    = string
-  default = "idseq-newdev"
+  default = "idseq-dev"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "owner" {
@@ -319,7 +319,7 @@ data "terraform_remote_state" "cloud-env" {
 
     key     = "terraform/idseq/envs/dev/components/cloud-env.tfstate"
     region  = "us-west-2"
-    profile = "idseq-newdev"
+    profile = "idseq-dev"
 
 
   }
@@ -333,7 +333,7 @@ data "terraform_remote_state" "db" {
 
     key     = "terraform/idseq/envs/dev/components/db.tfstate"
     region  = "us-west-2"
-    profile = "idseq-newdev"
+    profile = "idseq-dev"
 
 
   }
@@ -347,7 +347,7 @@ data "terraform_remote_state" "ecs" {
 
     key     = "terraform/idseq/envs/dev/components/ecs.tfstate"
     region  = "us-west-2"
-    profile = "idseq-newdev"
+    profile = "idseq-dev"
 
 
   }
@@ -361,7 +361,7 @@ data "terraform_remote_state" "elb-access-logs" {
 
     key     = "terraform/idseq/envs/dev/components/elb-access-logs.tfstate"
     region  = "us-west-2"
-    profile = "idseq-newdev"
+    profile = "idseq-dev"
 
 
   }
@@ -375,7 +375,7 @@ data "terraform_remote_state" "heatmap-optimization" {
 
     key     = "terraform/idseq/envs/dev/components/heatmap-optimization.tfstate"
     region  = "us-west-2"
-    profile = "idseq-newdev"
+    profile = "idseq-dev"
 
 
   }
@@ -389,7 +389,7 @@ data "terraform_remote_state" "redis" {
 
     key     = "terraform/idseq/envs/dev/components/redis.tfstate"
     region  = "us-west-2"
-    profile = "idseq-newdev"
+    profile = "idseq-dev"
 
 
   }
@@ -403,7 +403,7 @@ data "terraform_remote_state" "route53" {
 
     key     = "terraform/idseq/envs/dev/components/route53.tfstate"
     region  = "us-west-2"
-    profile = "idseq-newdev"
+    profile = "idseq-dev"
 
 
   }
@@ -413,13 +413,13 @@ variable "aws_accounts" {
   type = map(string)
   default = {
 
-    idseq-dev = "941377154785"
-
-    idseq-newdev = "491013321714"
+    idseq-dev = "491013321714"
 
     idseq-prod = "283694049553"
 
     idseq-staging = "030998640247"
+
+    idseq-support = "941377154785"
 
   }
 }

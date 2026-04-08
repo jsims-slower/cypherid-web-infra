@@ -5,7 +5,7 @@ include scripts/common.mk
 
 ENVS=dev prod sandbox staging
 MODULES=config czid-services-private-key idseq-s3-tar-writer individual-attr machine-images
-ACCOUNTS=idseq-dev idseq-newdev idseq-prod idseq-staging
+ACCOUNTS=idseq-dev idseq-prod idseq-staging idseq-support
 
 all: check
 

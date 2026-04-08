@@ -23,7 +23,7 @@ variable "TFC_PROJECT_NAME" {
 provider "aws" {
 
   region  = "us-west-2"
-  profile = "idseq-newdev"
+  profile = "idseq-support"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -41,7 +41,7 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["491013321714"]
+  allowed_account_ids = ["941377154785"]
 }
 # Aliased Providers (for doing things in every region).
 
@@ -49,7 +49,7 @@ provider "aws" {
 provider "aws" {
   alias   = "us-east-1"
   region  = "us-east-1"
-  profile = "idseq-newdev"
+  profile = "idseq-support"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -67,7 +67,7 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["491013321714"]
+  allowed_account_ids = ["941377154785"]
 }
 
 
@@ -127,12 +127,12 @@ terraform {
 
   backend "s3" {
 
-    bucket = "tfstate-491013321714-test"
+    bucket = "tfstate-941377154785-test"
 
-    key     = "terraform/idseq/accounts/idseq-newdev.tfstate"
+    key     = "terraform/idseq/accounts/idseq-support.tfstate"
     encrypt = true
     region  = "us-west-2"
-    profile = "idseq-newdev"
+    profile = "idseq-support"
 
 
   }
@@ -235,17 +235,17 @@ variable "region" {
 # tflint-ignore: terraform_unused_declarations
 variable "component" {
   type    = string
-  default = "idseq-newdev"
+  default = "idseq-support"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "account" {
   type    = string
-  default = "idseq-newdev"
+  default = "idseq-support"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "aws_profile" {
   type    = string
-  default = "idseq-newdev"
+  default = "idseq-support"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "owner" {
@@ -260,7 +260,7 @@ variable "tags" {
   default = {
     project   = "idseq"
     env       = "accounts"
-    service   = "idseq-newdev"
+    service   = "idseq-support"
     owner     = "biohub-tech@chanzuckerberg.com"
     managedBy = "terraform"
   }
@@ -281,19 +281,9 @@ variable "build_index_date" {
   default = "2021-01-22"
 }
 # tflint-ignore: terraform_unused_declarations
-variable "dynamodb_enabled" {
-  type    = string
-  default = "false"
-}
-# tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_idseq_bench" {
   type    = string
   default = "idseq-bench"
-}
-# tflint-ignore: terraform_unused_declarations
-variable "s3_bucket_name" {
-  type    = string
-  default = "tfstate-491013321714-test"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_public_references" {
@@ -310,13 +300,13 @@ variable "aws_accounts" {
   type = map(string)
   default = {
 
-    idseq-dev = "941377154785"
-
-    idseq-newdev = "491013321714"
+    idseq-dev = "491013321714"
 
     idseq-prod = "283694049553"
 
     idseq-staging = "030998640247"
+
+    idseq-support = "941377154785"
 
   }
 }

@@ -1,5 +1,5 @@
 locals {
-  s3_bucket_workflows = "seqtoid-workflows-${var.env}-${var.aws_accounts.idseq-newdev}"
+  s3_bucket_workflows = "seqtoid-workflows-${var.env}-${var.aws_accounts.idseq-dev}"
 
   zone_id      = data.terraform_remote_state.route53.outputs.env_seqtoid_org_zone_id
   env_fqdn     = data.terraform_remote_state.route53.outputs.env_seqtoid_org_fqdn

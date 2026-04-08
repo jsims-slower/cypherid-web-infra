@@ -371,13 +371,13 @@ variable "aws_accounts" {
   type = map(string)
   default = {
 
-    idseq-dev = "941377154785"
-
-    idseq-newdev = "491013321714"
+    idseq-dev = "491013321714"
 
     idseq-prod = "283694049553"
 
     idseq-staging = "030998640247"
+
+    idseq-support = "941377154785"
 
   }
 }
