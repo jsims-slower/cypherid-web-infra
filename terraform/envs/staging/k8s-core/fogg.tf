@@ -49,7 +49,7 @@ provider "aws" {
 provider "aws" {
   alias   = "czi-si-us-east-1"
   region  = "us-east-1"
-  profile = "idseq-sandbox"
+  profile = "idseq-prod"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -67,14 +67,14 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["941377154785"]
+  allowed_account_ids = ["283694049553"]
 }
 
 
 provider "aws" {
   alias   = "czi-si"
   region  = "us-west-2"
-  profile = "idseq-sandbox"
+  profile = "idseq-prod"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -92,7 +92,7 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["941377154785"]
+  allowed_account_ids = ["283694049553"]
 }
 
 

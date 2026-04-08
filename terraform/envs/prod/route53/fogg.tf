@@ -23,7 +23,7 @@ variable "TFC_PROJECT_NAME" {
 provider "aws" {
 
   region  = "us-west-2"
-  profile = "idseq-newdev"
+  profile = "idseq-prod"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -41,7 +41,7 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["491013321714"]
+  allowed_account_ids = ["283694049553"]
 }
 # Aliased Providers (for doing things in every region).
 
@@ -49,7 +49,7 @@ provider "aws" {
 provider "aws" {
   alias   = "us-east-1"
   region  = "us-east-1"
-  profile = "idseq-newdev"
+  profile = "idseq-prod"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -67,7 +67,7 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["491013321714"]
+  allowed_account_ids = ["283694049553"]
 }
 
 
@@ -127,12 +127,12 @@ terraform {
 
   backend "s3" {
 
-    bucket = "tfstate-491013321714-test"
+    bucket = "tfstate-283694049553"
 
-    key     = "terraform/idseq/envs/dev/components/iam-password-policy.tfstate"
+    key     = "terraform/idseq/envs/prod/components/route53.tfstate"
     encrypt = true
     region  = "us-west-2"
-    profile = "idseq-newdev"
+    profile = "idseq-prod"
 
 
   }
@@ -220,7 +220,7 @@ terraform {
 # tflint-ignore: terraform_unused_declarations
 variable "env" {
   type    = string
-  default = "dev"
+  default = "prod"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "project" {
@@ -235,12 +235,12 @@ variable "region" {
 # tflint-ignore: terraform_unused_declarations
 variable "component" {
   type    = string
-  default = "iam-password-policy"
+  default = "route53"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "aws_profile" {
   type    = string
-  default = "idseq-newdev"
+  default = "idseq-prod"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "owner" {
@@ -254,8 +254,8 @@ variable "tags" {
   type = object({ project : string, env : string, service : string, owner : string, managedBy : string })
   default = {
     project   = "idseq"
-    env       = "dev"
-    service   = "iam-password-policy"
+    env       = "prod"
+    service   = "route53"
     owner     = "biohub-tech@chanzuckerberg.com"
     managedBy = "terraform"
   }
@@ -278,12 +278,12 @@ variable "build_index_date" {
 # tflint-ignore: terraform_unused_declarations
 variable "eks_cluster_name" {
   type    = string
-  default = "czid-dev-eks"
+  default = "czid-prod-eks"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_aegea_ecs_execute" {
   type    = string
-  default = "aegea-ecs-execute-dev-491013321714"
+  default = "aegea-ecs-execute-prod-283694049553"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_idseq_bench" {
@@ -298,12 +298,12 @@ variable "s3_bucket_public_references" {
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_samples" {
   type    = string
-  default = "idseq-samples-dev-491013321714"
+  default = "idseq-samples-prod-283694049553"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_samples_v1" {
   type    = string
-  default = "czi-infectious-disease-dev-samples-491013321714"
+  default = "czi-infectious-disease-prod-samples-283694049553"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_secrets" {

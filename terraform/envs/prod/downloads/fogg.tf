@@ -47,9 +47,9 @@ provider "aws" {
 
 
 provider "aws" {
-  alias   = "czi-si-us-east-1"
+  alias   = "us-east-1"
   region  = "us-east-1"
-  profile = "idseq-sandbox"
+  profile = "idseq-prod"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -67,38 +67,38 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["941377154785"]
+  allowed_account_ids = ["283694049553"]
+}
+
+
+provider "aws" {
+  alias   = "czi-si-us-east-1"
+  region  = "us-east-1"
+  profile = "idseq-prod"
+
+  # this is the new way of injecting AWS tags to all AWS resources
+  # var.tags should be considered deprecated
+  default_tags {
+    tags = {
+      TFC_WORKSPACE_NAME                   = coalesce(var.TFC_WORKSPACE_NAME, "unknown")
+      TFC_WORKSPACE_SLUG                   = coalesce(var.TFC_WORKSPACE_SLUG, "unknown")
+      TFC_CONFIGURATION_VERSION_GIT_BRANCH = coalesce(var.TFC_CONFIGURATION_VERSION_GIT_BRANCH, "unknown")
+      TFC_CONFIGURATION_VERSION_GIT_TAG    = coalesce(var.TFC_CONFIGURATION_VERSION_GIT_TAG, "unknown")
+      TFC_PROJECT_NAME                     = coalesce(var.TFC_PROJECT_NAME, "unknown")
+      project                              = coalesce(var.tags.project, "unknown")
+      env                                  = coalesce(var.tags.env, "unknown")
+      service                              = coalesce(var.tags.service, "unknown")
+      owner                                = coalesce(var.tags.owner, "unknown")
+      managedBy                            = "terraform"
+    }
+  }
+  allowed_account_ids = ["283694049553"]
 }
 
 
 provider "aws" {
   alias   = "czi-si"
   region  = "us-west-2"
-  profile = "idseq-sandbox"
-
-  # this is the new way of injecting AWS tags to all AWS resources
-  # var.tags should be considered deprecated
-  default_tags {
-    tags = {
-      TFC_WORKSPACE_NAME                   = coalesce(var.TFC_WORKSPACE_NAME, "unknown")
-      TFC_WORKSPACE_SLUG                   = coalesce(var.TFC_WORKSPACE_SLUG, "unknown")
-      TFC_CONFIGURATION_VERSION_GIT_BRANCH = coalesce(var.TFC_CONFIGURATION_VERSION_GIT_BRANCH, "unknown")
-      TFC_CONFIGURATION_VERSION_GIT_TAG    = coalesce(var.TFC_CONFIGURATION_VERSION_GIT_TAG, "unknown")
-      TFC_PROJECT_NAME                     = coalesce(var.TFC_PROJECT_NAME, "unknown")
-      project                              = coalesce(var.tags.project, "unknown")
-      env                                  = coalesce(var.tags.env, "unknown")
-      service                              = coalesce(var.tags.service, "unknown")
-      owner                                = coalesce(var.tags.owner, "unknown")
-      managedBy                            = "terraform"
-    }
-  }
-  allowed_account_ids = ["941377154785"]
-}
-
-
-provider "aws" {
-  alias   = "us-east-1"
-  region  = "us-east-1"
   profile = "idseq-prod"
 
   # this is the new way of injecting AWS tags to all AWS resources
@@ -283,17 +283,12 @@ variable "eks_cluster_name" {
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_aegea_ecs_execute" {
   type    = string
-  default = "idseq-prod-aegea-ecs-execute-us-west-2"
+  default = "aegea-ecs-execute-prod-283694049553"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_idseq_bench" {
   type    = string
   default = "idseq-bench"
-}
-# tflint-ignore: terraform_unused_declarations
-variable "s3_bucket_pipeline_public_assets" {
-  type    = string
-  default = "idseq-prod-pipeline-public-assets-us-west-2"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_public_references" {
@@ -303,17 +298,31 @@ variable "s3_bucket_public_references" {
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_samples" {
   type    = string
-  default = "idseq-prod-samples-us-west-2"
+  default = "idseq-samples-prod-283694049553"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_samples_v1" {
   type    = string
-  default = "czi-infectious-disease-prod-samples"
+  default = "czi-infectious-disease-prod-samples-283694049553"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_secrets" {
   type    = string
   default = "idseq-secrets"
+}
+data "terraform_remote_state" "cloud-env" {
+  backend = "s3"
+  config = {
+
+
+    bucket = "tfstate-283694049553"
+
+    key     = "terraform/idseq/envs/prod/components/cloud-env.tfstate"
+    region  = "us-west-2"
+    profile = "idseq-prod"
+
+
+  }
 }
 # tflint-ignore: terraform_unused_declarations
 variable "aws_accounts" {
