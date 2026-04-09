@@ -724,8 +724,8 @@ envs:
         variables:
           - single_nat_gateway
           - k8s_cluster_names
-      czid-services-private-key:
-        module_source: terraform/modules/czid-services-private-key
+      #czid-services-private-key:
+      #  module_source: terraform/modules/czid-services-private-key
       db:
         depends_on:
           components:
@@ -751,12 +751,12 @@ envs:
             - db
             - happy
             - k8s-core
-      idseq-s3-tar-writer:
-        module_source: terraform/modules/idseq-s3-tar-writer
-        variables:
-          - force_image_rebuild
-        extra_vars:
-          force_image_rebuild: false
+      #idseq-s3-tar-writer:
+      #  module_source: terraform/modules/idseq-s3-tar-writer
+      #  variables:
+      #    - force_image_rebuild
+      #  extra_vars:
+      #    force_image_rebuild: false
       individual-attr:
         module_source: ./terraform/modules/individual-attr
       heatmap-optimization:
