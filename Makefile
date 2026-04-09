@@ -10,7 +10,7 @@ ACCOUNTS=idseq-dev idseq-prod idseq-staging idseq-support
 all: check
 
 setup: ## set up working directory by installing dependencies
-	curl -s https://raw.githubusercontent.com/chanzuckerberg/fogg/v0.92.40/download.sh | bash -s -- -b .fogg/bin v0.92.40
+	curl -s https://raw.githubusercontent.com/chanzuckerberg/fogg/v0.92.43/download.sh | bash -s -- -b .fogg/bin v0.92.43
 	.fogg/bin/fogg setup
 .PHONY: setup
 
