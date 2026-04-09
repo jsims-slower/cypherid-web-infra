@@ -228,6 +228,7 @@ envs:
         depends_on:
           components:
             - route53
+            - web
       cloud-env:
         module_source: terraform/modules/aws-env-v4.0.0
         module_name: aws-env
@@ -500,6 +501,7 @@ envs:
         depends_on:
           components:
             - route53
+            - web
       batch:
         depends_on:
           components:

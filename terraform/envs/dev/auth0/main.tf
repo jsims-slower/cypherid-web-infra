@@ -17,6 +17,7 @@ locals {
   env_seqtoid_org_fqdn     = data.terraform_remote_state.route53.outputs.env_seqtoid_org_fqdn
   env_seqtoid_org_url      = "https://${local.env_seqtoid_org_fqdn}"
   meta_env_seqtoid_org_url = "https://meta.${local.env_seqtoid_org_fqdn}"
+  assets_fqdn              = data.terraform_remote_state.web.outputs.assets_fqdn
 }
 
 resource "auth0_role" "admin" {
@@ -48,7 +49,8 @@ resource "auth0_client" "idseq_web" {
     "${local.env_seqtoid_org_url}/auth/auth0/callback",
     # "${local.meta_env_seqtoid_org_url}/auth/auth0/callback",
   ]
-  sso = true
+  logo_uri = "https://${local.assets_fqdn}/assets/logo-new.png"
+  sso      = true
   web_origins = [
     "http://localhost:3000",
     local.env_seqtoid_org_url,
@@ -156,7 +158,7 @@ resource "auth0_client_grant" "idseq_web_management_grant" {
 #   display_name = "Seqtoid Org"
 #
 #   branding {
-#     logo_url = "https://assets.prod.czid.org/assets/CZID_Favicon_Black.png"
+#     logo_url = "https://${local.assets_fqdn}/assets/CZID_Favicon_Black.png"
 #     colors = {
 #       primary         = "#f2f2f2"
 #       page_background = "#e1e1e1"
@@ -174,8 +176,8 @@ resource "auth0_client_grant" "idseq_web_management_grant" {
 
 resource "auth0_branding" "seqtoid_branding" {
   # depends_on  = [auth0_custom_domain.env_seqtoid_org]
-  logo_url    = "https://assets.dev.seqtoid.org/assets/logo-new.png"
-  favicon_url = "https://assets.prod.czid.org/assets/CZID_Favicon_Black.png"
+  logo_url    = "https://${local.assets_fqdn}/assets/logo-new.png"
+  favicon_url = "https://${local.assets_fqdn}/assets/CZID_Favicon_Black.png"
 
   colors {
     primary         = "#3867fa"

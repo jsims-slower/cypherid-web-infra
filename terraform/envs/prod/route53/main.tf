@@ -3,6 +3,18 @@ locals {
   happy_env_fqdn = "happy.${local.env_fqdn}"
 }
 
+# domain registration
+
+# TODO: Make sure this contains the nameservers from aws_route53_zone.root-seqtoid-org
+# resource "aws_route53domains_registered_domain" "seqtoid-org" {
+#   domain_name = var.base_domain
+# }
+#
+# import {
+#   to = aws_route53domains_registered_domain.seqtoid-org
+#   id = var.base_domain
+# }
+
 # root zone
 
 resource "aws_route53_zone" "root-seqtoid-org" {

@@ -6,6 +6,7 @@ locals {
   env_seqtoid_org_fqdn     = data.terraform_remote_state.route53.outputs.env_seqtoid_org_fqdn
   env_seqtoid_org_url      = "https://${local.env_seqtoid_org_fqdn}"
   meta_env_seqtoid_org_url = "https://meta.${local.env_seqtoid_org_fqdn}"
+  assets_fqdn              = data.terraform_remote_state.web.outputs.assets_fqdn
 }
 
 # TODO: This is created by DEV already
@@ -38,8 +39,7 @@ resource "auth0_client" "idseq_web" {
     "${local.env_seqtoid_org_url}/auth/auth0/callback",
     # "${local.meta_env_seqtoid_org_url}/auth/auth0/callback",
   ]
-  # logo_uri = "https://assets.prod.czid.org/assets/CZID_Favicon_Black.png"
-  logo_uri = "https://assets.${var.env}.seqtoid.org/assets/logo-new.png"
+  logo_uri = "https://${local.assets_fqdn}/assets/logo-new.png"
   sso      = true
   web_origins = [
     "http://localhost:3000",
@@ -109,7 +109,7 @@ resource "auth0_connection_client" "idseq_web_management_connection_client" {
 #   display_name = "Staging Org"
 #
 #   branding {
-#     logo_url = "https://assets.prod.czid.org/assets/CZID_Favicon_Black.png"
+#     logo_url = "https://${local.assets_fqdn}/assets/CZID_Favicon_Black.png"
 #     colors = {
 #       primary         = "#f2f2f2"
 #       page_background = "#e1e1e1"
