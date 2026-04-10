@@ -13,6 +13,6 @@ locals {
   s3_state_lock_enabled = true
   stage                 = var.env
   # tags                  = var.tags # TODO: var.tags is deprecated
-  terraform_version     = "1.14.3"
-  version               = "v1.7.1"
+  terraform_version = "1.14.3"
+  version           = "v1.7.1"
 }
