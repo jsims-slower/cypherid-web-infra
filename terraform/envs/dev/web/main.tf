@@ -301,7 +301,7 @@ module "staging" {
   tags                = var.tags # TODO: var.tags is deprecated
 
   cert_subject_alternative_names = {
-    "${local.www_env_fqdn}" = local.zone_id
+    (local.www_env_fqdn) = local.zone_id
   }
 }
 
@@ -313,7 +313,7 @@ module "staging_east" {
   tags                = var.tags # TODO: var.tags is deprecated
 
   cert_subject_alternative_names = {
-    "${local.www_env_fqdn}" = local.zone_id
+    (local.www_env_fqdn) = local.zone_id
   }
 
   # cloudfront requires us-east-1 acm certs

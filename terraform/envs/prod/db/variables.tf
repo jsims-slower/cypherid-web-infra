@@ -1,5 +1,6 @@
 variable "db_username" {
   default = "idseqmaster"
+  type    = string
 }
 
 variable "db_port" {
