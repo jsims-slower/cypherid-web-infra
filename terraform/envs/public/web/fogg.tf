@@ -23,7 +23,7 @@ variable "TFC_PROJECT_NAME" {
 provider "aws" {
 
   region  = "us-west-2"
-  profile = "idseq-newdev"
+  profile = "invalid-profile"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -41,15 +41,15 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["491013321714"]
+  allowed_account_ids = ["invalid-account-id"]
 }
 # Aliased Providers (for doing things in every region).
 
 
 provider "aws" {
-  alias   = "us-west-2"
-  region  = "us-west-2"
-  profile = "idseq-newdev"
+  alias   = "us-east-1"
+  region  = "us-east-1"
+  profile = "invalid-profile"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -67,14 +67,14 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["491013321714"]
+  allowed_account_ids = ["invalid-account-id"]
 }
 
 
 provider "aws" {
-  alias   = "us-east-1"
+  alias   = "czi-si-us-east-1"
   region  = "us-east-1"
-  profile = "idseq-newdev"
+  profile = "idseq-prod"
 
   # this is the new way of injecting AWS tags to all AWS resources
   # var.tags should be considered deprecated
@@ -92,22 +92,47 @@ provider "aws" {
       managedBy                            = "terraform"
     }
   }
-  allowed_account_ids = ["491013321714"]
+  allowed_account_ids = ["283694049553"]
+}
+
+
+provider "aws" {
+  alias   = "czi-si"
+  region  = "us-west-2"
+  profile = "idseq-prod"
+
+  # this is the new way of injecting AWS tags to all AWS resources
+  # var.tags should be considered deprecated
+  default_tags {
+    tags = {
+      TFC_WORKSPACE_NAME                   = coalesce(var.TFC_WORKSPACE_NAME, "unknown")
+      TFC_WORKSPACE_SLUG                   = coalesce(var.TFC_WORKSPACE_SLUG, "unknown")
+      TFC_CONFIGURATION_VERSION_GIT_BRANCH = coalesce(var.TFC_CONFIGURATION_VERSION_GIT_BRANCH, "unknown")
+      TFC_CONFIGURATION_VERSION_GIT_TAG    = coalesce(var.TFC_CONFIGURATION_VERSION_GIT_TAG, "unknown")
+      TFC_PROJECT_NAME                     = coalesce(var.TFC_PROJECT_NAME, "unknown")
+      project                              = coalesce(var.tags.project, "unknown")
+      env                                  = coalesce(var.tags.env, "unknown")
+      service                              = coalesce(var.tags.service, "unknown")
+      owner                                = coalesce(var.tags.owner, "unknown")
+      managedBy                            = "terraform"
+    }
+  }
+  allowed_account_ids = ["283694049553"]
 }
 
 
 provider "assert" {}
 terraform {
-  required_version = "=1.14.3"
+  required_version = "=1.14.8"
 
   backend "s3" {
 
-    bucket = "tfstate-491013321714-test"
+    bucket = "invalid-bucket"
 
     key     = "terraform/idseq/envs/public/components/web.tfstate"
     encrypt = true
     region  = "us-west-2"
-    profile = "idseq-newdev"
+    profile = "invalid-profile"
 
 
   }
@@ -130,7 +155,28 @@ terraform {
     aws = {
       source = "hashicorp/aws"
 
-      version = "5.94.0"
+      version = "~> 5.100.0"
+
+    }
+
+    helm = {
+      source = "hashicorp/helm"
+
+      version = "~> 2.17.0"
+
+    }
+
+    kubectl = {
+      source = "gavinbunney/kubectl"
+
+      version = "~> 1.19.0"
+
+    }
+
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+
+      version = "~> 3.0.1"
 
     }
 
@@ -194,7 +240,7 @@ variable "component" {
 # tflint-ignore: terraform_unused_declarations
 variable "aws_profile" {
   type    = string
-  default = "idseq-newdev"
+  default = "invalid-profile"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "owner" {
@@ -220,14 +266,14 @@ variable "alignment_index_date" {
   default = "2021-01-22"
 }
 # tflint-ignore: terraform_unused_declarations
+variable "base_domain" {
+  type    = string
+  default = "seqtoid.org"
+}
+# tflint-ignore: terraform_unused_declarations
 variable "build_index_date" {
   type    = string
   default = "2021-01-22"
-}
-# tflint-ignore: terraform_unused_declarations
-variable "project_v1" {
-  type    = string
-  default = "czid"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_idseq_bench" {
@@ -237,7 +283,7 @@ variable "s3_bucket_idseq_bench" {
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_public_references" {
   type    = string
-  default = "czid-public-references"
+  default = "seqtoid-public-references"
 }
 # tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_secrets" {
@@ -245,49 +291,17 @@ variable "s3_bucket_secrets" {
   default = "idseq-secrets"
 }
 # tflint-ignore: terraform_unused_declarations
-variable "s3_bucket_workflows" {
-  type    = string
-  default = "idseq-workflows"
-}
-# tflint-ignore: terraform_unused_declarations
-data "terraform_remote_state" "global" {
-  backend = "s3"
-  config = {
-
-
-    bucket = "tfstate-491013321714-test"
-
-    key     = "terraform/idseq/global.tfstate"
-    region  = "us-west-2"
-    profile = "idseq-newdev"
-
-
-  }
-}
-data "terraform_remote_state" "idseq-dev" {
-  backend = "s3"
-  config = {
-
-
-    bucket = "tfstate-491013321714-test"
-
-    key     = "terraform/idseq/accounts/idseq-dev.tfstate"
-    region  = "us-west-2"
-    profile = "idseq-newdev"
-
-
-  }
-}
-# tflint-ignore: terraform_unused_declarations
 variable "aws_accounts" {
   type = map(string)
   default = {
 
-    idseq-dev = "941377154785"
+    idseq-dev = "491013321714"
 
-    idseq-newdev = "491013321714"
+    idseq-prod = "283694049553"
 
-    idseq-prod = "745463180746"
+    idseq-staging = "030998640247"
+
+    idseq-support = "941377154785"
 
   }
 }

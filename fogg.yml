@@ -602,12 +602,18 @@ envs:
       eks_cluster_name: czid-staging-eks
   # TODO: Where do we want to house the Public data, like help-center(?) and other public files
   #public:
+  #  backend:
+  #    kind: s3
+  #    account_id: invalid-account-id
+  #    bucket: invalid-bucket
+  #    region: us-west-2
+  #    profile: idseq-prod
+  #  providers:
+  #    aws:
+  #      account_id: invalid-account-id
+  #      profile: invalid-profile
   #  components:
   #    web:
-  #      depends_on:
-  #        accounts:
-  #          - idseq-dev
-  #        components: []
   prod:
     backend:
       kind: s3
