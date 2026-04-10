@@ -155,9 +155,9 @@ envs:
       #     - tags
       #     - attributes
       iam-password-policy:
-        module_source: "github.com/chanzuckerberg/cztack//aws-iam-password-policy?ref=v0.104.2"
+        module_source: github.com/chanzuckerberg/cztack//aws-iam-password-policy?ref=v0.104.2
       params-secrets:
-        module_source: "github.com/chanzuckerberg/cztack//aws-params-secrets-setup?ref=v0.104.2"
+        module_source: github.com/chanzuckerberg/cztack//aws-params-secrets-setup?ref=v0.104.2
         variables:
           - alias_name
           - env
@@ -168,7 +168,7 @@ envs:
         depends_on:
           components:
             - cloud-env
-        module_source: "github.com/chanzuckerberg/cztack//aws-eks-cluster?ref=v0.104.2"
+        module_source: github.com/chanzuckerberg/cztack//aws-eks-cluster?ref=v0.104.2
         variables:
           - cluster_name
           - iam_cluster_name_prefix
@@ -271,7 +271,7 @@ envs:
         extra_vars:
           force_image_rebuild: false
       redis:
-        module_source: "github.com/chanzuckerberg/cztack//aws-redis-replication-group?ref=v0.104.2"
+        module_source: github.com/chanzuckerberg/cztack//aws-redis-replication-group?ref=v0.104.2
         module_name: elasticache_secure
         variables:
           - at_rest_encryption_enabled
@@ -332,7 +332,7 @@ envs:
         depends_on:
           components:
             - cloud-env
-        module_source: "github.com/chanzuckerberg/cztack//aws-eks-cluster?ref=v0.104.2"
+        module_source: github.com/chanzuckerberg/cztack//aws-eks-cluster?ref=v0.104.2
         variables:
           - cluster_name
           - cluster_version
@@ -431,7 +431,7 @@ envs:
         depends_on:
           components:
             - cloud-env
-        module_source: "github.com/chanzuckerberg/cztack//aws-eks-cluster?ref=v0.104.2"
+        module_source: github.com/chanzuckerberg/cztack//aws-eks-cluster?ref=v0.104.2
         variables:
           - cluster_name
           - iam_cluster_name_prefix
@@ -508,9 +508,9 @@ envs:
             - ecs
             - cloud-env
       iam-password-policy:
-        module_source: "github.com/chanzuckerberg/cztack//aws-iam-password-policy?ref=v0.104.2"
+        module_source: github.com/chanzuckerberg/cztack//aws-iam-password-policy?ref=v0.104.2
       params-secrets:
-        module_source: "github.com/chanzuckerberg/cztack//aws-params-secrets-setup?ref=v0.104.2"
+        module_source: github.com/chanzuckerberg/cztack//aws-params-secrets-setup?ref=v0.104.2
         variables:
           - alias_name
           - env
@@ -566,7 +566,7 @@ envs:
             - ecs
             - web
       redis:
-        module_source: "github.com/chanzuckerberg/cztack//aws-redis-replication-group?ref=v0.104.2"
+        module_source: github.com/chanzuckerberg/cztack//aws-redis-replication-group?ref=v0.104.2
         module_name: elasticache_secure
         variables:
           - at_rest_encryption_enabled
@@ -637,9 +637,9 @@ envs:
       #     - environment
       #     - attributes
       iam-password-policy:
-        module_source: "github.com/chanzuckerberg/cztack//aws-iam-password-policy?ref=v0.104.2"
+        module_source: github.com/chanzuckerberg/cztack//aws-iam-password-policy?ref=v0.104.2
       params-secrets:
-        module_source: "github.com/chanzuckerberg/cztack//aws-params-secrets-setup?ref=v0.104.2"
+        module_source: github.com/chanzuckerberg/cztack//aws-params-secrets-setup?ref=v0.104.2
         variables:
           - alias_name
           - env
@@ -650,7 +650,7 @@ envs:
         depends_on:
           components:
             - cloud-env
-        module_source: "github.com/chanzuckerberg/cztack//aws-eks-cluster?ref=v0.104.2"
+        module_source: github.com/chanzuckerberg/cztack//aws-eks-cluster?ref=v0.104.2
         variables:
           - cluster_name
           - iam_cluster_name_prefix
@@ -768,7 +768,7 @@ envs:
           components:
             - route53
       redis:
-        module_source: "github.com/chanzuckerberg/cztack//aws-redis-replication-group?ref=v0.104.2"
+        module_source: github.com/chanzuckerberg/cztack//aws-redis-replication-group?ref=v0.104.2
         module_name: elasticache_secure
         variables:
           - at_rest_encryption_enabled
