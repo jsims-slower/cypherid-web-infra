@@ -4,4 +4,5 @@ variable "db_username" {
 
 variable "db_port" {
   default = 3306
+  type    = number
 }
