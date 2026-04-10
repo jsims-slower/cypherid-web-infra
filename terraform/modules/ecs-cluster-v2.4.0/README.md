@@ -52,13 +52,12 @@ module "ecs" {
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_attach-logs"></a> [attach-logs](#module\_attach-logs) | github.com/chanzuckerberg/cztack//aws-iam-policy-cwlogs | v0.43.1 |
+| <a name="module_attach-logs"></a> [attach-logs](#module\_attach-logs) | github.com/chanzuckerberg/cztack//aws-iam-policy-cwlogs | v0.104.2 |
 | <a name="module_images"></a> [images](#module\_images) | ../machine-images | n/a |
-| <a name="module_logs"></a> [logs](#module\_logs) | github.com/chanzuckerberg/cztack//aws-cloudwatch-log-group | v0.43.1 |
-| <a name="module_orgwide-secrets"></a> [orgwide-secrets](#module\_orgwide-secrets) | ../aws-iam-policy-orgwide-secrets | n/a |
-| <a name="module_profile"></a> [profile](#module\_profile) | github.com/chanzuckerberg/cztack//aws-iam-instance-profile | v0.60.0 |
+| <a name="module_logs"></a> [logs](#module\_logs) | github.com/chanzuckerberg/cztack//aws-cloudwatch-log-group | v0.104.2 |
+| <a name="module_profile"></a> [profile](#module\_profile) | github.com/chanzuckerberg/cztack//aws-iam-instance-profile | v0.104.2 |
 | <a name="module_sg"></a> [sg](#module\_sg) | terraform-aws-modules/security-group/aws | 4.3.0 |
-| <a name="module_user_data"></a> [user\_data](#module\_user\_data) | ../instance-cloud-init-script | n/a |
+| <a name="module_user_data"></a> [user\_data](#module\_user\_data) | ../instance-cloud-init-script-v0.484.6 | n/a |
 
 ## Resources
 
