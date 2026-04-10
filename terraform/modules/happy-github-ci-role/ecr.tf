@@ -22,7 +22,7 @@ module "ecr_writer_policy" {
 
 // used for the dynamic autocreated ECRs
 module "autocreated_ecr_writer_policy" {
-  source              = "github.com/chanzuckerberg/cztack//aws-iam-policy-ecr-writer?ref=v0.104.2"
+  source    = "github.com/chanzuckerberg/cztack//aws-iam-policy-ecr-writer?ref=v0.104.2"
   role_name = var.gh_actions_role_name
   // TODO: not a super fan of this. Would be ideal to have the role only have access to the stacks created by this happy project
   ecr_repository_arns = ["arn:aws:ecr:us-west-2:${local.account_id}:repository/*/${var.tags.env}/*"]

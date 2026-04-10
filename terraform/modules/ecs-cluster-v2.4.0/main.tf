@@ -45,7 +45,7 @@ module "images" {
 }
 
 module "logs" {
-  source = "github.com/chanzuckerberg/cztack//aws-cloudwatch-log-group?ref=v0.104.2"
+  source            = "github.com/chanzuckerberg/cztack//aws-cloudwatch-log-group?ref=v0.104.2"
   project           = var.project
   env               = var.env
   service           = var.service

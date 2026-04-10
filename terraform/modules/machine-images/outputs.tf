@@ -65,7 +65,7 @@
 
 output "czi_amazon2_ecs" {
   description = "Stable id for a recent build. Updated explicitly to avoid unintended changes."
-  value = data.aws_ami.ecs_ami.image_id
+  value       = data.aws_ami.ecs_ami.image_id
 }
 
 # output "czi_amazon2_eks" {

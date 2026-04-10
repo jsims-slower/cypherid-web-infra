@@ -126,6 +126,8 @@ defaults:
       ssh_key_secrets:
         - SHARED_INFRA_DEPLOY_KEY
       test_buckets: 20
+    #tflint:
+    #  enabled: true
 envs:
   dev:
     backend:
@@ -820,11 +822,31 @@ envs:
       #s3_bucket_pipeline_public_assets: idseq-prod-pipeline-public-assets-us-west-2
       eks_cluster_name: czid-prod-eks
 modules:
+  alb-http-v0.484.6: {}
+  aws-elasticsearch-v0.199.1: {}
+  aws-elb-access-logs-bucket-v0.420.0: {}
+  aws-env-v4.0.0: {}
+  aws-iam-policy-s3-reader-v0.420.0: {}
+  aws-iam-policy-s3-writer-v0.66.0: {}
   config: {}
-  machine-images: {}
-  individual-attr: {}
-  idseq-s3-tar-writer: {}
   czid-services-private-key: {}
+  ecs-cluster-v2.4.0: {}
+  ecs-service-with-alb-v0.421.0: {}
+  happy-env-eks: {}
+  happy-github-ci-role: {}
+  happy-github-ci-role-ecs: {}
+  happy-github-ci-role-eks: {}
+  idseq-s3-tar-writer: {}
+  individual-attr: {}
+  instance-cloud-init-script-v0.484.6: {}
+  k8s-core-v5.5.1: {}
+  kubernetes-aws-ssm-k8s-core-v5: {}
+  kubernetes-secret-from-aws-param-v0.395.0: {}
+  machine-images: {}
+  panther-s3-ingest-v2.0.1: {}
+  snowflake-stage-s3-role-v0.420.0: {}
+  waf-georestriction-main: {}
+  web-acl-regional-v3.3.1: {}
 plugins:
   custom_plugins:
     tflint:
