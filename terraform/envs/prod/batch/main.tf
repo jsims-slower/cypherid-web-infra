@@ -255,7 +255,7 @@ resource "aws_batch_compute_environment" "idseq_122GB_16CPU" {
     security_group_ids = [random_id.batch.keepers.security_group_id]
     subnets            = data.terraform_remote_state.cloud-env.outputs.private_subnets
     type               = "EC2"
-    tags = local.tags
+    tags               = local.tags
 
     # image_id           =  random_id.batch.keepers.image_id
   }
