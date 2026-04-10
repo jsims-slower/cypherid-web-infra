@@ -7,25 +7,37 @@ No requirements.
 
 | Name | Version |
 |------|---------|
-| aws | n/a |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+
+## Modules
+
+No modules.
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [aws_iam_policy.s3-bucket-writer](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_role_policy_attachment.s3-bucket-writer](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_user_policy_attachment.s3-bucket-writer](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user_policy_attachment) | resource |
+| [aws_iam_policy_document.s3-bucket-writer](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| bucket\_name | n/a | `string` | n/a | yes |
-| bucket\_prefix | n/a | `string` | `""` | no |
-| env | n/a | `string` | n/a | yes |
-| owner | n/a | `string` | n/a | yes |
-| policy\_name | n/a | `string` | `""` | no |
-| policy\_path | n/a | `string` | `"/"` | no |
-| project | n/a | `string` | n/a | yes |
-| role\_name | n/a | `string` | `null` | no |
-| service | n/a | `string` | n/a | yes |
-| user\_name | n/a | `string` | `null` | no |
+| <a name="input_bucket_name"></a> [bucket\_name](#input\_bucket\_name) | n/a | `string` | n/a | yes |
+| <a name="input_bucket_prefix"></a> [bucket\_prefix](#input\_bucket\_prefix) | n/a | `string` | `""` | no |
+| <a name="input_env"></a> [env](#input\_env) | n/a | `string` | n/a | yes |
+| <a name="input_owner"></a> [owner](#input\_owner) | n/a | `string` | n/a | yes |
+| <a name="input_policy_name"></a> [policy\_name](#input\_policy\_name) | n/a | `string` | `""` | no |
+| <a name="input_policy_path"></a> [policy\_path](#input\_policy\_path) | n/a | `string` | `"/"` | no |
+| <a name="input_project"></a> [project](#input\_project) | n/a | `string` | n/a | yes |
+| <a name="input_role_name"></a> [role\_name](#input\_role\_name) | n/a | `string` | `null` | no |
+| <a name="input_service"></a> [service](#input\_service) | n/a | `string` | n/a | yes |
+| <a name="input_user_name"></a> [user\_name](#input\_user\_name) | n/a | `string` | `null` | no |
 
 ## Outputs
 
-No output.
-
+No outputs.
 <!-- END -->
