@@ -207,16 +207,16 @@ data "aws_iam_policy_document" "idseq-upload-assume-role" {
       identifiers = [aws_iam_role.idseq-web.arn]
     }
   }
-#   statement {
-#     actions = ["sts:AssumeRole"]
-#     effect  = "Allow"
-#     sid     = "PowerUserAssumeRoleForDevEnvironments"
+  #statement {
+  #  actions = ["sts:AssumeRole"]
+  #  effect  = "Allow"
+  #  sid     = "PowerUserAssumeRoleForDevEnvironments"
 
-#     principals {
-#       type        = "AWS"
-#       identifiers = [data.aws_iam_role.poweruser.arn]
-#     }
-#   }
+  #  principals {
+  #    type        = "AWS"
+  #    identifiers = [data.aws_iam_role.poweruser.arn]
+  #  }
+  #}
 }
 
 resource "aws_iam_role" "idseq-upload" {
