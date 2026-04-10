@@ -281,11 +281,6 @@ variable "eks_cluster_name" {
   default = "czid-sandbox-eks"
 }
 # tflint-ignore: terraform_unused_declarations
-variable "ie_ops_genie_team" {
-  type    = string
-  default = "Core Infra Eng"
-}
-# tflint-ignore: terraform_unused_declarations
 variable "s3_bucket_aegea_ecs_execute" {
   type    = string
   default = "aegea-ecs-execute-sandbox-941377154785"
