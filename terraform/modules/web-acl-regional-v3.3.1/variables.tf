@@ -21,8 +21,7 @@ variable "name" {
 
 variable "tags" {
   description = "Additional tags to apply to the WebACL and its related resources."
-  type        = map(string)
-  default     = {}
+  type        = object({ project : string, env : string, service : string, owner : string, managedBy : string })
 }
 
 variable "requests_per_5_min" {

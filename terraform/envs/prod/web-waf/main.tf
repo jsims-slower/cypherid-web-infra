@@ -13,7 +13,7 @@ module "georestriction-rule" {
 
 module "web-service-waf" {
   source                = "../../../modules/web-acl-regional-v3.3.1"
-  tags                  = var.tags
+  tags                  = var.tags # TODO: var.tags is deprecated
   enable_panther_ingest = true
   rule_groups           = [{ arn : module.georestriction-rule.arn, name : module.georestriction-rule.name }]
   czi_baseline_count_rules = {
