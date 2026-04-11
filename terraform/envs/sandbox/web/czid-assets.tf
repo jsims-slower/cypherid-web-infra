@@ -4,7 +4,7 @@ locals {
   # czid_full_domain   = "${local.czid_subdomain}.${local.czid_domain}"
   # czid_origin_domain = local.czid_domain
   #
-  czid_assets_fqdn   = "assets.${local.czid_domain}"
+  czid_assets_fqdn = "assets.${local.czid_domain}"
 
   czid_aliases = {
     "www.${local.czid_assets_fqdn}" = data.aws_route53_zone.czid_zone.id
