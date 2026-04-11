@@ -4,7 +4,7 @@ locals {
   policy_name        = length(var.policy_name) > 0 ? var.policy_name : "${var.project}-${var.service}-${var.env}-s3writer-${var.bucket_name}"
 }
 
-data aws_iam_policy_document s3-bucket-writer {
+data "aws_iam_policy_document" "s3-bucket-writer" {
   statement {
     sid = "WriteToBucket"
 
