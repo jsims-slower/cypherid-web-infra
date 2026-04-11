@@ -26,8 +26,8 @@ If you just want the CZI baseline, you can ignore the `input_rule_groups` variab
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_logs_bucket"></a> [logs\_bucket](#module\_logs\_bucket) | github.com/chanzuckerberg/cztack//aws-s3-private-bucket | v0.60.1 |
-| <a name="module_panther-s3"></a> [panther-s3](#module\_panther-s3) | git@github.com:chanzuckerberg/shared-infra//terraform/modules/panther-s3-ingest | panther-s3-ingest-v2.0.1 |
+| <a name="module_logs_bucket"></a> [logs\_bucket](#module\_logs\_bucket) | github.com/chanzuckerberg/cztack//aws-s3-private-bucket | v0.104.2 |
+| <a name="module_panther-s3"></a> [panther-s3](#module\_panther-s3) | ../panther-s3-ingest-v2.0.1 | n/a |
 
 ## Resources
 
@@ -53,7 +53,7 @@ If you just want the CZI baseline, you can ignore the `input_rule_groups` variab
 | <a name="input_name"></a> [name](#input\_name) | Custom name for the Web ACL. We suggest making it related to your application for easy searching.<br>    If undefined, it will follow Infra Eng defaults as project-env-service." | `string` | `""` | no |
 | <a name="input_requests_per_5_min"></a> [requests\_per\_5\_min](#input\_requests\_per\_5\_min) | Limit on requests per 5-minute period for a single originating IP address. It would be used as a [rate\_limiting\_statement](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/wafv2_web_acl.html#rate_based_statement) | `number` | `1000` | no |
 | <a name="input_rule_groups"></a> [rule\_groups](#input\_rule\_groups) | List of Rule Group ARNs you want to attach to the WebACL--this implies that the rule groups were created already.<br>    They will have higher priority than the CZI WAF baseline. | <pre>list(object({<br>    arn : string,<br>    name : string,<br>  }))</pre> | `[]` | no |
-| <a name="input_tags"></a> [tags](#input\_tags) | Additional tags to apply to the WebACL and its related resources. | `map(string)` | `{}` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | Additional tags to apply to the WebACL and its related resources. | `object({ project : string, env : string, service : string, owner : string, managedBy : string })` | n/a | yes |
 
 ## Outputs
 

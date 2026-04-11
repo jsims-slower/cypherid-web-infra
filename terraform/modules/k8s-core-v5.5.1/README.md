@@ -48,7 +48,6 @@ adoami: force release
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_aws-ssm"></a> [aws-ssm](#module\_aws-ssm) | ../kubernetes-aws-ssm | n/a |
 | <a name="module_kiam"></a> [kiam](#module\_kiam) | ./kiam | n/a |
 | <a name="module_linkerd"></a> [linkerd](#module\_linkerd) | ./linkerd | n/a |
 | <a name="module_nginx_ingress"></a> [nginx\_ingress](#module\_nginx\_ingress) | ./nginx-ingress-controller | n/a |
@@ -86,8 +85,5 @@ adoami: force release
 | Name | Description |
 |------|-------------|
 | <a name="output_additional_addons"></a> [additional\_addons](#output\_additional\_addons) | n/a |
-| <a name="output_aws_ssm_iam_role_name"></a> [aws\_ssm\_iam\_role\_name](#output\_aws\_ssm\_iam\_role\_name) | n/a |
-| <a name="output_datadog_agent_hostname"></a> [datadog\_agent\_hostname](#output\_datadog\_agent\_hostname) | n/a |
 | <a name="output_default_namespace"></a> [default\_namespace](#output\_default\_namespace) | Default namespace for applications to install into. |
-| <a name="output_rancher_manifest_url"></a> [rancher\_manifest\_url](#output\_rancher\_manifest\_url) | n/a |
 <!-- END -->

@@ -15,7 +15,7 @@
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_aws-bucket"></a> [aws-bucket](#module\_aws-bucket) | github.com/chanzuckerberg/cztack//aws-s3-private-bucket | v0.60.1 |
+| <a name="module_aws-bucket"></a> [aws-bucket](#module\_aws-bucket) | github.com/chanzuckerberg/cztack//aws-s3-private-bucket | v0.104.2 |
 
 ## Resources
 
