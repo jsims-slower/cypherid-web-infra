@@ -46,7 +46,7 @@ jobs:
           aws-profile: idseq-${{ inputs.environment }}
       - name: Sts GetCallerIdentity
         run: |
-          aws sts get-caller-identity
+          aws sts get-caller-identity --profile idseq-${{ inputs.environment }}
       - name: Terraform Init and Apply environment templates
         run: |
           cd terraform/envs/${{ inputs.environment }}/iam-password-policy/
