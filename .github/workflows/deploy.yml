@@ -17,7 +17,7 @@ on:
 
 env:
   AWS_REGION: us-west-2
-  AWS_DEFAULT_OUTPUT: json
+  #AWS_DEFAULT_OUTPUT: json
   #DEPLOYMENT_ENVIRONMENT: ${{ inputs.environment }}
   TF_CLI_ARGS_apply: "--auto-approve"
 
@@ -30,6 +30,31 @@ jobs:
   DeployTerraform:
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        component:
+          - iam-password-policy
+          - params-secrets
+#          - route53
+          - czid-services-private-key
+          - cloud-env
+#          - idseq-s3-tar-writer
+#          - elb-access-logs
+          - maintenance
+#          - heatmap-optimization
+#          - db
+#          - downloads
+#          - ecs
+#          - batch
+#          - redis
+#          - web
+#          - web-waf
+#          - auth0
+#          - resque
+#          - eks
+#          - k8s-core
+#          - happy
+#          - access-management
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v6
@@ -42,19 +67,15 @@ jobs:
           aws-profile: idseq-${{ inputs.environment }}
       - name: Sts GetCallerIdentity
         run: aws sts get-caller-identity --profile idseq-${{ inputs.environment }}
-      - name: iam-password-policy
+      - name: "Plan - ${{ matrix.component }}"
         run: |
-          cd terraform/envs/${{ inputs.environment }}/iam-password-policy/
+          cd terraform/envs/${{ inputs.environment }}/${{ matrix.component }}/
           make check-plan
-      - name: params-secrets
-        run: |
-          cd terraform/envs/${{ inputs.environment }}/params-secrets/
-          make check-plan
-      - name: route53
-        run: |
-          cd terraform/envs/${{ inputs.environment }}/route53/
-          make check-plan
-
+#      - name: route53 # Needs Prod credentials for czid-si to configure root DNS
+#        run: |
+#          cd terraform/envs/${{ inputs.environment }}/route53/
+#          make check-plan
+#
 #          terraform -chdir=cloud-env init
 #          terraform -chdir=cloud-env apply
 #

@@ -141,6 +141,10 @@ envs:
         account_id: 491013321714
         profile: idseq-dev
     components:
+      access-management:
+        depends_on:
+          components:
+            - web
       # used to code generate our configuration for the s3 storing state files outisde of TFE buckets
       # s3-tf-state:
       #   depends_on:
