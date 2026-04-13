@@ -12,7 +12,22 @@ module "czid_web_private_gh_actions_executor" {
     name = "czid-${var.env}-gh-actions-executor"
   }
   authorized_github_repos = {
-    chanzuckerberg : ["czid-web-private", "idseq"]
+    # chanzuckerberg : ["czid-web-private", "idseq"]
+    # TODO: Remove this fork
+    "jsims-slower" : [
+      "cypherid-web-infra",
+      "cypherid-workflow-infra",
+      "seqtoid-graphql-federation-server",
+      "seqtoid-web",
+      "seqtoid-workflows"
+    ],
+    "IT-Academic-Research-Services" : [
+      "cypherid-web-infra",
+      "cypherid-workflow-infra",
+      "seqtoid-graphql-federation-server",
+      "seqtoid-web",
+      "seqtoid-workflows"
+    ]
   }
 }
 
