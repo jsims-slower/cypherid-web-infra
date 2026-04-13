@@ -31,6 +31,16 @@ module "czid_web_private_gh_actions_executor" {
   }
 }
 
+data "tls_certificate" "github" {
+  url = "https://token.actions.githubusercontent.com/.well-known/openid-configuration"
+}
+
+resource "aws_iam_openid_connect_provider" "github" {
+  url             = "https://token.actions.githubusercontent.com"
+  thumbprint_list = [data.tls_certificate.github.certificates[0].sha1_fingerprint]
+  client_id_list  = ["sts.amazonaws.com"]
+}
+
 resource "aws_iam_role_policy_attachment" "czid_ga_ci_cd" {
   role       = module.czid_web_private_gh_actions_executor.role.name
   policy_arn = aws_iam_policy.czid_ci_cd.arn

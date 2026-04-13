@@ -26,10 +26,16 @@ permissions:
 
 jobs:
   DeployTerraform:
+    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v6
+      - name: View VARS
+        run: |
+          echo vars.AWS_ACCOUNT_ID=[${{ vars.AWS_ACCOUNT_ID }}]
+          echo secrets.AWS_ACCOUNT_ID=[${{ secrets.AWS_ACCOUNT_ID }}]
+          echo env.AWS_ACCOUNT_ID=[${{ env.AWS_ACCOUNT_ID }}]
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v6.1.0
         with:
@@ -37,12 +43,13 @@ jobs:
           #role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/czid-${{ inputs.environment }}-gh-actions-executor
           #role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ env.AWS_REGION }}
+          aws-profile: idseq-${{ inputs.environment }}
       - name: Sts GetCallerIdentity
         run: |
           aws sts get-caller-identity
       - name: Terraform Init and Apply environment templates
         run: |
-          cd terraform/envs/${{ env.DEPLOYMENT_ENVIRONMENT }}/iam-password-policy/
+          cd terraform/envs/${{ inputs.environment }}/iam-password-policy/
           make check-plan
           cd -
 #      - name: Setup Profile
