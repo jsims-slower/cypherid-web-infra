@@ -9,11 +9,11 @@ on:
         required: true
         type: environment
         default: 'debug'
-      profile-name:
-        description: 'The profile name to use for AWS CLI'
-        required: true
-        type: string
-        default: 'idseq-dev'
+#      profile-name:
+#        description: 'The profile name to use for AWS CLI'
+#        required: true
+#        type: string
+#        default: 'idseq-dev'
 
 env:
   AWS_REGION : us-west-2
@@ -33,17 +33,9 @@ jobs:
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v6.1.0
         with:
-          #role-to-assume: arn:aws:iam::491013321714:role/gha-seqtoid #TODO - Parameterize AWS account ID based on deploy environment
-          role-to-assume: czid-${{ inputs.environment }}-gh-actions-executor
+          role-to-assume: arn:aws:iam::${{ var.AWS_ACCOUNT_ID }}:role/czid-${{ inputs.environment }}-gh-actions-executor
           #role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ env.AWS_REGION }}
-#      - name: Setup Profile
-#        shell: bash
-#        run: |
-#              aws configure set region us-west-2 --profile ${{ inputs.profile-name }}
-#              aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile ${{ inputs.profile-name }}
-#              aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile ${{ inputs.profile-name }}
-#              aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile ${{ inputs.profile-name }}
       - name: Sts GetCallerIdentity
         run: |
           aws sts get-caller-identity
