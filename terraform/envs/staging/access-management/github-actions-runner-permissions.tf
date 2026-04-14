@@ -41,6 +41,12 @@ resource "aws_iam_openid_connect_provider" "github" {
   client_id_list  = ["sts.amazonaws.com"]
 }
 
+# TODO: Adds near-superuser power to the CI/CD process
+resource "aws_iam_role_policy_attachment" "czid_ci_cd_poweruser" {
+  role       = module.czid_web_private_gh_actions_executor.role.name
+  policy_arn = "arn:aws:iam::aws:policy/PowerUserAccess"
+}
+
 resource "aws_iam_role_policy_attachment" "czid_ga_ci_cd" {
   role       = module.czid_web_private_gh_actions_executor.role.name
   policy_arn = aws_iam_policy.czid_ci_cd.arn
@@ -142,7 +148,8 @@ data "aws_iam_policy_document" "ci_cd_policy_document" {
     actions = ["secretsmanager:*"]
 
     resources = [
-    "arn:aws:secretsmanager:*:${local.account_id}:secret:idseq/*"]
+      "arn:aws:secretsmanager:*:${local.account_id}:secret:idseq/*"
+    ]
   }
   statement {
     actions = [
