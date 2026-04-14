@@ -67,8 +67,10 @@ jobs:
       - name: Setup Terraform
         run: |
           make setup
-          make terraform
+          echo Initializing tfenv
           .fogg/tfenv/bin/tfenv init
+          echo Installing terraform
+          make terraform
           .fogg/tfenv/bin/terraform --version
       - name: "Plan - ${{ matrix.component }}"
         # TODO: Handle special cases, like route53 which needs idseq-prod access; or fix route53 to be profile-specific only; also Auth0 Params
