@@ -9,104 +9,101 @@ on:
         required: true
         type: environment
         default: 'debug'
-      profile-name:
-        description: 'The profile name to use for AWS CLI'
-        required: true
-        type: string
-        default: 'idseq-dev'
 
 env:
-  AWS_REGION : us-west-2
-  DEPLOYMENT_ENVIRONMENT: ${{ inputs.environment }}
+  AWS_REGION: us-west-2
+  #AWS_DEFAULT_OUTPUT: json
+  #DEPLOYMENT_ENVIRONMENT: ${{ inputs.environment }}
   TF_CLI_ARGS_apply: "--auto-approve"
+
 
 permissions:
   id-token: write
   contents: read
 
 jobs:
-  DeployTerraform:
+  TerraformPlan:
+    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      #max-parallel: 2
+      matrix:
+        component:
+          - iam-password-policy
+          - params-secrets
+          #- route53
+          - czid-services-private-key
+          - cloud-env
+          - idseq-s3-tar-writer
+          - elb-access-logs
+          - maintenance
+          - heatmap-optimization
+          - db
+          - downloads
+          - ecs
+          - batch
+          - redis
+          - web
+          - web-waf
+          #- auth0
+          - resque
+          - eks
+          - k8s-core
+          - happy
+          - access-management
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Reconfigure git to use HTTP authentication
+        run: >
+          git config --global url."https://github.com/".insteadOf
+          ssh://git@github.com/
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v6.1.0
         with:
-          #role-to-assume: arn:aws:iam::491013321714:role/gha-seqtoid #TODO - Parameterize AWS account ID based on deploy environment
-          role-to-assume: czid-${{ inputs.environment }}-gh-actions-executor
+          # TODO: Only uncomment for local execution via nektos-act
+          #aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          #aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          #aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          #output-env-credentials: true
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/czid-${{ inputs.environment }}-gh-actions-executor
           #role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ env.AWS_REGION }}
-#      - name: Setup Profile
-#        shell: bash
-#        run: |
-#              aws configure set region us-west-2 --profile ${{ inputs.profile-name }}
-#              aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile ${{ inputs.profile-name }}
-#              aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile ${{ inputs.profile-name }}
-#              aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile ${{ inputs.profile-name }}
-      - name: Sts GetCallerIdentity
+          aws-profile: idseq-${{ inputs.environment }}
+      - name: Setup Terraform
+        id: setup
         run: |
-          aws sts get-caller-identity
-      - name: Terraform Init and Apply environment templates
+          make terraform
+          .fogg/tfenv/bin/terraform --version
+      - name: "Plan - ${{ matrix.component }}"
+        id: plan
+        # TODO: Handle special cases, like route53 which needs idseq-prod access; or fix route53 to be profile-specific only; also Auth0 Params
+        # NOTE: make check-plan should be sufficient, but it doesn't leave the plan file after it executes; other commands should also be make commands, but expect AWS CLI
+        #       make check-auth init fmt refresh check-plan
         run: |
-          cd terraform/envs/${{ env.DEPLOYMENT_ENVIRONMENT }}/iam-password-policy/
-          make check-plan
-          cd -
-#      - name: Setup Profile
-#        shell: bash
-#        run: |
-#              aws configure set region us-west-2 --profile ${{ inputs.profile-name }}
-#              aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile ${{ inputs.profile-name }}
-#              aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile ${{ inputs.profile-name }}
-#              aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile ${{ inputs.profile-name }}
-#      - name: Sts GetCallerIdentity
-#        run: |
-#          aws sts get-caller-identity
-#      - name: Set up runner
-#        run: source scripts/init_cd_runner.sh
-#      - name: Terraform Init and Apply account templates
-#        run: |
-#          cd terraform/accounts/idseq-dev
-#          terraform init
-#          terraform apply
-#      - name: Terraform Init and Apply environment templates
-#        run: |
-#          cd terraform/envs/${{ env.DEPLOYMENT_ENVIRONMENT }}
-#          terraform -chdir=cloud-env init
-#          terraform -chdir=cloud-env apply
-#
-#          terraform -chdir=elb-access-logs init
-#          terraform -chdir=elb-access-logs apply
-#
-#          terraform -chdir=maintenance init
-#          terraform -chdir=maintenance apply
-#
-#          terraform -chdir=heatmap-optimization init
-#          terraform -chdir=heatmap-optimization apply
-#
-#          terraform -chdir=db init
-#          terraform -chdir=db apply
-#
-#          terraform -chdir=ecs init
-#          terraform -chdir=ecs apply
-#
-#          terraform -chdir=redis init
-#          terraform -chdir=redis apply
-#
-#          terraform -chdir=web init
-#          terraform -chdir=web apply
-#
-#          terraform -chdir=web-waf init
-#          terraform -chdir=web-waf apply
-#
-#          terraform -chdir=resque init
-#          terraform -chdir=resque apply
-#
-#          terraform -chdir=eks init
-#          terraform -chdir=eks apply
-#
-#          terraform -chdir=k8s-core init
-#          terraform -chdir=k8s-core apply
-#
-#          terraform -chdir=happy init
-#          terraform -chdir=happy apply
+          cd terraform/envs/${{ inputs.environment }}/${{ matrix.component }}/
+          ../../../../.fogg/tfenv/bin/terraform init -input=false
+          ../../../../.fogg/tfenv/bin/terraform refresh
+          set +e
+          ../../../../.fogg/tfenv/bin/terraform plan -input=false -detailed-exitcode -refresh=false -out=tf.plan
+          exitcode=$?
+          echo "Terraform exited with $exitcode"
+          ../../../../.fogg/tfenv/bin/terraform show -json tf.plan > plan.json
+          change_count=$(jq -r '.resource_changes[].change.actions[]' plan.json | grep -v "no-op" | wc -l)
+          echo "count=$change_count" >> "$GITHUB_OUTPUT"
+          if [[ $exitcode -eq 2 ]]; then
+            exit 0
+          else
+            exit $exitcode
+          fi
+      - name: "Summary - ${{ matrix.component }}"
+        id: summary
+        run: |
+          if [[ ${{ steps.plan.outputs.count }} -gt 0 ]]; then
+            echo ":yellow_circle: Changes: ${{ steps.plan.outputs.count }}" >> $GITHUB_STEP_SUMMARY
+          else
+            echo ":green_circle: No Changes" >> $GITHUB_STEP_SUMMARY
+          fi

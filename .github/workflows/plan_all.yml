@@ -1,0 +1,82 @@
+name: Plan All
+run-name: Plan All in ${{ inputs.environment }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'The environment to which to deploy'
+        required: true
+        type: environment
+        default: 'debug'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  plan-iam-password-policy:
+    name: Plan - iam-password-policy
+    uses: ./.github/workflows/plan_component.yml
+    with:
+      environment: "${{ inputs.environment }}"
+      #      environment: "${{ inputs.environment }}"
+      component: "iam-password-policy"
+    permissions:
+      id-token: write
+      contents: read
+    secrets: inherit
+
+  plan-params-secrets:
+    name: Plan - params-secrets
+    uses: ./.github/workflows/plan_component.yml
+    with:
+      environment: "${{ inputs.environment }}"
+      #      environment: "${{ inputs.environment }}"
+      component: "params-secrets"
+    permissions:
+      id-token: write
+      contents: read
+    secrets: inherit
+
+  plan-czid-services-private-key:
+    name: Plan - czid-services-private-key
+    uses: ./.github/workflows/plan_component.yml
+    with:
+      environment: "${{ inputs.environment }}"
+      #      environment: "${{ inputs.environment }}"
+      component: "czid-services-private-key"
+    permissions:
+      id-token: write
+      contents: read
+    secrets: inherit
+
+  plan-summary:
+    name: Plan Summary
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    needs:
+      - plan-iam-password-policy
+      - plan-params-secrets
+      - plan-czid-services-private-key
+    steps:
+      - name: "Components Summary"
+        id: summary
+        run: |
+          echo "| * | Component | Changes |" >> $GITHUB_STEP_SUMMARY
+          echo "| - | --------- | ------- |" >> $GITHUB_STEP_SUMMARY
+          if [[ ${{ needs.plan-iam-password-policy.outputs.count }} -eq 0 ]]; then
+            echo "| :green_circle: | iam-password-policy | No Changes |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| :yellow_circle: | iam-password-policy | ${{ needs.plan-iam-password-policy.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [[ ${{ needs.plan-params-secrets.outputs.count }} -eq 0 ]]; then
+            echo "| :green_circle: | params-secrets | No Changes |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| :yellow_circle: | params-secrets | ${{ needs.plan-params-secrets.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [[ ${{ needs.plan-czid-services-private-key.outputs.count }} -eq 0 ]]; then
+            echo "| :green_circle: | czid-services-private-key | No Changes |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| :yellow_circle: | czid-services-private-key | ${{ needs.plan-czid-services-private-key.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+          fi
