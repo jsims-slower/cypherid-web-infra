@@ -22,39 +22,45 @@ permissions:
   contents: read
 
 jobs:
-  DeployTerraform:
+  TerraformPlan:
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: true
+      fail-fast: false
       #max-parallel: 2
       matrix:
         component:
-          #- iam-password-policy
-          #- params-secrets
+          - iam-password-policy
+          - params-secrets
           #- route53
-          #- czid-services-private-key
+          - czid-services-private-key
           - cloud-env
-          #- idseq-s3-tar-writer
-          #- elb-access-logs
+          - idseq-s3-tar-writer
+          - elb-access-logs
           - maintenance
-          #- heatmap-optimization
-          #- db
-          #- downloads
-          #- ecs
-          #- batch
-          #- redis
-          #- web
-          #- web-waf
+          - heatmap-optimization
+          - db
+          - downloads
+          - ecs
+          - batch
+          - redis
+          - web
+          - web-waf
           #- auth0
-          #- resque
-          #- eks
-          #- k8s-core
-          #- happy
+          - resque
+          - eks
+          - k8s-core
+          - happy
           - access-management
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Reconfigure git to use HTTP authentication
+        run: >
+          git config --global url."https://github.com/".insteadOf
+          ssh://git@github.com/
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v6.1.0
         with:
@@ -75,17 +81,18 @@ jobs:
       - name: "Plan - ${{ matrix.component }}"
         id: plan
         # TODO: Handle special cases, like route53 which needs idseq-prod access; or fix route53 to be profile-specific only; also Auth0 Params
-        # TODO: make check-plan should be sufficient, but it doesn't leave the plan file after it executes; other commands should also be make commands, but expect AWS CLI
-        # make check-auth init fmt refresh check-plan
+        # NOTE: make check-plan should be sufficient, but it doesn't leave the plan file after it executes; other commands should also be make commands, but expect AWS CLI
+        #       make check-auth init fmt refresh check-plan
         run: |
           cd terraform/envs/${{ inputs.environment }}/${{ matrix.component }}/
           ../../../../.fogg/tfenv/bin/terraform init -input=false
           ../../../../.fogg/tfenv/bin/terraform refresh
           set +e
-          ../../../../.fogg/tfenv/bin/terraform plan -input=false -detailed-exitcode -refresh=false -out=/tmp/${{ matrix.component }}.plan
+          ../../../../.fogg/tfenv/bin/terraform plan -input=false -detailed-exitcode -refresh=false -out=tf.plan
           exitcode=$?
           echo "Terraform exited with $exitcode"
-          change_count=$(jq -r '.resource_changes[].change.actions[]' /tmp/plan.json | grep -v "no-op" | wc -l)
+          ../../../../.fogg/tfenv/bin/terraform show -json tf.plan > plan.json
+          change_count=$(jq -r '.resource_changes[].change.actions[]' plan.json | grep -v "no-op" | wc -l)
           echo "count=$change_count" >> "$GITHUB_OUTPUT"
           if [[ $exitcode -eq 2 ]]; then
             exit 0
@@ -95,4 +102,8 @@ jobs:
       - name: "Summary - ${{ matrix.component }}"
         id: summary
         run: |
-          echo "Changes: ${{ matrix.component }} - ${{ steps.plan.outputs.count }}" >> $GITHUB_STEP_SUMMARY
+          if [[ ${{ steps.plan.outputs.count }} -gt 0 ]]; then
+            echo ":yellow_circle: Changes: ${{ steps.plan.outputs.count }}" >> $GITHUB_STEP_SUMMARY
+          else
+            echo ":green_circle: No Changes" >> $GITHUB_STEP_SUMMARY
+          fi
