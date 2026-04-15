@@ -1,5 +1,4 @@
 name: Plan Component
-#run-name: Plan - ${{ inputs.environment }}
 
 on:
   workflow_call:
@@ -14,13 +13,10 @@ on:
         required: true
     secrets:
       AUTH0_CLIENT_ID:
-        type: string
         required: true
       AUTH0_CLIENT_SECRET:
-        type: string
         required: true
       AUTH0_DOMAIN:
-        type: string
         required: true
     outputs:
       count:
@@ -32,7 +28,7 @@ on:
 
 jobs:
   plan-component:
-    name: Plan Component
+    name: Plan - ${{ inputs.component }}
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     outputs:
@@ -71,7 +67,7 @@ jobs:
           AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
           AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
           AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
-        # TODO: Handle special cases, like route53 which needs idseq-prod access; or fix route53 to be profile-specific only; also Auth0 Params
+        # TODO: Handle special cases, like route53 which needs idseq-prod access; or fix route53 to be profile-specific only
         # NOTE: make check-plan should be sufficient, but it doesn't leave the plan file after it executes; other commands should also be make commands, but expect AWS CLI
         #       make check-auth init fmt refresh check-plan
         run: |
