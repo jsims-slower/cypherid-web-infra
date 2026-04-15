@@ -66,14 +66,14 @@ jobs:
           ../../../../.fogg/tfenv/bin/terraform refresh
           echo "Plan will be created in: ${{ github.workspace }}/component-plan"
           set +e
-          ../../../../.fogg/tfenv/bin/terraform plan -input=false -detailed-exitcode -refresh=false -out=${{ github.workspace }}/component-plan
+          ../../../../.fogg/tfenv/bin/terraform plan -input=false -detailed-exitcode -refresh=false -out="${{ github.workspace }}/component-plan"
           exitcode=$?
           echo "Terraform exited with $exitcode"
-          ../../../../.fogg/tfenv/bin/terraform show -json ${{ github.workspace }}/component-plan > plan.json
+          ../../../../.fogg/tfenv/bin/terraform show -json "${{ github.workspace }}/component-plan" > plan.json
           change_count=$(jq -r '.resource_changes[].change.actions[]' plan.json | grep -v "no-op" | wc -l)
           echo "count=$change_count" >> "$GITHUB_OUTPUT"
           echo "Plan is located in: ${{ github.workspace }}"
-          ls ${{ github.workspace }
+          ls "${{ github.workspace }}"
           if [[ $exitcode -eq 2 ]]; then
             exit 0
           else
@@ -90,7 +90,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: plan-${{ inputs.component }}
-          path: ${{ github.workspace }}/component-plan
+          path: "${{ github.workspace }}/component-plan"
           retention-days: 1
           compression-level: 0 # Plan files are already pretty compact, and max compression gives at best 10% savings
           if-no-files-found: error
