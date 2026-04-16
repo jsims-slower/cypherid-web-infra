@@ -1,4 +1,4 @@
-name: Plan Component
+name: Plan Component Call
 
 on:
   workflow_call:

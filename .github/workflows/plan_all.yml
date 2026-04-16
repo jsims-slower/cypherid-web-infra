@@ -1,5 +1,5 @@
-name: Plan All
-run-name: Plan All in ${{ inputs.environment }}
+name: Manually Plan All
+run-name: Manually Plan All in ${{ inputs.environment }}
 
 on:
   workflow_dispatch:
@@ -18,7 +18,7 @@ permissions:
 jobs:
   plan-iam-password-policy:
     name: Plan - iam-password-policy
-    uses: ./.github/workflows/plan_component.yml
+    uses: ./.github/workflows/plan_component_call.yml
     with:
       environment: ${{ inputs.environment }}
       component: iam-password-policy
@@ -26,7 +26,7 @@ jobs:
 
   plan-params-secrets:
     name: Plan - params-secrets
-    uses: ./.github/workflows/plan_component.yml
+    uses: ./.github/workflows/plan_component_call.yml
     with:
       environment: ${{ inputs.environment }}
       component: params-secrets
@@ -34,7 +34,7 @@ jobs:
 
   #plan-route53:
   #  name: Plan - route53
-  #  uses: ./.github/workflows/plan_component.yml
+  #  uses: ./.github/workflows/plan_component_call.yml
   #  with:
   #    environment: ${{ inputs.environment }}
   #    component: route53
@@ -42,7 +42,7 @@ jobs:
 
   plan-czid-services-private-key:
     name: Plan - czid-services-private-key
-    uses: ./.github/workflows/plan_component.yml
+    uses: ./.github/workflows/plan_component_call.yml
     with:
       environment: ${{ inputs.environment }}
       component: czid-services-private-key
@@ -50,7 +50,7 @@ jobs:
 
   plan-cloud-env:
     name: Plan - cloud-env
-    uses: ./.github/workflows/plan_component.yml
+    uses: ./.github/workflows/plan_component_call.yml
     with:
       environment: ${{ inputs.environment }}
       component: cloud-env
@@ -58,7 +58,7 @@ jobs:
 
   plan-idseq-s3-tar-writer:
     name: Plan - idseq-s3-tar-writer
-    uses: ./.github/workflows/plan_component.yml
+    uses: ./.github/workflows/plan_component_call.yml
     with:
       environment: ${{ inputs.environment }}
       component: idseq-s3-tar-writer
@@ -66,7 +66,7 @@ jobs:
 
   plan-elb-access-logs:
     name: Plan - elb-access-logs
-    uses: ./.github/workflows/plan_component.yml
+    uses: ./.github/workflows/plan_component_call.yml
     with:
       environment: ${{ inputs.environment }}
       component: elb-access-logs
@@ -77,7 +77,7 @@ jobs:
 
   plan-maintenance:
     name: Plan - maintenance
-    uses: ./.github/workflows/plan_component.yml
+    uses: ./.github/workflows/plan_component_call.yml
     with:
       environment: ${{ inputs.environment }}
       component: maintenance
@@ -88,7 +88,7 @@ jobs:
 
   plan-heatmap-optimization:
     name: Plan - heatmap-optimization
-    uses: ./.github/workflows/plan_component.yml
+    uses: ./.github/workflows/plan_component_call.yml
     with:
       environment: ${{ inputs.environment }}
       component: heatmap-optimization
@@ -99,7 +99,7 @@ jobs:
 
   plan-db:
     name: Plan - db
-    uses: ./.github/workflows/plan_component.yml
+    uses: ./.github/workflows/plan_component_call.yml
     with:
       environment: ${{ inputs.environment }}
       component: db
@@ -110,7 +110,7 @@ jobs:
 
   plan-downloads:
     name: Plan - downloads
-    uses: ./.github/workflows/plan_component.yml
+    uses: ./.github/workflows/plan_component_call.yml
     with:
       environment: ${{ inputs.environment }}
       component: downloads
@@ -121,7 +121,7 @@ jobs:
 
   plan-ecs:
     name: Plan - ecs
-    uses: ./.github/workflows/plan_component.yml
+    uses: ./.github/workflows/plan_component_call.yml
     with:
       environment: ${{ inputs.environment }}
       component: ecs
@@ -132,7 +132,7 @@ jobs:
 
   plan-batch:
     name: Plan - batch
-    uses: ./.github/workflows/plan_component.yml
+    uses: ./.github/workflows/plan_component_call.yml
     with:
       environment: ${{ inputs.environment }}
       component: batch
@@ -143,7 +143,7 @@ jobs:
 
   plan-redis:
     name: Plan - redis
-    uses: ./.github/workflows/plan_component.yml
+    uses: ./.github/workflows/plan_component_call.yml
     with:
       environment: ${{ inputs.environment }}
       component: redis
@@ -154,7 +154,7 @@ jobs:
 
   plan-web:
     name: Plan - web
-    uses: ./.github/workflows/plan_component.yml
+    uses: ./.github/workflows/plan_component_call.yml
     with:
       environment: ${{ inputs.environment }}
       component: web
@@ -165,7 +165,7 @@ jobs:
 
   plan-web-waf:
     name: Plan - web-waf
-    uses: ./.github/workflows/plan_component.yml
+    uses: ./.github/workflows/plan_component_call.yml
     with:
       environment: ${{ inputs.environment }}
       component: web-waf
@@ -176,7 +176,7 @@ jobs:
 
   plan-auth0:
     name: Plan - auth0
-    uses: ./.github/workflows/plan_component.yml
+    uses: ./.github/workflows/plan_component_call.yml
     with:
       environment: ${{ inputs.environment }}
       component: auth0
@@ -187,7 +187,7 @@ jobs:
 
   plan-resque:
     name: Plan - resque
-    uses: ./.github/workflows/plan_component.yml
+    uses: ./.github/workflows/plan_component_call.yml
     with:
       environment: ${{ inputs.environment }}
       component: resque
@@ -198,7 +198,7 @@ jobs:
 
   plan-eks:
     name: Plan - eks
-    uses: ./.github/workflows/plan_component.yml
+    uses: ./.github/workflows/plan_component_call.yml
     with:
       environment: ${{ inputs.environment }}
       component: eks
@@ -209,7 +209,7 @@ jobs:
 
   plan-k8s-core:
     name: Plan - k8s-core
-    uses: ./.github/workflows/plan_component.yml
+    uses: ./.github/workflows/plan_component_call.yml
     with:
       environment: ${{ inputs.environment }}
       component: k8s-core
@@ -220,7 +220,7 @@ jobs:
 
   plan-happy:
     name: Plan - happy
-    uses: ./.github/workflows/plan_component.yml
+    uses: ./.github/workflows/plan_component_call.yml
     with:
       environment: ${{ inputs.environment }}
       component: happy
@@ -231,7 +231,7 @@ jobs:
 
   plan-access-management:
     name: Plan - access-management
-    uses: ./.github/workflows/plan_component.yml
+    uses: ./.github/workflows/plan_component_call.yml
     with:
       environment: ${{ inputs.environment }}
       component: access-management
