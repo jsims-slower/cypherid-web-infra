@@ -291,23 +291,23 @@ jobs:
         id: summary
         # TODO: route53, auth0
         run: |
-          echo "|| Component | Changes |" >> $GITHUB_STEP_SUMMARY
-          echo "| - | --------- | ------- |" >> $GITHUB_STEP_SUMMARY
+          echo "|| Component | Changes | Artifact ID |" >> $GITHUB_STEP_SUMMARY
+          echo "| - | --------- | ------- | ----------- |" >> $GITHUB_STEP_SUMMARY
           
           if [[ -z "${{ needs.plan-iam-password-policy.outputs.count }}" ]]; then
-            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+            echo "| :red_circle: | iam-password-policy | Failed | ${{ needs.plan-iam-password-policy.outputs.artifact-id }} |" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.plan-iam-password-policy.outputs.count }}" -eq 0 ]]; then
-            echo "| :green_circle: | iam-password-policy | No Changes |" >> $GITHUB_STEP_SUMMARY 
+            echo "| :green_circle: | iam-password-policy | No Changes | ${{ needs.plan-iam-password-policy.outputs.artifact-id }} |" >> $GITHUB_STEP_SUMMARY 
           else
-            echo "| :yellow_circle: | iam-password-policy | ${{ needs.plan-iam-password-policy.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| :yellow_circle: | iam-password-policy | ${{ needs.plan-iam-password-policy.outputs.count }} | ${{ needs.plan-iam-password-policy.outputs.artifact-id }} |" >> $GITHUB_STEP_SUMMARY
           fi
 
           if [[ -z "${{ needs.plan-params-secrets.outputs.count }}" ]]; then
-            echo "| :red_circle: | params-secrets | Failed |" >> $GITHUB_STEP_SUMMARY
+            echo "| :red_circle: | params-secrets | Failed | ${{ needs.plan-params-secrets.outputs.artifact-id }} |" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.plan-params-secrets.outputs.count }}" -eq 0 ]]; then
-            echo "| :green_circle: | params-secrets | No Changes |" >> $GITHUB_STEP_SUMMARY 
+            echo "| :green_circle: | params-secrets | No Changes | ${{ needs.plan-params-secrets.outputs.artifact-id }} |" >> $GITHUB_STEP_SUMMARY 
           else
-            echo "| :yellow_circle: | params-secrets | ${{ needs.plan-params-secrets.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| :yellow_circle: | params-secrets | ${{ needs.plan-params-secrets.outputs.count }} | ${{ needs.plan-params-secrets.outputs.artifact-id }} |" >> $GITHUB_STEP_SUMMARY
           fi
           
           if [[ -z "${{ needs.plan-czid-services-private-key.outputs.count }}" ]]; then

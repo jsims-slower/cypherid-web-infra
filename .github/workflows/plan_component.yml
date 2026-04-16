@@ -22,45 +22,21 @@ on:
       count:
         description: "Number of changes to apply"
         value: ${{ jobs.plan-component.outputs.count }}
-      plan:
-        description: "The generated Plan artifact"
-        value: "${{ jobs.plan-component.outputs.plan }}"
+      artifact-id:
+        description: "The Artifact ID of the generated Plan"
+        value: "${{ jobs.plan-component.outputs.artifact-id }}"
 
 jobs:
   plan-component:
     name: Plan Component - ${{ inputs.component }}
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
+    env:
+      AWS_REGION: us-west-2
     outputs:
       count: ${{ steps.plan.outputs.count }}
-      plan: "${{ steps.artifact.outputs.plan }}"
+      artifact-id: "${{ steps.output-artifact.outputs.artifact-id }}"
     steps:
-      - name: TestSecrets
-        env:
-          AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
-          AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
-          AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
-        run: |
-          my_str=${{ secrets.AUTH0_CLIENT_ID }}
-          echo "SECRET AUTH0_CLIENT_ID=${#my_str}"
-          echo "ENV AUTH0_CLIENT_ID=${#AUTH0_CLIENT_ID}"
-          
-          my_str=${{ secrets.AUTH0_CLIENT_SECRET }}
-          echo "SECRET AUTH0_CLIENT_SECRET=${#my_str}"
-          echo "ENV AUTH0_CLIENT_SECRET=${#AUTH0_CLIENT_SECRET}"
-          
-          my_str=${{ secrets.AUTH0_DOMAIN }}
-          echo "SECRET AUTH0_DOMAIN=${#my_str}"
-          echo "ENV AUTH0_DOMAIN=${#AUTH0_DOMAIN}"
-          
-          my_str=${{ secrets.AWS_ACCESS_KEY_ID }}
-          echo "SECRET AWS_ACCESS_KEY_ID=${#my_str}"
-          
-          my_str=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          echo "SECRET AWS_SECRET_ACCESS_KEY=${#my_str}"
-          
-          my_str=${{ secrets.AWS_SESSION_TOKEN }}
-          echo "SECRET AWS_SESSION_TOKEN=${#my_str}"
       - name: Git clone the repository
         uses: actions/checkout@v6
         with:
@@ -70,15 +46,20 @@ jobs:
           git config --global url."https://github.com/".insteadOf ssh://git@github.com/
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v6.1.0
-        env:
-          AWS_REGION: us-west-2
+        if: ${{ !env.ACT }}
         with:
-          # TODO: Only uncomment for local execution via nektos-act
-          #aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          #aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          #aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-          #output-env-credentials: true
           role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/czid-${{ inputs.environment }}-gh-actions-executor
+          #role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: ${{ env.AWS_REGION }}
+          aws-profile: idseq-${{ inputs.environment }}
+      - name: Configure AWS Credentials for local execution using nektos act
+        uses: aws-actions/configure-aws-credentials@v6.1.0
+        if: ${{ env.ACT }}
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          output-env-credentials: true
           #role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ env.AWS_REGION }}
           aws-profile: idseq-${{ inputs.environment }}
@@ -97,53 +78,38 @@ jobs:
         # NOTE: make check-plan should be sufficient, but it doesn't leave the plan file after it executes; other commands should also be make commands, but expect AWS CLI
         #       make check-auth init fmt refresh check-plan
         run: |
-          
-          my_str="${{ secrets.AUTH0_CLIENT_ID }}"
-          echo "SECRET AUTH0_CLIENT_ID=${#my_str}"
-          echo "ENV AUTH0_CLIENT_ID=${#AUTH0_CLIENT_ID}"
-          
-          my_str="${{ secrets.AUTH0_CLIENT_SECRET }}"
-          echo "SECRET AUTH0_CLIENT_SECRET=${#my_str}"
-          echo "ENV AUTH0_CLIENT_SECRET=${#AUTH0_CLIENT_SECRET}"
-          
-          my_str="${{ secrets.AUTH0_DOMAIN }}"
-          echo "SECRET AUTH0_DOMAIN=${#my_str}"
-          echo "ENV AUTH0_DOMAIN=${#AUTH0_DOMAIN}"
-          
           cd terraform/envs/${{ inputs.environment }}/${{ inputs.component }}/
           ../../../../.fogg/tfenv/bin/terraform init -input=false
           ../../../../.fogg/tfenv/bin/terraform refresh
           echo "Plan will be created in: ${{ github.workspace }}/component-plan"
           set +e
-          ../../../../.fogg/tfenv/bin/terraform plan -input=false -detailed-exitcode -refresh=false -out="${{ github.workspace }}/component-plan"
+          ../../../../.fogg/tfenv/bin/terraform plan -input=false -detailed-exitcode -refresh=false -out="${{ github.workspace }}/${{ inputs.component }}.plan"
           exitcode=$?
-          echo "Terraform exited with $exitcode"
-          ../../../../.fogg/tfenv/bin/terraform show -json "${{ github.workspace }}/component-plan" > plan.json
-          change_count=$(jq -r '.resource_changes[].change.actions[]' plan.json | grep -v "no-op" | wc -l)
-          echo "count=$change_count" >> "$GITHUB_OUTPUT"
-          echo "Plan is located in: ${{ github.workspace }}"
-          ls "${{ github.workspace }}"
-          if [[ $exitcode -eq 2 ]]; then
-            exit 0
-          else
+          echo "Terraform exited with exit-code $exitcode"
+          if [[ $exitcode -eq 1 ]]; then
             exit $exitcode
           fi
-      # TODO: Only uncomment for local execution via nektos-act, when testing outputs and artifacts
+          ../../../../.fogg/tfenv/bin/terraform show -json "${{ github.workspace }}/${{ inputs.component }}.plan" > plan.json
+          change_count=$(jq -r '.resource_changes[].change.actions[]' plan.json | grep -v "no-op" | wc -l)
+          echo "count=$change_count"
+          echo "count=$change_count" >> "$GITHUB_OUTPUT"
+      # TODO: Only uncomment for local execution via nektos act, when testing outputs and artifacts
       #- name: Terraform Plan
       #  id: plan
       #  run: |
-      #    echo "{}" > ./component.plan
+      #    echo "foo" > "${{ github.workspace }}/component-plan"
       #    count=$(( RANDOM % 3 ))
       #    echo "count=$count" >> "$GITHUB_OUTPUT"
       - name: Upload Plan as Artifact
+        id: upload-artifact
         uses: actions/upload-artifact@v4
         with:
-          name: plan-${{ inputs.component }}
-          path: "${{ github.workspace }}/component-plan"
+          name: "plan-${{ inputs.component }}"
+          path: "${{ github.workspace }}/${{ inputs.component }}.plan"
           retention-days: 1
           compression-level: 0 # Plan files are already pretty compact, and max compression gives at best 10% savings
           if-no-files-found: error
-      - name: Artifact Output
-        id: artifact
+      - name: Output Artifact ID
+        id: output-artifact
         run: |
-          echo "plan=plan-${{ inputs.component }}" >> "$GITHUB_OUTPUT"
+          echo "artifact-id=${{ steps.upload-artifact.outputs.artifact-id }}" >> "$GITHUB_OUTPUT"
