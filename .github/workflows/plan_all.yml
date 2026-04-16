@@ -192,6 +192,20 @@ jobs:
 #      contents: read
 #    secrets: inherit
 
+  test-auth0:
+    name: Test - auth0
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test it
+        env:
+          AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
+          AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
+          AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
+        run: |
+          echo SECRET AUTH0_DOMAIN=${{ secrets.AUTH0_DOMAIN }}
+          echo ENV AUTH0_DOMAIN=AUTH0_DOMAIN
+
   plan-auth0:
     name: Plan - auth0
     uses: ./.github/workflows/plan_component.yml
@@ -296,18 +310,23 @@ jobs:
         run: |
           echo "| * | Component | Changes |" >> $GITHUB_STEP_SUMMARY
           echo "| - | --------- | ------- |" >> $GITHUB_STEP_SUMMARY
+          
           if [[ ${{ needs.plan-czid-services-private-key.outputs.count }} -eq 0 ]]; then
             echo "| :green_circle: | czid-services-private-key | No Changes |" >> $GITHUB_STEP_SUMMARY
           else
             echo "| :yellow_circle: | czid-services-private-key | ${{ needs.plan-czid-services-private-key.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
           fi
-          if [[ ${{ needs.plan-ecs.outputs.count }} -eq 0 ]]; then
+          
+          if [[ "${{ needs.plan-ecs.outputs.count }}" -eq 0 ]]; then
             echo "| :green_circle: | ecs | No Changes |" >> $GITHUB_STEP_SUMMARY
           else
             echo "| :yellow_circle: | ecs | ${{ needs.plan-ecs.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
           fi
-          if [[ ${{ needs.plan-auth0.outputs.count }} -eq 0 ]]; then
-            echo "| :green_circle: | auth0 | No Changes |" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ -z "${{ needs.plan-auth0.outputs.count }}" ]]; then
+            echo "| :red_circle: | auth0 | Failed |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.plan-auth0.outputs.count }}" -eq 0 ]]; then
+            echo "| :green_circle: | auth0 | No Changes |" >> $GITHUB_STEP_SUMMARY 
           else
             echo "| :yellow_circle: | auth0 | ${{ needs.plan-auth0.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
           fi
