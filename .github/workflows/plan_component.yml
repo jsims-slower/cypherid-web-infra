@@ -41,9 +41,17 @@ jobs:
           AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
           AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
         run: |
+          my_str=${{ secrets.AUTH0_CLIENT_ID }}
+          echo "SECRET AUTH0_CLIENT_ID=${#my_str}"
+          echo "ENV AUTH0_CLIENT_ID=${#AUTH0_CLIENT_ID}"
+          
+          my_str=${{ secrets.AUTH0_CLIENT_SECRET }}
+          echo "SECRET AUTH0_CLIENT_SECRET=${#my_str}"
+          echo "ENV AUTH0_CLIENT_SECRET=${#AUTH0_CLIENT_SECRET}"
+          
           my_str=${{ secrets.AUTH0_DOMAIN }}
           echo "SECRET AUTH0_DOMAIN=${#my_str}"
-          echo ENV AUTH0_DOMAIN=${#AUTH0_DOMAIN}
+          echo "ENV AUTH0_DOMAIN=${#AUTH0_DOMAIN}"
       - name: Git clone the repository
         uses: actions/checkout@v6
         with:
@@ -80,6 +88,19 @@ jobs:
         # NOTE: make check-plan should be sufficient, but it doesn't leave the plan file after it executes; other commands should also be make commands, but expect AWS CLI
         #       make check-auth init fmt refresh check-plan
         run: |
+          
+          my_str=${{ secrets.AUTH0_CLIENT_ID }}
+          echo "SECRET AUTH0_CLIENT_ID=${#my_str}"
+          echo "ENV AUTH0_CLIENT_ID=${#AUTH0_CLIENT_ID}"
+          
+          my_str=${{ secrets.AUTH0_CLIENT_SECRET }}
+          echo "SECRET AUTH0_CLIENT_SECRET=${#my_str}"
+          echo "ENV AUTH0_CLIENT_SECRET=${#AUTH0_CLIENT_SECRET}"
+          
+          my_str=${{ secrets.AUTH0_DOMAIN }}
+          echo "SECRET AUTH0_DOMAIN=${#my_str}"
+          echo "ENV AUTH0_DOMAIN=${#AUTH0_DOMAIN}"
+          
           cd terraform/envs/${{ inputs.environment }}/${{ inputs.component }}/
           ../../../../.fogg/tfenv/bin/terraform init -input=false
           ../../../../.fogg/tfenv/bin/terraform refresh
