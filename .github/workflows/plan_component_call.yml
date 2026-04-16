@@ -19,15 +19,18 @@ on:
       AUTH0_DOMAIN:
         required: true
     outputs:
-      count:
+      change-count:
         description: "Then number of changes in the generated Plan"
-        value: ${{ jobs.plan-component.outputs.count }}
+        value: ${{ jobs.plan-component.outputs.change-count }}
       plan-artifact-id:
         description: "Then number of changes in the generated Plan"
         value: ${{ jobs.plan-component.outputs.count }}
       result-artifact-id:
         description: "The Artifact ID of the generated Plan"
         value: "${{ jobs.plan-component.outputs.artifact-id }}"
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   plan-component:
@@ -37,7 +40,7 @@ jobs:
     env:
       AWS_REGION: us-west-2
     outputs:
-      count: ${{ steps.create-result.outputs.count }}
+      change-count: ${{ steps.create-result.outputs.change-count }}
       plan-artifact-id: ${{ steps.upload-plan.outputs.artifact-id }}
       result-artifact-id: "${{ steps.upload-result.outputs.artifact-id }}"
     steps:
@@ -101,7 +104,7 @@ jobs:
       #    echo "foo" > "${{ github.workspace }}/tf.plan"
       - name: Upload Plan as Artifact
         id: upload-plan
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: "plan-${{ inputs.component }}"
           path: "${{ github.workspace }}/tf.plan"
@@ -112,32 +115,32 @@ jobs:
       #- name: Create Result JSON
       #  id: create-result
       #  run: |
-      #    count=$(( RANDOM % 3 ))
-      #    echo "count=$count"
-      #    echo "count=$count" >> "$GITHUB_OUTPUT"
-      #    jq -n \
-      #      --arg count $count \
-      #      --arg name "plan-${{ inputs.component }}" \
-      #      --arg id "${{ steps.upload-plan.outputs.artifact-id }}" \
-      #      '{change_count: $count, artifact_name: $name, artifact_id: $id}' \
-      #      > "${{ github.workspace }}/result.json"
+      #    change_count=$(( RANDOM % 3 ))
+      #    echo "change-count=$change_count"
+      #    echo "change-count=$change_count" >> "$GITHUB_OUTPUT"
+      #    jq -cn \
+      #      --arg component "${{ inputs.component }}" \
+      #      --arg change_count $change_count \
+      #      --arg artifact_name "plan-${{ inputs.component }}" \
+      #      --arg artifact_id "${{ steps.upload-plan.outputs.artifact-id }}" \
+      #      '$ARGS.named' > "${{ github.workspace }}/result.json"
       #    jq -c . "${{ github.workspace }}/result.json"
       - name: Create Result JSON
         id: create-result
         run: |
-          count=$(jq -r '.resource_changes[].change.actions[]' "${{ github.workspace }}/plan.json" | grep -v "no-op" | wc -l)
-          echo "count=$count"
-          echo "count=$count" >> "$GITHUB_OUTPUT"
-          jq -n \
-            --arg count $count \
-            --arg name "plan-${{ inputs.component }}" \
-            --arg id "${{ steps.upload-plan.outputs.artifact-id }}" \
-            '{change_count: $count, artifact_name: $name, artifact_id: $id}' \
-            > "${{ github.workspace }}/result.json"
+          change_count=$(jq -r '.resource_changes[].change.actions[]' "${{ github.workspace }}/plan.json" | grep -v "no-op" | wc -l)
+          echo "change-count=$change_count"
+          echo "change-count=$change_count" >> "$GITHUB_OUTPUT"
+          jq -cn \
+            --arg component "${{ inputs.component }}" \
+            --arg change_count $change_count \
+            --arg artifact_name "plan-${{ inputs.component }}" \
+            --arg artifact_id "${{ steps.upload-plan.outputs.artifact-id }}" \
+            '$ARGS.named' > "${{ github.workspace }}/result.json"
           jq -c . "${{ github.workspace }}/result.json"
       - name: Upload Result JSON as Artifact
         id: upload-result
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: "result-${{ inputs.component }}"
           path: "${{ github.workspace }}/result.json"
