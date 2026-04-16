@@ -29,6 +29,9 @@ on:
         description: "The Artifact ID of the generated Plan"
         value: "${{ jobs.plan-component.outputs.artifact-id }}"
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   plan-component:
     name: Plan Component - ${{ inputs.component }}
