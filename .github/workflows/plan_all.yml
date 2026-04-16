@@ -201,14 +201,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    secrets:
-      # TODO: inherit should work, but doesn't for some reason; Only uncomment these when testing locally!
-      #AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
-      AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
-      AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
-      AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
+    secrets: inherit
 
   plan-resque:
     name: Plan - resque
@@ -310,7 +303,7 @@ jobs:
           fi
 
           if [[ -z "${{ needs.plan-params-secrets.outputs.count }}" ]]; then
-            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+            echo "| :red_circle: | params-secrets | Failed |" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.plan-params-secrets.outputs.count }}" -eq 0 ]]; then
             echo "| :green_circle: | params-secrets | No Changes |" >> $GITHUB_STEP_SUMMARY 
           else
@@ -318,7 +311,7 @@ jobs:
           fi
           
           if [[ -z "${{ needs.plan-czid-services-private-key.outputs.count }}" ]]; then
-            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+            echo "| :red_circle: | czid-services-private-key | Failed |" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.plan-czid-services-private-key.outputs.count }}" -eq 0 ]]; then
             echo "| :green_circle: | czid-services-private-key | No Changes |" >> $GITHUB_STEP_SUMMARY 
           else
@@ -326,7 +319,7 @@ jobs:
           fi
           
           if [[ -z "${{ needs.plan-cloud-env.outputs.count }}" ]]; then
-            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+            echo "| :red_circle: | cloud-env | Failed |" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.plan-cloud-env.outputs.count }}" -eq 0 ]]; then
             echo "| :green_circle: | cloud-env | No Changes |" >> $GITHUB_STEP_SUMMARY 
           else
@@ -334,7 +327,7 @@ jobs:
           fi
           
           if [[ -z "${{ needs.plan-idseq-s3-tar-writer.outputs.count }}" ]]; then
-            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+            echo "| :red_circle: | idseq-s3-tar-writer | Failed |" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.plan-idseq-s3-tar-writer.outputs.count }}" -eq 0 ]]; then
             echo "| :green_circle: | idseq-s3-tar-writer | No Changes |" >> $GITHUB_STEP_SUMMARY 
           else
@@ -342,7 +335,7 @@ jobs:
           fi
           
           if [[ -z "${{ needs.plan-elb-access-logs.outputs.count }}" ]]; then
-            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+            echo "| :red_circle: | elb-access-logs | Failed |" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.plan-elb-access-logs.outputs.count }}" -eq 0 ]]; then
             echo "| :green_circle: | elb-access-logs | No Changes |" >> $GITHUB_STEP_SUMMARY 
           else
@@ -350,7 +343,7 @@ jobs:
           fi
           
           if [[ -z "${{ needs.plan-maintenance.outputs.count }}" ]]; then
-            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+            echo "| :red_circle: | maintenance | Failed |" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.plan-maintenance.outputs.count }}" -eq 0 ]]; then
             echo "| :green_circle: | maintenance | No Changes |" >> $GITHUB_STEP_SUMMARY 
           else
@@ -358,7 +351,7 @@ jobs:
           fi
           
           if [[ -z "${{ needs.plan-heatmap-optimization.outputs.count }}" ]]; then
-            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+            echo "| :red_circle: | heatmap-optimization | Failed |" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.plan-heatmap-optimization.outputs.count }}" -eq 0 ]]; then
             echo "| :green_circle: | heatmap-optimization | No Changes |" >> $GITHUB_STEP_SUMMARY 
           else
@@ -366,7 +359,7 @@ jobs:
           fi
           
           if [[ -z "${{ needs.plan-db.outputs.count }}" ]]; then
-            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+            echo "| :red_circle: | db | Failed |" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.plan-db.outputs.count }}" -eq 0 ]]; then
             echo "| :green_circle: | db | No Changes |" >> $GITHUB_STEP_SUMMARY 
           else
@@ -374,7 +367,7 @@ jobs:
           fi
           
           if [[ -z "${{ needs.plan-downloads.outputs.count }}" ]]; then
-            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+            echo "| :red_circle: | downloadspolicy | Failed |" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.plan-downloads.outputs.count }}" -eq 0 ]]; then
             echo "| :green_circle: | downloads | No Changes |" >> $GITHUB_STEP_SUMMARY 
           else
@@ -382,7 +375,7 @@ jobs:
           fi
           
           if [[ -z "${{ needs.plan-ecs.outputs.count }}" ]]; then
-            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+            echo "| :red_circle: | ecs | Failed |" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.plan-ecs.outputs.count }}" -eq 0 ]]; then
             echo "| :green_circle: | ecs | No Changes |" >> $GITHUB_STEP_SUMMARY 
           else
@@ -390,7 +383,7 @@ jobs:
           fi
           
           if [[ -z "${{ needs.plan-batch.outputs.count }}" ]]; then
-            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+            echo "| :red_circle: | batch | Failed |" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.plan-batch.outputs.count }}" -eq 0 ]]; then
             echo "| :green_circle: | batch | No Changes |" >> $GITHUB_STEP_SUMMARY 
           else
@@ -398,7 +391,7 @@ jobs:
           fi
           
           if [[ -z "${{ needs.plan-redis.outputs.count }}" ]]; then
-            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+            echo "| :red_circle: | redis | Failed |" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.plan-redis.outputs.count }}" -eq 0 ]]; then
             echo "| :green_circle: | redis | No Changes |" >> $GITHUB_STEP_SUMMARY 
           else
@@ -406,7 +399,7 @@ jobs:
           fi          
           
           if [[ -z "${{ needs.plan-web.outputs.count }}" ]]; then
-            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+            echo "| :red_circle: | web | Failed |" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.plan-web.outputs.count }}" -eq 0 ]]; then
             echo "| :green_circle: | web | No Changes |" >> $GITHUB_STEP_SUMMARY 
           else
@@ -414,7 +407,7 @@ jobs:
           fi
           
           if [[ -z "${{ needs.plan-web-waf.outputs.count }}" ]]; then
-            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+            echo "| :red_circle: | web-waf | Failed |" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.plan-web-waf.outputs.count }}" -eq 0 ]]; then
             echo "| :green_circle: | web-waf | No Changes |" >> $GITHUB_STEP_SUMMARY 
           else
@@ -422,7 +415,7 @@ jobs:
           fi
           
           if [[ -z "${{ needs.plan-auth0.outputs.count }}" ]]; then
-            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+            echo "| :red_circle: | auth0 | Failed |" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.plan-auth0.outputs.count }}" -eq 0 ]]; then
             echo "| :green_circle: | auth0 | No Changes |" >> $GITHUB_STEP_SUMMARY 
           else
@@ -430,7 +423,7 @@ jobs:
           fi
           
           if [[ -z "${{ needs.plan-resque.outputs.count }}" ]]; then
-            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+            echo "| :red_circle: | resque | Failed |" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.plan-resque.outputs.count }}" -eq 0 ]]; then
             echo "| :green_circle: | resque | No Changes |" >> $GITHUB_STEP_SUMMARY 
           else
@@ -438,7 +431,7 @@ jobs:
           fi
           
           if [[ -z "${{ needs.plan-eks.outputs.count }}" ]]; then
-            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+            echo "| :red_circle: | eks | Failed |" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.plan-eks.outputs.count }}" -eq 0 ]]; then
             echo "| :green_circle: | eks | No Changes |" >> $GITHUB_STEP_SUMMARY 
           else
@@ -446,7 +439,7 @@ jobs:
           fi
           
           if [[ -z "${{ needs.plan-k8s-core.outputs.count }}" ]]; then
-            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+            echo "| :red_circle: | k8s-core | Failed |" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.plan-k8s-core.outputs.count }}" -eq 0 ]]; then
             echo "| :green_circle: | k8s-core | No Changes |" >> $GITHUB_STEP_SUMMARY 
           else
@@ -454,7 +447,7 @@ jobs:
           fi
           
           if [[ -z "${{ needs.plan-happy.outputs.count }}" ]]; then
-            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+            echo "| :red_circle: | happypolicy | Failed |" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.plan-happy.outputs.count }}" -eq 0 ]]; then
             echo "| :green_circle: | happy | No Changes |" >> $GITHUB_STEP_SUMMARY 
           else
@@ -462,7 +455,7 @@ jobs:
           fi
           
           if [[ -z "${{ needs.plan-access-management.outputs.count }}" ]]; then
-            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+            echo "| :red_circle: | access-management | Failed |" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.plan-access-management.outputs.count }}" -eq 0 ]]; then
             echo "| :green_circle: | access-management | No Changes |" >> $GITHUB_STEP_SUMMARY 
           else
