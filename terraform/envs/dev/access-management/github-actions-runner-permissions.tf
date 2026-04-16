@@ -1,5 +1,5 @@
 locals {
-  account_id          = var.aws_accounts.idseq-staging
+  account_id          = var.aws_accounts.idseq-dev
   s3_bucket_workflows = data.terraform_remote_state.web.outputs.s3_bucket_workflows
 }
 
