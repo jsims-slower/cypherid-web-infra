@@ -41,8 +41,9 @@ jobs:
           AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
           AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
         run: |
-          echo SECRET AUTH0_DOMAIN=${{ secrets.AUTH0_DOMAIN }}
-          echo ENV AUTH0_DOMAIN=$AUTH0_DOMAIN
+          my_str=${{ secrets.AUTH0_DOMAIN }}
+          echo "SECRET AUTH0_DOMAIN=${#my_str}"
+          echo ENV AUTH0_DOMAIN=${#AUTH0_DOMAIN}
       - name: Git clone the repository
         uses: actions/checkout@v6
         with:
