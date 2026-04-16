@@ -16,27 +16,27 @@ permissions:
 
 # NOTE: We would use a matrix, but Outputs are not properly supported yet
 jobs:
-#  plan-iam-password-policy:
-#    name: Plan - iam-password-policy
-#    uses: ./.github/workflows/plan_component.yml
-#    with:
-#      environment: ${{ inputs.environment }}
-#      component: iam-password-policy
-#    permissions:
-#      id-token: write
-#      contents: read
-#    secrets: inherit
-#
-#  plan-params-secrets:
-#    name: Plan - params-secrets
-#    uses: ./.github/workflows/plan_component.yml
-#    with:
-#      environment: ${{ inputs.environment }}
-#      component: params-secrets
-#    permissions:
-#      id-token: write
-#      contents: read
-#    secrets: inherit
+  plan-iam-password-policy:
+    name: Plan - iam-password-policy
+    uses: ./.github/workflows/plan_component.yml
+    with:
+      environment: ${{ inputs.environment }}
+      component: iam-password-policy
+    permissions:
+      id-token: write
+      contents: read
+    secrets: inherit
+
+  plan-params-secrets:
+    name: Plan - params-secrets
+    uses: ./.github/workflows/plan_component.yml
+    with:
+      environment: ${{ inputs.environment }}
+      component: params-secrets
+    permissions:
+      id-token: write
+      contents: read
+    secrets: inherit
 
   #plan-route53:
   #  name: Plan - route53
@@ -59,83 +59,83 @@ jobs:
       id-token: write
       contents: read
     secrets: inherit
-#
-#  plan-cloud-env:
-#    name: Plan - cloud-env
-#    uses: ./.github/workflows/plan_component.yml
-#    with:
-#      environment: ${{ inputs.environment }}
-#      component: cloud-env
-#    permissions:
-#      id-token: write
-#      contents: read
-#    secrets: inherit
-#
-#  plan-idseq-s3-tar-writer:
-#    name: Plan - idseq-s3-tar-writer
-#    uses: ./.github/workflows/plan_component.yml
-#    with:
-#      environment: ${{ inputs.environment }}
-#      component: idseq-s3-tar-writer
-#    permissions:
-#      id-token: write
-#      contents: read
-#    secrets: inherit
-#
-#  plan-elb-access-logs:
-#    name: Plan - elb-access-logs
-#    uses: ./.github/workflows/plan_component.yml
-#    with:
-#      environment: ${{ inputs.environment }}
-#      component: elb-access-logs
-#    permissions:
-#      id-token: write
-#      contents: read
-#    secrets: inherit
-#
-#  plan-maintenance:
-#    name: Plan - maintenance
-#    uses: ./.github/workflows/plan_component.yml
-#    with:
-#      environment: ${{ inputs.environment }}
-#      component: maintenance
-#    permissions:
-#      id-token: write
-#      contents: read
-#    secrets: inherit
-#
-#  plan-heatmap-optimization:
-#    name: Plan - heatmap-optimization
-#    uses: ./.github/workflows/plan_component.yml
-#    with:
-#      environment: ${{ inputs.environment }}
-#      component: heatmap-optimization
-#    permissions:
-#      id-token: write
-#      contents: read
-#    secrets: inherit
-#
-#  plan-db:
-#    name: Plan - db
-#    uses: ./.github/workflows/plan_component.yml
-#    with:
-#      environment: ${{ inputs.environment }}
-#      component: db
-#    permissions:
-#      id-token: write
-#      contents: read
-#    secrets: inherit
-#
-#  plan-downloads:
-#    name: Plan - downloads
-#    uses: ./.github/workflows/plan_component.yml
-#    with:
-#      environment: ${{ inputs.environment }}
-#      component: downloads
-#    permissions:
-#      id-token: write
-#      contents: read
-#    secrets: inherit
+
+  plan-cloud-env:
+    name: Plan - cloud-env
+    uses: ./.github/workflows/plan_component.yml
+    with:
+      environment: ${{ inputs.environment }}
+      component: cloud-env
+    permissions:
+      id-token: write
+      contents: read
+    secrets: inherit
+
+  plan-idseq-s3-tar-writer:
+    name: Plan - idseq-s3-tar-writer
+    uses: ./.github/workflows/plan_component.yml
+    with:
+      environment: ${{ inputs.environment }}
+      component: idseq-s3-tar-writer
+    permissions:
+      id-token: write
+      contents: read
+    secrets: inherit
+
+  plan-elb-access-logs:
+    name: Plan - elb-access-logs
+    uses: ./.github/workflows/plan_component.yml
+    with:
+      environment: ${{ inputs.environment }}
+      component: elb-access-logs
+    permissions:
+      id-token: write
+      contents: read
+    secrets: inherit
+
+  plan-maintenance:
+    name: Plan - maintenance
+    uses: ./.github/workflows/plan_component.yml
+    with:
+      environment: ${{ inputs.environment }}
+      component: maintenance
+    permissions:
+      id-token: write
+      contents: read
+    secrets: inherit
+
+  plan-heatmap-optimization:
+    name: Plan - heatmap-optimization
+    uses: ./.github/workflows/plan_component.yml
+    with:
+      environment: ${{ inputs.environment }}
+      component: heatmap-optimization
+    permissions:
+      id-token: write
+      contents: read
+    secrets: inherit
+
+  plan-db:
+    name: Plan - db
+    uses: ./.github/workflows/plan_component.yml
+    with:
+      environment: ${{ inputs.environment }}
+      component: db
+    permissions:
+      id-token: write
+      contents: read
+    secrets: inherit
+
+  plan-downloads:
+    name: Plan - downloads
+    uses: ./.github/workflows/plan_component.yml
+    with:
+      environment: ${{ inputs.environment }}
+      component: downloads
+    permissions:
+      id-token: write
+      contents: read
+    secrets: inherit
 
   plan-ecs:
     name: Plan - ecs
@@ -147,50 +147,50 @@ jobs:
       id-token: write
       contents: read
     secrets: inherit
-#
-#  plan-batch:
-#    name: Plan - batch
-#    uses: ./.github/workflows/plan_component.yml
-#    with:
-#      environment: ${{ inputs.environment }}
-#      component: batch
-#    permissions:
-#      id-token: write
-#      contents: read
-#    secrets: inherit
-#
-#  plan-redis:
-#    name: Plan - redis
-#    uses: ./.github/workflows/plan_component.yml
-#    with:
-#      environment: ${{ inputs.environment }}
-#      component: redis
-#    permissions:
-#      id-token: write
-#      contents: read
-#    secrets: inherit
-#
-#  plan-web:
-#    name: Plan - web
-#    uses: ./.github/workflows/plan_component.yml
-#    with:
-#      environment: ${{ inputs.environment }}
-#      component: web
-#    permissions:
-#      id-token: write
-#      contents: read
-#    secrets: inherit
-#
-#  plan-web-waf:
-#    name: Plan - web-waf
-#    uses: ./.github/workflows/plan_component.yml
-#    with:
-#      environment: ${{ inputs.environment }}
-#      component: web-waf
-#    permissions:
-#      id-token: write
-#      contents: read
-#    secrets: inherit
+
+  plan-batch:
+    name: Plan - batch
+    uses: ./.github/workflows/plan_component.yml
+    with:
+      environment: ${{ inputs.environment }}
+      component: batch
+    permissions:
+      id-token: write
+      contents: read
+    secrets: inherit
+
+  plan-redis:
+    name: Plan - redis
+    uses: ./.github/workflows/plan_component.yml
+    with:
+      environment: ${{ inputs.environment }}
+      component: redis
+    permissions:
+      id-token: write
+      contents: read
+    secrets: inherit
+
+  plan-web:
+    name: Plan - web
+    uses: ./.github/workflows/plan_component.yml
+    with:
+      environment: ${{ inputs.environment }}
+      component: web
+    permissions:
+      id-token: write
+      contents: read
+    secrets: inherit
+
+  plan-web-waf:
+    name: Plan - web-waf
+    uses: ./.github/workflows/plan_component.yml
+    with:
+      environment: ${{ inputs.environment }}
+      component: web-waf
+    permissions:
+      id-token: write
+      contents: read
+    secrets: inherit
 
   plan-auth0:
     name: Plan - auth0
@@ -210,60 +210,60 @@ jobs:
       AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
       AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
 
-#  plan-resque:
-#    name: Plan - resque
-#    uses: ./.github/workflows/plan_component.yml
-#    with:
-#      environment: ${{ inputs.environment }}
-#      component: resque
-#    permissions:
-#      id-token: write
-#      contents: read
-#    secrets: inherit
-#
-#  plan-eks:
-#    name: Plan - eks
-#    uses: ./.github/workflows/plan_component.yml
-#    with:
-#      environment: ${{ inputs.environment }}
-#      component: eks
-#    permissions:
-#      id-token: write
-#      contents: read
-#    secrets: inherit
-#
-#  plan-k8s-core:
-#    name: Plan - k8s-core
-#    uses: ./.github/workflows/plan_component.yml
-#    with:
-#      environment: ${{ inputs.environment }}
-#      component: k8s-core
-#    permissions:
-#      id-token: write
-#      contents: read
-#    secrets: inherit
-#
-#  plan-happy:
-#    name: Plan - happy
-#    uses: ./.github/workflows/plan_component.yml
-#    with:
-#      environment: ${{ inputs.environment }}
-#      component: happy
-#    permissions:
-#      id-token: write
-#      contents: read
-#    secrets: inherit
-#
-#  plan-access-management:
-#    name: Plan - access-management
-#    uses: ./.github/workflows/plan_component.yml
-#    with:
-#      environment: ${{ inputs.environment }}
-#      component: access-management
-#    permissions:
-#      id-token: write
-#      contents: read
-#    secrets: inherit
+  plan-resque:
+    name: Plan - resque
+    uses: ./.github/workflows/plan_component.yml
+    with:
+      environment: ${{ inputs.environment }}
+      component: resque
+    permissions:
+      id-token: write
+      contents: read
+    secrets: inherit
+
+  plan-eks:
+    name: Plan - eks
+    uses: ./.github/workflows/plan_component.yml
+    with:
+      environment: ${{ inputs.environment }}
+      component: eks
+    permissions:
+      id-token: write
+      contents: read
+    secrets: inherit
+
+  plan-k8s-core:
+    name: Plan - k8s-core
+    uses: ./.github/workflows/plan_component.yml
+    with:
+      environment: ${{ inputs.environment }}
+      component: k8s-core
+    permissions:
+      id-token: write
+      contents: read
+    secrets: inherit
+
+  plan-happy:
+    name: Plan - happy
+    uses: ./.github/workflows/plan_component.yml
+    with:
+      environment: ${{ inputs.environment }}
+      component: happy
+    permissions:
+      id-token: write
+      contents: read
+    secrets: inherit
+
+  plan-access-management:
+    name: Plan - access-management
+    uses: ./.github/workflows/plan_component.yml
+    with:
+      environment: ${{ inputs.environment }}
+      component: access-management
+    permissions:
+      id-token: write
+      contents: read
+    secrets: inherit
 
   plan-summary:
     name: Plan Summary
@@ -271,28 +271,28 @@ jobs:
     runs-on: ubuntu-latest
     if: always() # Run even if upstream jobs fail
     needs:
-#      - plan-iam-password-policy
-#      - plan-params-secrets
+      - plan-iam-password-policy
+      - plan-params-secrets
       #- plan-route53
       - plan-czid-services-private-key
-#      - plan-cloud-env
-#      - plan-idseq-s3-tar-writer
-#      - plan-elb-access-logs
-#      - plan-maintenance
-#      - plan-heatmap-optimization
-#      - plan-db
-#      - plan-downloads
+      - plan-cloud-env
+      - plan-idseq-s3-tar-writer
+      - plan-elb-access-logs
+      - plan-maintenance
+      - plan-heatmap-optimization
+      - plan-db
+      - plan-downloads
       - plan-ecs
-#      - plan-batch
-#      - plan-redis
-#      - plan-web
-#      - plan-web-waf
+      - plan-batch
+      - plan-redis
+      - plan-web
+      - plan-web-waf
       - plan-auth0
-#      - plan-resque
-#      - plan-eks
-#      - plan-k8s-core
-#      - plan-happy
-#      - plan-access-management
+      - plan-resque
+      - plan-eks
+      - plan-k8s-core
+      - plan-happy
+      - plan-access-management
     steps:
       - name: Components Summary
         id: summary
@@ -301,22 +301,170 @@ jobs:
           echo "|| Component | Changes |" >> $GITHUB_STEP_SUMMARY
           echo "| - | --------- | ------- |" >> $GITHUB_STEP_SUMMARY
           
-          if [[ ${{ needs.plan-czid-services-private-key.outputs.count }} -eq 0 ]]; then
-            echo "| :green_circle: | czid-services-private-key | No Changes |" >> $GITHUB_STEP_SUMMARY
+          if [[ -z "${{ needs.plan-iam-password-policy.outputs.count }}" ]]; then
+            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.plan-iam-password-policy.outputs.count }}" -eq 0 ]]; then
+            echo "| :green_circle: | iam-password-policy | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          else
+            echo "| :yellow_circle: | iam-password-policy | ${{ needs.plan-iam-password-policy.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [[ -z "${{ needs.plan-params-secrets.outputs.count }}" ]]; then
+            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.plan-params-secrets.outputs.count }}" -eq 0 ]]; then
+            echo "| :green_circle: | params-secrets | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          else
+            echo "| :yellow_circle: | params-secrets | ${{ needs.plan-params-secrets.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ -z "${{ needs.plan-czid-services-private-key.outputs.count }}" ]]; then
+            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.plan-czid-services-private-key.outputs.count }}" -eq 0 ]]; then
+            echo "| :green_circle: | czid-services-private-key | No Changes |" >> $GITHUB_STEP_SUMMARY 
           else
             echo "| :yellow_circle: | czid-services-private-key | ${{ needs.plan-czid-services-private-key.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
           fi
           
-          if [[ "${{ needs.plan-ecs.outputs.count }}" -eq 0 ]]; then
-            echo "| :green_circle: | ecs | No Changes |" >> $GITHUB_STEP_SUMMARY
+          if [[ -z "${{ needs.plan-cloud-env.outputs.count }}" ]]; then
+            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.plan-cloud-env.outputs.count }}" -eq 0 ]]; then
+            echo "| :green_circle: | cloud-env | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          else
+            echo "| :yellow_circle: | cloud-env | ${{ needs.plan-cloud-env.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ -z "${{ needs.plan-idseq-s3-tar-writer.outputs.count }}" ]]; then
+            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.plan-idseq-s3-tar-writer.outputs.count }}" -eq 0 ]]; then
+            echo "| :green_circle: | idseq-s3-tar-writer | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          else
+            echo "| :yellow_circle: | idseq-s3-tar-writer | ${{ needs.plan-idseq-s3-tar-writer.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ -z "${{ needs.plan-elb-access-logs.outputs.count }}" ]]; then
+            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.plan-elb-access-logs.outputs.count }}" -eq 0 ]]; then
+            echo "| :green_circle: | elb-access-logs | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          else
+            echo "| :yellow_circle: | elb-access-logs | ${{ needs.plan-elb-access-logs.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ -z "${{ needs.plan-maintenance.outputs.count }}" ]]; then
+            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.plan-maintenance.outputs.count }}" -eq 0 ]]; then
+            echo "| :green_circle: | maintenance | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          else
+            echo "| :yellow_circle: | maintenance | ${{ needs.plan-maintenance.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ -z "${{ needs.plan-heatmap-optimization.outputs.count }}" ]]; then
+            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.plan-heatmap-optimization.outputs.count }}" -eq 0 ]]; then
+            echo "| :green_circle: | heatmap-optimization | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          else
+            echo "| :yellow_circle: | heatmap-optimization | ${{ needs.plan-heatmap-optimization.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ -z "${{ needs.plan-db.outputs.count }}" ]]; then
+            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.plan-db.outputs.count }}" -eq 0 ]]; then
+            echo "| :green_circle: | db | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          else
+            echo "| :yellow_circle: | db | ${{ needs.plan-db.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ -z "${{ needs.plan-downloads.outputs.count }}" ]]; then
+            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.plan-downloads.outputs.count }}" -eq 0 ]]; then
+            echo "| :green_circle: | downloads | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          else
+            echo "| :yellow_circle: | downloads | ${{ needs.plan-downloads.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ -z "${{ needs.plan-ecs.outputs.count }}" ]]; then
+            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.plan-ecs.outputs.count }}" -eq 0 ]]; then
+            echo "| :green_circle: | ecs | No Changes |" >> $GITHUB_STEP_SUMMARY 
           else
             echo "| :yellow_circle: | ecs | ${{ needs.plan-ecs.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
           fi
           
+          if [[ -z "${{ needs.plan-batch.outputs.count }}" ]]; then
+            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.plan-batch.outputs.count }}" -eq 0 ]]; then
+            echo "| :green_circle: | batch | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          else
+            echo "| :yellow_circle: | batch | ${{ needs.plan-batch.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ -z "${{ needs.plan-redis.outputs.count }}" ]]; then
+            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.plan-redis.outputs.count }}" -eq 0 ]]; then
+            echo "| :green_circle: | redis | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          else
+            echo "| :yellow_circle: | redis | ${{ needs.plan-redis.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+          fi          
+          
+          if [[ -z "${{ needs.plan-web.outputs.count }}" ]]; then
+            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.plan-web.outputs.count }}" -eq 0 ]]; then
+            echo "| :green_circle: | web | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          else
+            echo "| :yellow_circle: | web | ${{ needs.plan-web.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ -z "${{ needs.plan-web-waf.outputs.count }}" ]]; then
+            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.plan-web-waf.outputs.count }}" -eq 0 ]]; then
+            echo "| :green_circle: | web-waf | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          else
+            echo "| :yellow_circle: | web-waf | ${{ needs.plan-web-waf.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
           if [[ -z "${{ needs.plan-auth0.outputs.count }}" ]]; then
-            echo "| :red_circle: | auth0 | Failed |" >> $GITHUB_STEP_SUMMARY
+            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.plan-auth0.outputs.count }}" -eq 0 ]]; then
             echo "| :green_circle: | auth0 | No Changes |" >> $GITHUB_STEP_SUMMARY 
           else
             echo "| :yellow_circle: | auth0 | ${{ needs.plan-auth0.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ -z "${{ needs.plan-resque.outputs.count }}" ]]; then
+            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.plan-resque.outputs.count }}" -eq 0 ]]; then
+            echo "| :green_circle: | resque | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          else
+            echo "| :yellow_circle: | resque | ${{ needs.plan-resque.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ -z "${{ needs.plan-eks.outputs.count }}" ]]; then
+            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.plan-eks.outputs.count }}" -eq 0 ]]; then
+            echo "| :green_circle: | eks | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          else
+            echo "| :yellow_circle: | eks | ${{ needs.plan-eks.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ -z "${{ needs.plan-k8s-core.outputs.count }}" ]]; then
+            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.plan-k8s-core.outputs.count }}" -eq 0 ]]; then
+            echo "| :green_circle: | k8s-core | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          else
+            echo "| :yellow_circle: | k8s-core | ${{ needs.plan-k8s-core.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ -z "${{ needs.plan-happy.outputs.count }}" ]]; then
+            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.plan-happy.outputs.count }}" -eq 0 ]]; then
+            echo "| :green_circle: | happy | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          else
+            echo "| :yellow_circle: | happy | ${{ needs.plan-happy.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ -z "${{ needs.plan-access-management.outputs.count }}" ]]; then
+            echo "| :red_circle: | iam-password-policy | Failed |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.plan-access-management.outputs.count }}" -eq 0 ]]; then
+            echo "| :green_circle: | access-management | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          else
+            echo "| :yellow_circle: | access-management | ${{ needs.plan-access-management.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
           fi
