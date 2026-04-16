@@ -101,7 +101,7 @@ jobs:
       #    echo "foo" > "${{ github.workspace }}/tf.plan"
       - name: Upload Plan as Artifact
         id: upload-plan
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: "plan-${{ inputs.component }}"
           path: "${{ github.workspace }}/tf.plan"
@@ -137,7 +137,7 @@ jobs:
           jq -c . "${{ github.workspace }}/result.json"
       - name: Upload Result JSON as Artifact
         id: upload-result
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: "result-${{ inputs.component }}"
           path: "${{ github.workspace }}/result.json"

@@ -110,14 +110,14 @@ jobs:
       - plan-components
     steps:
       - name: "Download Results"
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           pattern: result-*
           path: results
       - name: "Generate Summary"
         run: |
           echo "plan-components.result=${{ needs.plan-components.result }}"
-          ls -al results/
+          ls -al results/*/*
           jq --slurp . results/result-*/*
           echo "|   | Component | Changes |" >> $GITHUB_STEP_SUMMARY
           echo "| - | --------- | ------- |" >> $GITHUB_STEP_SUMMARY
