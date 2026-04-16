@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: The environment to which to deploy
+        description: "Both Github Environment and AWS Environment"
         required: true
         type: environment
         default: debug
@@ -22,9 +22,6 @@ jobs:
     with:
       environment: ${{ inputs.environment }}
       component: iam-password-policy
-    permissions:
-      id-token: write
-      contents: read
     secrets: inherit
 
   plan-params-secrets:
@@ -33,9 +30,6 @@ jobs:
     with:
       environment: ${{ inputs.environment }}
       component: params-secrets
-    permissions:
-      id-token: write
-      contents: read
     secrets: inherit
 
   #plan-route53:
@@ -44,9 +38,6 @@ jobs:
   #  with:
   #    environment: ${{ inputs.environment }}
   #    component: route53
-  #  permissions:
-  #    id-token: write
-  #    contents: read
   #  secrets: inherit
 
   plan-czid-services-private-key:
@@ -55,9 +46,6 @@ jobs:
     with:
       environment: ${{ inputs.environment }}
       component: czid-services-private-key
-    permissions:
-      id-token: write
-      contents: read
     secrets: inherit
 
   plan-cloud-env:
@@ -66,9 +54,6 @@ jobs:
     with:
       environment: ${{ inputs.environment }}
       component: cloud-env
-    permissions:
-      id-token: write
-      contents: read
     secrets: inherit
 
   plan-idseq-s3-tar-writer:
@@ -77,9 +62,6 @@ jobs:
     with:
       environment: ${{ inputs.environment }}
       component: idseq-s3-tar-writer
-    permissions:
-      id-token: write
-      contents: read
     secrets: inherit
 
   plan-elb-access-logs:
@@ -289,7 +271,7 @@ jobs:
     steps:
       - name: Components Summary
         id: summary
-        # TODO: route53, auth0
+        # TODO: route53
         run: |
           echo "|| Component | Changes | Artifact ID |" >> $GITHUB_STEP_SUMMARY
           echo "| - | --------- | ------- | ----------- |" >> $GITHUB_STEP_SUMMARY

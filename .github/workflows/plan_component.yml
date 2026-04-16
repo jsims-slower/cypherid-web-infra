@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       environment:
-        description: "Both Github Environment, and the AWS Environment to deploy to"
+        description: "Both Github Environment and AWS Environment"
         type: string
         required: true
       component:
@@ -20,7 +20,7 @@ on:
         required: true
     outputs:
       count:
-        description: "Number of changes to apply"
+        description: "Then number of changes in the generated Plan"
         value: ${{ jobs.plan-component.outputs.count }}
       artifact-id:
         description: "The Artifact ID of the generated Plan"
