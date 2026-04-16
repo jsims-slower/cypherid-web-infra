@@ -92,7 +92,7 @@ jobs:
           - web-waf
           - auth0
           - resque
-          - eks
+          #- eks
           - k8s-core
           - happy
           - access-management
@@ -103,7 +103,7 @@ jobs:
     secrets: inherit
 
   plan-components-summary:
-    name: "Summary of Terraform Plan Components Results"
+    name: "Terraform Plan Components"
     if: ${{ !cancelled() }} # && contains(needs.plan-components.result, 'success') }}
     runs-on: ubuntu-latest
     needs:
