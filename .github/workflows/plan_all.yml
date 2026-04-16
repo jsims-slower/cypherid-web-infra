@@ -105,7 +105,6 @@ jobs:
   plan-components-summary:
     name: "Summary of Terraform Plan Components Results"
     if: ${{ !cancelled() && contains(needs.plan-components.result, 'success') }}
-    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     needs:
       - plan-components
