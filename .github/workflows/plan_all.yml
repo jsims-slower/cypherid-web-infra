@@ -273,8 +273,8 @@ jobs:
         id: summary
         # TODO: route53
         run: |
-          echo "|| Component | Changes | Artifact ID |" >> $GITHUB_STEP_SUMMARY
-          echo "| - | --------- | ------- | ----------- |" >> $GITHUB_STEP_SUMMARY
+          echo "|| Component | Changes |" >> $GITHUB_STEP_SUMMARY
+          echo "| - | --------- | ------- |" >> $GITHUB_STEP_SUMMARY
           
           if [[ -z "${{ needs.plan-iam-password-policy.outputs.count }}" ]]; then
             echo "| :red_circle: | iam-password-policy | Failed | ${{ needs.plan-iam-password-policy.outputs.artifact-id }} |" >> $GITHUB_STEP_SUMMARY

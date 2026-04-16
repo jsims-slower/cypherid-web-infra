@@ -22,7 +22,10 @@ on:
       count:
         description: "Then number of changes in the generated Plan"
         value: ${{ jobs.plan-component.outputs.count }}
-      artifact-id:
+      plan-artifact-id:
+        description: "Then number of changes in the generated Plan"
+        value: ${{ jobs.plan-component.outputs.count }}
+      result-artifact-id:
         description: "The Artifact ID of the generated Plan"
         value: "${{ jobs.plan-component.outputs.artifact-id }}"
 
@@ -34,8 +37,9 @@ jobs:
     env:
       AWS_REGION: us-west-2
     outputs:
-      count: ${{ steps.plan.outputs.count }}
-      artifact-id: "${{ steps.output-artifact.outputs.artifact-id }}"
+      count: ${{ steps.create-result.outputs.count }}
+      plan-artifact-id: ${{ steps.upload-plan.outputs.artifact-id }}
+      result-artifact-id: "${{ steps.upload-result.outputs.artifact-id }}"
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v6
@@ -81,35 +85,61 @@ jobs:
           cd terraform/envs/${{ inputs.environment }}/${{ inputs.component }}/
           ../../../../.fogg/tfenv/bin/terraform init -input=false
           ../../../../.fogg/tfenv/bin/terraform refresh
-          echo "Plan will be created in: ${{ github.workspace }}/component-plan"
+          echo "Plan will be created in: ${{ github.workspace }}/tf.plan"
           set +e
-          ../../../../.fogg/tfenv/bin/terraform plan -input=false -detailed-exitcode -refresh=false -out="${{ github.workspace }}/${{ inputs.component }}.plan"
+          ../../../../.fogg/tfenv/bin/terraform plan -input=false -detailed-exitcode -refresh=false -out="${{ github.workspace }}/tf.plan"
           exitcode=$?
           echo "Terraform exited with exit-code $exitcode"
           if [[ $exitcode -eq 1 ]]; then
             exit $exitcode
           fi
-          ../../../../.fogg/tfenv/bin/terraform show -json "${{ github.workspace }}/${{ inputs.component }}.plan" > plan.json
-          change_count=$(jq -r '.resource_changes[].change.actions[]' plan.json | grep -v "no-op" | wc -l)
-          echo "count=$change_count"
-          echo "count=$change_count" >> "$GITHUB_OUTPUT"
+          ../../../../.fogg/tfenv/bin/terraform show -json "${{ github.workspace }}/tf.plan" > "${{ github.workspace }}/plan.json"
       # TODO: Only uncomment for local execution via nektos act, when testing outputs and artifacts
       #- name: Terraform Plan
       #  id: plan
       #  run: |
-      #    echo "foo" > "${{ github.workspace }}/component-plan"
-      #    count=$(( RANDOM % 3 ))
-      #    echo "count=$count" >> "$GITHUB_OUTPUT"
+      #    echo "foo" > "${{ github.workspace }}/tf.plan"
       - name: Upload Plan as Artifact
-        id: upload-artifact
+        id: upload-plan
         uses: actions/upload-artifact@v4
         with:
           name: "plan-${{ inputs.component }}"
-          path: "${{ github.workspace }}/${{ inputs.component }}.plan"
+          path: "${{ github.workspace }}/tf.plan"
           retention-days: 1
           compression-level: 0 # Plan files are already pretty compact, and max compression gives at best 10% savings
           if-no-files-found: error
-      - name: Output Artifact ID
-        id: output-artifact
+      # TODO: Only uncomment for local execution via nektos act, when testing outputs and artifacts
+      #- name: Create Result JSON
+      #  id: create-result
+      #  run: |
+      #    count=$(( RANDOM % 3 ))
+      #    echo "count=$count"
+      #    echo "count=$count" >> "$GITHUB_OUTPUT"
+      #    jq -n \
+      #      --arg count $count \
+      #      --arg name "plan-${{ inputs.component }}" \
+      #      --arg id "${{ steps.upload-plan.outputs.artifact-id }}" \
+      #      '{change_count: $count, artifact_name: $name, artifact_id: $id}' \
+      #      > "${{ github.workspace }}/result.json"
+      #    jq -c . "${{ github.workspace }}/result.json"
+      - name: Create Result JSON
+        id: create-result
         run: |
-          echo "artifact-id=${{ steps.upload-artifact.outputs.artifact-id }}" >> "$GITHUB_OUTPUT"
+          count=$(jq -r '.resource_changes[].change.actions[]' "${{ github.workspace }}/plan.json" | grep -v "no-op" | wc -l)
+          echo "count=$count"
+          echo "count=$count" >> "$GITHUB_OUTPUT"
+          jq -n \
+            --arg count $count \
+            --arg name "plan-${{ inputs.component }}" \
+            --arg id "${{ steps.upload-plan.outputs.artifact-id }}" \
+            '{change_count: $count, artifact_name: $name, artifact_id: $id}' \
+            > "${{ github.workspace }}/result.json"
+          jq -c . "${{ github.workspace }}/result.json"
+      - name: Upload Result JSON as Artifact
+        id: upload-result
+        uses: actions/upload-artifact@v4
+        with:
+          name: "result-${{ inputs.component }}"
+          path: "${{ github.workspace }}/result.json"
+          retention-days: 1
+          if-no-files-found: error
