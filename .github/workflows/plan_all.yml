@@ -26,6 +26,7 @@ env:
   branch_name: ${{ github.base_ref || github.ref_name }}
 
 permissions:
+  id-token: write
   contents: read
 
 concurrency:
