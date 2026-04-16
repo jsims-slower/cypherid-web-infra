@@ -115,12 +115,12 @@ jobs:
       #    count=$(( RANDOM % 3 ))
       #    echo "count=$count"
       #    echo "count=$count" >> "$GITHUB_OUTPUT"
-      #    jq -n \
+      #    jq -cn \
+      #      --arg component "${{ inputs.component }}" \
       #      --arg count $count \
-      #      --arg name "plan-${{ inputs.component }}" \
-      #      --arg id "${{ steps.upload-plan.outputs.artifact-id }}" \
-      #      '{change_count: $count, artifact_name: $name, artifact_id: $id}' \
-      #      > "${{ github.workspace }}/result.json"
+      #      --arg artifact_name "plan-${{ inputs.component }}" \
+      #      --arg artifact_id "${{ steps.upload-plan.outputs.artifact-id }}" \
+      #      '$ARGS.named' > "${{ github.workspace }}/result.json"
       #    jq -c . "${{ github.workspace }}/result.json"
       - name: Create Result JSON
         id: create-result
@@ -128,12 +128,12 @@ jobs:
           count=$(jq -r '.resource_changes[].change.actions[]' "${{ github.workspace }}/plan.json" | grep -v "no-op" | wc -l)
           echo "count=$count"
           echo "count=$count" >> "$GITHUB_OUTPUT"
-          jq -n \
+          jq -cn \
+            --arg component "${{ inputs.component }}" \
             --arg count $count \
-            --arg name "plan-${{ inputs.component }}" \
-            --arg id "${{ steps.upload-plan.outputs.artifact-id }}" \
-            '{change_count: $count, artifact_name: $name, artifact_id: $id}' \
-            > "${{ github.workspace }}/result.json"
+            --arg artifact_name "plan-${{ inputs.component }}" \
+            --arg artifact_id "${{ steps.upload-plan.outputs.artifact-id }}" \
+            '$ARGS.named' > "${{ github.workspace }}/result.json"
           jq -c . "${{ github.workspace }}/result.json"
       - name: Upload Result JSON as Artifact
         id: upload-result
