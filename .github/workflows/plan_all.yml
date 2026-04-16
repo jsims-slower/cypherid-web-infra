@@ -244,7 +244,7 @@ jobs:
     name: Plan Summary
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
-    if: always() # Run even if upstream jobs fail
+    if: ${{ !cancelled() }} # Run even if upstream jobs fail
     needs:
       - plan-iam-password-policy
       - plan-params-secrets
@@ -276,170 +276,170 @@ jobs:
           echo "|| Component | Changes |" >> $GITHUB_STEP_SUMMARY
           echo "| - | --------- | ------- |" >> $GITHUB_STEP_SUMMARY
           
-          if [[ -z "${{ needs.plan-iam-password-policy.outputs.count }}" ]]; then
+          if [[ -z "${{ needs.plan-iam-password-policy.outputs.change-count }}" ]]; then
             echo "| :red_circle: | iam-password-policy | Failed | ${{ needs.plan-iam-password-policy.outputs.artifact-id }} |" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.plan-iam-password-policy.outputs.count }}" -eq 0 ]]; then
-            echo "| :green_circle: | iam-password-policy | No Changes | ${{ needs.plan-iam-password-policy.outputs.artifact-id }} |" >> $GITHUB_STEP_SUMMARY 
+          elif [[ "${{ needs.plan-iam-password-policy.outputs.change-count }}" -eq 0 ]]; then
+            echo "| :green_circle: | iam-password-policy | None | ${{ needs.plan-iam-password-policy.outputs.artifact-id }} |" >> $GITHUB_STEP_SUMMARY 
           else
-            echo "| :yellow_circle: | iam-password-policy | ${{ needs.plan-iam-password-policy.outputs.count }} | ${{ needs.plan-iam-password-policy.outputs.artifact-id }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| :yellow_circle: | iam-password-policy | ${{ needs.plan-iam-password-policy.outputs.change-count }} | ${{ needs.plan-iam-password-policy.outputs.artifact-id }} |" >> $GITHUB_STEP_SUMMARY
           fi
 
-          if [[ -z "${{ needs.plan-params-secrets.outputs.count }}" ]]; then
+          if [[ -z "${{ needs.plan-params-secrets.outputs.change-count }}" ]]; then
             echo "| :red_circle: | params-secrets | Failed | ${{ needs.plan-params-secrets.outputs.artifact-id }} |" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.plan-params-secrets.outputs.count }}" -eq 0 ]]; then
-            echo "| :green_circle: | params-secrets | No Changes | ${{ needs.plan-params-secrets.outputs.artifact-id }} |" >> $GITHUB_STEP_SUMMARY 
+          elif [[ "${{ needs.plan-params-secrets.outputs.change-count }}" -eq 0 ]]; then
+            echo "| :green_circle: | params-secrets | None | ${{ needs.plan-params-secrets.outputs.artifact-id }} |" >> $GITHUB_STEP_SUMMARY 
           else
-            echo "| :yellow_circle: | params-secrets | ${{ needs.plan-params-secrets.outputs.count }} | ${{ needs.plan-params-secrets.outputs.artifact-id }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| :yellow_circle: | params-secrets | ${{ needs.plan-params-secrets.outputs.change-count }} | ${{ needs.plan-params-secrets.outputs.artifact-id }} |" >> $GITHUB_STEP_SUMMARY
           fi
           
-          if [[ -z "${{ needs.plan-czid-services-private-key.outputs.count }}" ]]; then
+          if [[ -z "${{ needs.plan-czid-services-private-key.outputs.change-count }}" ]]; then
             echo "| :red_circle: | czid-services-private-key | Failed |" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.plan-czid-services-private-key.outputs.count }}" -eq 0 ]]; then
-            echo "| :green_circle: | czid-services-private-key | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          elif [[ "${{ needs.plan-czid-services-private-key.outputs.change-count }}" -eq 0 ]]; then
+            echo "| :green_circle: | czid-services-private-key | None |" >> $GITHUB_STEP_SUMMARY 
           else
-            echo "| :yellow_circle: | czid-services-private-key | ${{ needs.plan-czid-services-private-key.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| :yellow_circle: | czid-services-private-key | ${{ needs.plan-czid-services-private-key.outputs.change-count }} |" >> $GITHUB_STEP_SUMMARY
           fi
           
-          if [[ -z "${{ needs.plan-cloud-env.outputs.count }}" ]]; then
+          if [[ -z "${{ needs.plan-cloud-env.outputs.change-count }}" ]]; then
             echo "| :red_circle: | cloud-env | Failed |" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.plan-cloud-env.outputs.count }}" -eq 0 ]]; then
-            echo "| :green_circle: | cloud-env | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          elif [[ "${{ needs.plan-cloud-env.outputs.change-count }}" -eq 0 ]]; then
+            echo "| :green_circle: | cloud-env | None |" >> $GITHUB_STEP_SUMMARY 
           else
-            echo "| :yellow_circle: | cloud-env | ${{ needs.plan-cloud-env.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| :yellow_circle: | cloud-env | ${{ needs.plan-cloud-env.outputs.change-count }} |" >> $GITHUB_STEP_SUMMARY
           fi
           
-          if [[ -z "${{ needs.plan-idseq-s3-tar-writer.outputs.count }}" ]]; then
+          if [[ -z "${{ needs.plan-idseq-s3-tar-writer.outputs.change-count }}" ]]; then
             echo "| :red_circle: | idseq-s3-tar-writer | Failed |" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.plan-idseq-s3-tar-writer.outputs.count }}" -eq 0 ]]; then
-            echo "| :green_circle: | idseq-s3-tar-writer | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          elif [[ "${{ needs.plan-idseq-s3-tar-writer.outputs.change-count }}" -eq 0 ]]; then
+            echo "| :green_circle: | idseq-s3-tar-writer | None |" >> $GITHUB_STEP_SUMMARY 
           else
-            echo "| :yellow_circle: | idseq-s3-tar-writer | ${{ needs.plan-idseq-s3-tar-writer.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| :yellow_circle: | idseq-s3-tar-writer | ${{ needs.plan-idseq-s3-tar-writer.outputs.change-count }} |" >> $GITHUB_STEP_SUMMARY
           fi
           
-          if [[ -z "${{ needs.plan-elb-access-logs.outputs.count }}" ]]; then
+          if [[ -z "${{ needs.plan-elb-access-logs.outputs.change-count }}" ]]; then
             echo "| :red_circle: | elb-access-logs | Failed |" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.plan-elb-access-logs.outputs.count }}" -eq 0 ]]; then
-            echo "| :green_circle: | elb-access-logs | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          elif [[ "${{ needs.plan-elb-access-logs.outputs.change-count }}" -eq 0 ]]; then
+            echo "| :green_circle: | elb-access-logs | None |" >> $GITHUB_STEP_SUMMARY 
           else
-            echo "| :yellow_circle: | elb-access-logs | ${{ needs.plan-elb-access-logs.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| :yellow_circle: | elb-access-logs | ${{ needs.plan-elb-access-logs.outputs.change-count }} |" >> $GITHUB_STEP_SUMMARY
           fi
           
-          if [[ -z "${{ needs.plan-maintenance.outputs.count }}" ]]; then
+          if [[ -z "${{ needs.plan-maintenance.outputs.change-count }}" ]]; then
             echo "| :red_circle: | maintenance | Failed |" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.plan-maintenance.outputs.count }}" -eq 0 ]]; then
-            echo "| :green_circle: | maintenance | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          elif [[ "${{ needs.plan-maintenance.outputs.change-count }}" -eq 0 ]]; then
+            echo "| :green_circle: | maintenance | None |" >> $GITHUB_STEP_SUMMARY 
           else
-            echo "| :yellow_circle: | maintenance | ${{ needs.plan-maintenance.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| :yellow_circle: | maintenance | ${{ needs.plan-maintenance.outputs.change-count }} |" >> $GITHUB_STEP_SUMMARY
           fi
           
-          if [[ -z "${{ needs.plan-heatmap-optimization.outputs.count }}" ]]; then
+          if [[ -z "${{ needs.plan-heatmap-optimization.outputs.change-count }}" ]]; then
             echo "| :red_circle: | heatmap-optimization | Failed |" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.plan-heatmap-optimization.outputs.count }}" -eq 0 ]]; then
-            echo "| :green_circle: | heatmap-optimization | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          elif [[ "${{ needs.plan-heatmap-optimization.outputs.change-count }}" -eq 0 ]]; then
+            echo "| :green_circle: | heatmap-optimization | None |" >> $GITHUB_STEP_SUMMARY 
           else
-            echo "| :yellow_circle: | heatmap-optimization | ${{ needs.plan-heatmap-optimization.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| :yellow_circle: | heatmap-optimization | ${{ needs.plan-heatmap-optimization.outputs.change-count }} |" >> $GITHUB_STEP_SUMMARY
           fi
           
-          if [[ -z "${{ needs.plan-db.outputs.count }}" ]]; then
+          if [[ -z "${{ needs.plan-db.outputs.change-count }}" ]]; then
             echo "| :red_circle: | db | Failed |" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.plan-db.outputs.count }}" -eq 0 ]]; then
-            echo "| :green_circle: | db | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          elif [[ "${{ needs.plan-db.outputs.change-count }}" -eq 0 ]]; then
+            echo "| :green_circle: | db | None |" >> $GITHUB_STEP_SUMMARY 
           else
-            echo "| :yellow_circle: | db | ${{ needs.plan-db.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| :yellow_circle: | db | ${{ needs.plan-db.outputs.change-count }} |" >> $GITHUB_STEP_SUMMARY
           fi
           
-          if [[ -z "${{ needs.plan-downloads.outputs.count }}" ]]; then
+          if [[ -z "${{ needs.plan-downloads.outputs.change-count }}" ]]; then
             echo "| :red_circle: | downloadspolicy | Failed |" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.plan-downloads.outputs.count }}" -eq 0 ]]; then
-            echo "| :green_circle: | downloads | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          elif [[ "${{ needs.plan-downloads.outputs.change-count }}" -eq 0 ]]; then
+            echo "| :green_circle: | downloads | None |" >> $GITHUB_STEP_SUMMARY 
           else
-            echo "| :yellow_circle: | downloads | ${{ needs.plan-downloads.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| :yellow_circle: | downloads | ${{ needs.plan-downloads.outputs.change-count }} |" >> $GITHUB_STEP_SUMMARY
           fi
           
-          if [[ -z "${{ needs.plan-ecs.outputs.count }}" ]]; then
+          if [[ -z "${{ needs.plan-ecs.outputs.change-count }}" ]]; then
             echo "| :red_circle: | ecs | Failed |" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.plan-ecs.outputs.count }}" -eq 0 ]]; then
-            echo "| :green_circle: | ecs | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          elif [[ "${{ needs.plan-ecs.outputs.change-count }}" -eq 0 ]]; then
+            echo "| :green_circle: | ecs | None |" >> $GITHUB_STEP_SUMMARY 
           else
-            echo "| :yellow_circle: | ecs | ${{ needs.plan-ecs.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| :yellow_circle: | ecs | ${{ needs.plan-ecs.outputs.change-count }} |" >> $GITHUB_STEP_SUMMARY
           fi
           
-          if [[ -z "${{ needs.plan-batch.outputs.count }}" ]]; then
+          if [[ -z "${{ needs.plan-batch.outputs.change-count }}" ]]; then
             echo "| :red_circle: | batch | Failed |" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.plan-batch.outputs.count }}" -eq 0 ]]; then
-            echo "| :green_circle: | batch | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          elif [[ "${{ needs.plan-batch.outputs.change-count }}" -eq 0 ]]; then
+            echo "| :green_circle: | batch | None |" >> $GITHUB_STEP_SUMMARY 
           else
-            echo "| :yellow_circle: | batch | ${{ needs.plan-batch.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| :yellow_circle: | batch | ${{ needs.plan-batch.outputs.change-count }} |" >> $GITHUB_STEP_SUMMARY
           fi
           
-          if [[ -z "${{ needs.plan-redis.outputs.count }}" ]]; then
+          if [[ -z "${{ needs.plan-redis.outputs.change-count }}" ]]; then
             echo "| :red_circle: | redis | Failed |" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.plan-redis.outputs.count }}" -eq 0 ]]; then
-            echo "| :green_circle: | redis | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          elif [[ "${{ needs.plan-redis.outputs.change-count }}" -eq 0 ]]; then
+            echo "| :green_circle: | redis | None |" >> $GITHUB_STEP_SUMMARY 
           else
-            echo "| :yellow_circle: | redis | ${{ needs.plan-redis.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| :yellow_circle: | redis | ${{ needs.plan-redis.outputs.change-count }} |" >> $GITHUB_STEP_SUMMARY
           fi          
           
-          if [[ -z "${{ needs.plan-web.outputs.count }}" ]]; then
+          if [[ -z "${{ needs.plan-web.outputs.change-count }}" ]]; then
             echo "| :red_circle: | web | Failed |" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.plan-web.outputs.count }}" -eq 0 ]]; then
-            echo "| :green_circle: | web | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          elif [[ "${{ needs.plan-web.outputs.change-count }}" -eq 0 ]]; then
+            echo "| :green_circle: | web | None |" >> $GITHUB_STEP_SUMMARY 
           else
-            echo "| :yellow_circle: | web | ${{ needs.plan-web.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| :yellow_circle: | web | ${{ needs.plan-web.outputs.change-count }} |" >> $GITHUB_STEP_SUMMARY
           fi
           
-          if [[ -z "${{ needs.plan-web-waf.outputs.count }}" ]]; then
+          if [[ -z "${{ needs.plan-web-waf.outputs.change-count }}" ]]; then
             echo "| :red_circle: | web-waf | Failed |" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.plan-web-waf.outputs.count }}" -eq 0 ]]; then
-            echo "| :green_circle: | web-waf | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          elif [[ "${{ needs.plan-web-waf.outputs.change-count }}" -eq 0 ]]; then
+            echo "| :green_circle: | web-waf | None |" >> $GITHUB_STEP_SUMMARY 
           else
-            echo "| :yellow_circle: | web-waf | ${{ needs.plan-web-waf.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| :yellow_circle: | web-waf | ${{ needs.plan-web-waf.outputs.change-count }} |" >> $GITHUB_STEP_SUMMARY
           fi
           
-          if [[ -z "${{ needs.plan-auth0.outputs.count }}" ]]; then
+          if [[ -z "${{ needs.plan-auth0.outputs.change-count }}" ]]; then
             echo "| :red_circle: | auth0 | Failed |" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.plan-auth0.outputs.count }}" -eq 0 ]]; then
-            echo "| :green_circle: | auth0 | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          elif [[ "${{ needs.plan-auth0.outputs.change-count }}" -eq 0 ]]; then
+            echo "| :green_circle: | auth0 | None |" >> $GITHUB_STEP_SUMMARY 
           else
-            echo "| :yellow_circle: | auth0 | ${{ needs.plan-auth0.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| :yellow_circle: | auth0 | ${{ needs.plan-auth0.outputs.change-count }} |" >> $GITHUB_STEP_SUMMARY
           fi
           
-          if [[ -z "${{ needs.plan-resque.outputs.count }}" ]]; then
+          if [[ -z "${{ needs.plan-resque.outputs.change-count }}" ]]; then
             echo "| :red_circle: | resque | Failed |" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.plan-resque.outputs.count }}" -eq 0 ]]; then
-            echo "| :green_circle: | resque | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          elif [[ "${{ needs.plan-resque.outputs.change-count }}" -eq 0 ]]; then
+            echo "| :green_circle: | resque | None |" >> $GITHUB_STEP_SUMMARY 
           else
-            echo "| :yellow_circle: | resque | ${{ needs.plan-resque.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| :yellow_circle: | resque | ${{ needs.plan-resque.outputs.change-count }} |" >> $GITHUB_STEP_SUMMARY
           fi
           
-          if [[ -z "${{ needs.plan-eks.outputs.count }}" ]]; then
+          if [[ -z "${{ needs.plan-eks.outputs.change-count }}" ]]; then
             echo "| :red_circle: | eks | Failed |" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.plan-eks.outputs.count }}" -eq 0 ]]; then
-            echo "| :green_circle: | eks | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          elif [[ "${{ needs.plan-eks.outputs.change-count }}" -eq 0 ]]; then
+            echo "| :green_circle: | eks | None |" >> $GITHUB_STEP_SUMMARY 
           else
-            echo "| :yellow_circle: | eks | ${{ needs.plan-eks.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| :yellow_circle: | eks | ${{ needs.plan-eks.outputs.change-count }} |" >> $GITHUB_STEP_SUMMARY
           fi
           
-          if [[ -z "${{ needs.plan-k8s-core.outputs.count }}" ]]; then
+          if [[ -z "${{ needs.plan-k8s-core.outputs.change-count }}" ]]; then
             echo "| :red_circle: | k8s-core | Failed |" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.plan-k8s-core.outputs.count }}" -eq 0 ]]; then
-            echo "| :green_circle: | k8s-core | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          elif [[ "${{ needs.plan-k8s-core.outputs.change-count }}" -eq 0 ]]; then
+            echo "| :green_circle: | k8s-core | None |" >> $GITHUB_STEP_SUMMARY 
           else
-            echo "| :yellow_circle: | k8s-core | ${{ needs.plan-k8s-core.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| :yellow_circle: | k8s-core | ${{ needs.plan-k8s-core.outputs.change-count }} |" >> $GITHUB_STEP_SUMMARY
           fi
           
-          if [[ -z "${{ needs.plan-happy.outputs.count }}" ]]; then
+          if [[ -z "${{ needs.plan-happy.outputs.change-count }}" ]]; then
             echo "| :red_circle: | happypolicy | Failed |" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.plan-happy.outputs.count }}" -eq 0 ]]; then
-            echo "| :green_circle: | happy | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          elif [[ "${{ needs.plan-happy.outputs.change-count }}" -eq 0 ]]; then
+            echo "| :green_circle: | happy | None |" >> $GITHUB_STEP_SUMMARY 
           else
-            echo "| :yellow_circle: | happy | ${{ needs.plan-happy.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| :yellow_circle: | happy | ${{ needs.plan-happy.outputs.change-count }} |" >> $GITHUB_STEP_SUMMARY
           fi
           
-          if [[ -z "${{ needs.plan-access-management.outputs.count }}" ]]; then
+          if [[ -z "${{ needs.plan-access-management.outputs.change-count }}" ]]; then
             echo "| :red_circle: | access-management | Failed |" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.plan-access-management.outputs.count }}" -eq 0 ]]; then
-            echo "| :green_circle: | access-management | No Changes |" >> $GITHUB_STEP_SUMMARY 
+          elif [[ "${{ needs.plan-access-management.outputs.change-count }}" -eq 0 ]]; then
+            echo "| :green_circle: | access-management | None |" >> $GITHUB_STEP_SUMMARY 
           else
-            echo "| :yellow_circle: | access-management | ${{ needs.plan-access-management.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| :yellow_circle: | access-management | ${{ needs.plan-access-management.outputs.change-count }} |" >> $GITHUB_STEP_SUMMARY
           fi
