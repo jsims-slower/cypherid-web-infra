@@ -1,0 +1,129 @@
+name: Terraform Plan all Components
+run-name: Terraform Plan all Components in ${{ github.base_ref || github.ref_name }} by ${{ github.actor }}
+
+on:
+  push:
+    branches:
+      - development
+      - staging
+      - main
+      - 'releases/**'
+  pull_request:
+    branches:
+      - development
+      - staging
+      - main
+      - 'releases/**'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Both Github Environment and AWS Environment"
+        required: true
+        type: environment
+        default: dev
+
+env:
+  branch_name: ${{ github.base_ref || github.ref_name }}
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  should-plan:
+    name: "Check if Terraform Plan should be performed"
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.calculate-environment.outputs.environment }}
+    steps:
+      - name: "Calculate Environment"
+        id: calculate-environment
+        # TODO: Handle Releases
+        run: |
+          echo "branch_name=${{ env.branch_name }}"
+          echo "environment=${{ inputs.environment }}"
+          echo "| Planning | Environment | Branch |" >> $GITHUB_STEP_SUMMARY
+          echo "| ---------------- | ----------- | ------ |" >> $GITHUB_STEP_SUMMARY
+          if [[ -n "${{ inputs.environment }}" ]]; then
+            echo "environment=${{ inputs.environment }}" >> "$GITHUB_OUTPUT"
+            echo "| :green_circle: Enabled | ${{ inputs.environment }} | ${{ env.branch_name }} |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ env.branch_name }}" == "development" ]]; then
+            echo "environment=dev" >> "$GITHUB_OUTPUT"
+            echo "| :green_circle: Enabled | dev | ${{ env.branch_name }} |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ env.branch_name }}" == "staging" ]]; then
+            echo "environment=staging" >> "$GITHUB_OUTPUT"
+            echo "| :green_circle: Enabled | staging | ${{ env.branch_name }} |" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ env.branch_name }}" == "main" ]]; then
+            echo "environment=prod" >> "$GITHUB_OUTPUT"
+            echo "| :green_circle: Enabled | prod | ${{ env.branch_name }} |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "environment=" >> "$GITHUB_OUTPUT"
+            echo "| :yellow_circle: Disabled | | ${{ env.branch_name }} |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  plan-components:
+    name: "Terraform Plan each Component"
+    if: ${{ !cancelled() && needs.should-plan.outputs.environment }}
+    needs:
+      - should-plan
+    strategy:
+      fail-fast: false
+      #max-parallel: 2
+      matrix:
+        # TODO: List all folders in terraform/envs/<environment>>/
+        component:
+          - iam-password-policy
+          - params-secrets
+          #- route53
+          - czid-services-private-key
+          - cloud-env
+          - idseq-s3-tar-writer
+          - elb-access-logs
+          - maintenance
+          - heatmap-optimization
+          - db
+          - downloads
+          - ecs
+          - batch
+          - redis
+          - web
+          - web-waf
+          - auth0
+          - resque
+          #- eks
+          - k8s-core
+          - happy
+          - access-management
+    uses: ./.github/workflows/plan_component_call.yml
+    with:
+      environment: "${{ needs.should-plan.outputs.environment }}"
+      component: ${{ matrix.component }}
+    secrets: inherit
+
+  plan-components-summary:
+    name: "Terraform Plan Components"
+    if: ${{ !cancelled() }} # && contains(needs.plan-components.result, 'success') }}
+    runs-on: ubuntu-latest
+    needs:
+      - plan-components
+    steps:
+      - name: "Download Results"
+        uses: actions/download-artifact@v5
+        with:
+          pattern: result-*
+          path: results
+      - name: "Generate Summary"
+        run: |
+          echo "plan-components.result=${{ needs.plan-components.result }}"
+          ls -al results/*/*
+          jq --slurp . results/result-*/*
+          echo "|   | Component | Changes |" >> $GITHUB_STEP_SUMMARY
+          echo "| - | --------- | ------- |" >> $GITHUB_STEP_SUMMARY
+          jq -c '{component, change_count}' results/result-*/*.json | jq -r '. | "||\(.component)|\(.change_count)|"'
+          jq -c '{component, change_count}' results/result-*/*.json | jq -r '. | "||\(.component)|\(.change_count)|"' >> $GITHUB_STEP_SUMMARY
