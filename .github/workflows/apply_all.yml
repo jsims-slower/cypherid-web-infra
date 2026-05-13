@@ -1,19 +1,20 @@
 name: Terraform Apply all Components
-run-name: Terraform Apply all Components for Workflow ${{ github.event.workflow_run.id }} by ${{ github.actor }}
+run-name: Terraform Apply all Components for Workflow ${{ inputs.run-id }} by ${{ github.actor }}
 
 on:
   # TODO: Trigger automatically for branch deployments?
   #push:
   #  branches:
-  #    - development
+  #    - development # Corresponds to dev
+  #    - main # Corresponds to prod
+  #    - production # TODO: Do we want main to mean prod, or an actual production branch?
   #    - staging
-  #    - main
   #    - 'releases/**' TODO: Handle releases
   workflow_dispatch:
     inputs:
       run-id:
-        description: 'Github Action Workflow Run ID'
-        type: string
+        description: Github Action Workflow Run ID to get Plan Artifacts from
+        type: number
         required: true
 
 env:
@@ -23,10 +24,14 @@ permissions:
   id-token: write
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ inputs.run-id || 0 }}
+  cancel-in-progress: true # ${{ github.ref != 'refs/heads/main' }}
+
 jobs:
   should-apply:
     name: Check if Terraform Apply should be performed
-    if: ${{ !cancelled() && (inputs.run-id || github.event.workflow_run.conclusion == 'success') }}
+    if: ${{ !cancelled() && inputs.run-id }}
     runs-on: ubuntu-latest
     outputs:
       environment: ${{ steps.changed-components.outputs.environment }}
@@ -37,12 +42,12 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
           echo "$GITHUB_CONTEXT"
-      - name: Download Result Artifacts
+      - name: 'Download Artifacts for Workflow Run ${{ inputs.run-id }}'
         uses: actions/download-artifact@v5
         with:
           pattern: result-*
           path: results
-          run-id: ${{ inputs.run-id || github.event.workflow_run.id }}
+          run-id: ${{ inputs.run-id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Generate Changed Components Matrix
         id: changed-components
@@ -55,9 +60,21 @@ jobs:
           echo "environment=$environment"
           echo "environment=$environment" >> "$GITHUB_OUTPUT"
 
+          component_count=$(jq 'length' <<< "$components")
+          echo "| Should Apply | Environment | Workflow Run ID | Components |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| ----------- | ----------- | ------ | ---------- |" >> "$GITHUB_STEP_SUMMARY"
+          if [[ "$component_count" -ne 0 ]]; then
+            echo "| :green_circle: Enabled | $environment | ${{ inputs.run-id }} | $component_count |"
+            echo "| :green_circle: Enabled | $environment | ${{ inputs.run-id }} | $component_count |" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "| :yellow_circle: Disabled | $environment | ${{ inputs.run-id }} | $component_count |"
+            echo "| :yellow_circle: Disabled | $environment | ${{ inputs.run-id }} | $component_count |" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
   apply-components:
-    name: Terraform Apply each Component
-    if: ${{ needs.should-apply.outputs.environment }}
+    name: Terraform Apply ${{ matrix.component }}
+    # Only run if the environment is set and the components array is not empty
+    if: ${{ needs.should-apply.outputs.environment && needs.should-apply.outputs.components != '[]' }}
     needs:
       - should-apply
     strategy:
@@ -67,7 +84,7 @@ jobs:
         component: ${{ fromJson(needs.should-apply.outputs.components) }}
     uses: ./.github/workflows/apply_component_call.yml
     with:
-      environment: ${{ needs.should-plan.outputs.environment }}
+      environment: ${{ needs.should-apply.outputs.environment }}
       component: ${{ matrix.component }}
-      run-id: ${{ inputs.run-id || github.event.workflow_run.id }}
+      run-id: ${{ inputs.run-id }}
     secrets: inherit
