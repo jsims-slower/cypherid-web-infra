@@ -61,14 +61,14 @@ jobs:
           echo "environment=$environment" >> "$GITHUB_OUTPUT"
 
           component_count=$(jq 'length' <<< "$components")
-          echo "| Should Apply | Environment | Workflow Run ID | Components |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Should Apply | Environment | Components | Workflow Run ID |" >> "$GITHUB_STEP_SUMMARY"
           echo "| ----------- | ----------- | ------ | ---------- |" >> "$GITHUB_STEP_SUMMARY"
           if [[ "$component_count" -ne 0 ]]; then
-            echo "| :green_circle: Enabled | $environment | ${{ inputs.run-id }} | $component_count |"
-            echo "| :green_circle: Enabled | $environment | ${{ inputs.run-id }} | $component_count |" >> "$GITHUB_STEP_SUMMARY"
+            echo "| :green_circle: Enabled | $environment | $component_count | ${{ inputs.run-id }} |"
+            echo "| :green_circle: Enabled | $environment | $component_count | ${{ inputs.run-id }} |" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "| :yellow_circle: Disabled | $environment | ${{ inputs.run-id }} | $component_count |"
-            echo "| :yellow_circle: Disabled | $environment | ${{ inputs.run-id }} | $component_count |" >> "$GITHUB_STEP_SUMMARY"
+            echo "| :yellow_circle: Disabled | $environment | $component_count | ${{ inputs.run-id }} |"
+            echo "| :yellow_circle: Disabled | $environment | $component_count | ${{ inputs.run-id }} |" >> "$GITHUB_STEP_SUMMARY"
           fi
 
   apply-components:

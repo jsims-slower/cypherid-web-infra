@@ -87,14 +87,14 @@ jobs:
       - name: Generate Summary
         run: |
           component_count=$(jq 'length' <<< '${{ steps.list-components.outputs.components }}')
-          echo "| Should Plan | Environment | Branch | Components |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Should Plan | Environment | Branch | Components | Workflow Run ID |" >> "$GITHUB_STEP_SUMMARY"
           echo "| ----------- | ----------- | ------ | ---------- |" >> "$GITHUB_STEP_SUMMARY"
           if [[ -n "${{ steps.calculate-environment.outputs.environment }}" ]]; then
-            echo "| :green_circle: Enabled | ${{ steps.calculate-environment.outputs.environment }} | ${{ env.branch_name }} | $component_count |"
-            echo "| :green_circle: Enabled | ${{ steps.calculate-environment.outputs.environment }} | ${{ env.branch_name }} | $component_count |" >> "$GITHUB_STEP_SUMMARY"
+            echo "| :green_circle: Enabled | ${{ steps.calculate-environment.outputs.environment }} | ${{ env.branch_name }} | $component_count | ${{ github.run_id }} |"
+            echo "| :green_circle: Enabled | ${{ steps.calculate-environment.outputs.environment }} | ${{ env.branch_name }} | $component_count | ${{ github.run_id }} |" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "| :yellow_circle: Disabled | | ${{ env.branch_name }} | $component_count |"
-            echo "| :yellow_circle: Disabled | | ${{ env.branch_name }} | $component_count |" >> "$GITHUB_STEP_SUMMARY"
+            echo "| :yellow_circle: Disabled | | ${{ env.branch_name }} | $component_count | ${{ github.run_id }} |"
+            echo "| :yellow_circle: Disabled | | ${{ env.branch_name }} | $component_count | ${{ github.run_id }} |" >> "$GITHUB_STEP_SUMMARY"
           fi
 
   plan-components:
