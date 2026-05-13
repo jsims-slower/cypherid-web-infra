@@ -86,5 +86,5 @@ jobs:
     with:
       environment: ${{ needs.should-apply.outputs.environment }}
       component: ${{ matrix.component }}
-      run-id: ${{ inputs.run-id }}
+      run-id: ${{ fromJson(inputs.run-id) }}
     secrets: inherit
