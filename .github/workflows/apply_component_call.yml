@@ -96,7 +96,7 @@ jobs:
           AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
           AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
         run: |
-          ${{ github.workspace }}/.fogg/tfenv/bin/terraform plan -input=false -out=tfplan
+          ${{ github.workspace }}/.fogg/tfenv/bin/terraform plan -input=false -out=tf.plan
       - name: Terraform Apply
         working-directory: "./terraform/envs/${{ inputs.environment }}/${{ inputs.component }}/"
         env:
@@ -104,4 +104,4 @@ jobs:
           AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
           AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
         run: |
-          ${{ github.workspace }}/.fogg/tfenv/bin/terraform apply -input=false -auto-approve tfplan
+          ${{ github.workspace }}/.fogg/tfenv/bin/terraform apply -input=false -auto-approve tf.plan
