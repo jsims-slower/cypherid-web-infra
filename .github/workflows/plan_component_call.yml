@@ -121,7 +121,7 @@ jobs:
         with:
           name: plan-${{ inputs.component }}
           path: ${{ github.workspace }}/tf.plan
-          retention-days: 1
+          retention-days: 30
           compression-level: 0 # Plan files are already pretty compact, and max compression gives at best 10% savings
           if-no-files-found: error
       - name: Create Result JSON
@@ -143,5 +143,5 @@ jobs:
         with:
           name: result-${{ inputs.component }}
           path: ${{ github.workspace }}/result.json
-          retention-days: 1
+          retention-days: 30
           if-no-files-found: error
